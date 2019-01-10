@@ -6,58 +6,55 @@ namespace DataAccessTests
     [TestClass()]
     public class AuthenticationProviderTests
     {
-        [TestMethod()]
+        private const string Password = "password";
+
+        [TestMethod]
         public void GenerateSaltTest()
         {
             var salt = AuthenticationProvider.GenerateSalt();
             Assert.IsNotNull(salt);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void HashPasswordTest()
         {
             var salt = AuthenticationProvider.GenerateSalt();
-            var password = "password";
-            var hash = AuthenticationProvider.HashPassword(password + salt);
-            Assert.AreNotEqual(password + salt, hash);
+            var hash = AuthenticationProvider.HashPassword(Password + salt);
+            Assert.AreNotEqual(Password + salt, hash);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void VerifyPasswordTest()
         {
-            var password = "password";
-            var hash = AuthenticationProvider.HashPassword(password);
-            var result = AuthenticationProvider.VerifyPassword(password, hash);
+            var hash = AuthenticationProvider.HashPassword(Password);
+            var result = AuthenticationProvider.VerifyPassword(Password, hash);
             Assert.IsTrue(result);
         }
 
         [TestMethod]
         public void VerifyPasswordWithSaltTest()
         {
-            var password = "password";
             var salt = AuthenticationProvider.GenerateSalt();
-            var hash = AuthenticationProvider.HashPassword(password + salt);
-            var result = AuthenticationProvider.VerifyPassword("password" + salt, hash);
+            var hash = AuthenticationProvider.HashPassword(Password + salt);
+            var result = AuthenticationProvider.VerifyPassword(Password + salt, hash);
             Assert.IsTrue(result);
         }
 
         [TestMethod]
         public void VerifyPasswordMissingSaltTest()
         {
-            var password = "password";
             var salt = AuthenticationProvider.GenerateSalt();
-            var hash = AuthenticationProvider.HashPassword(password + salt);
-            var result = AuthenticationProvider.VerifyPassword(password, hash);
+            var hash = AuthenticationProvider.HashPassword(Password + salt);
+            var result = AuthenticationProvider.VerifyPassword(Password, hash);
             Assert.IsFalse(result);
         }
 
         [TestMethod]
         public void VerifyPasswordWithSaltWrongPasswordTest()
-        {
-            var password = "password";
-            var incorrectPassword = "Password";
+        { 
+            const string incorrectPassword = "Password";
             var salt = AuthenticationProvider.GenerateSalt();
-            var hash = AuthenticationProvider.HashPassword(password + salt);
+            var hash = AuthenticationProvider.HashPassword(Password + salt);
             var result = AuthenticationProvider.VerifyPassword(incorrectPassword + salt, hash);
             Assert.IsFalse(result);
         }
