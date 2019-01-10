@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Android", "Android\Android.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{EF6C2F10-6268-4254-8198-416CCE6A0DDE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess.Tests", "DataAccessTests\DataAccess.Tests.csproj", "{9A3C79A2-E79B-40C2-B1EF-FD791A7D109C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{EF6C2F10-6268-4254-8198-416CCE6A0DDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF6C2F10-6268-4254-8198-416CCE6A0DDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF6C2F10-6268-4254-8198-416CCE6A0DDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A3C79A2-E79B-40C2-B1EF-FD791A7D109C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A3C79A2-E79B-40C2-B1EF-FD791A7D109C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A3C79A2-E79B-40C2-B1EF-FD791A7D109C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A3C79A2-E79B-40C2-B1EF-FD791A7D109C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
