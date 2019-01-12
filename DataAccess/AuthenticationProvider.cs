@@ -29,8 +29,7 @@ namespace DataAccess
 
         public static bool VerifyPassword(string password, string hash)
         {
-            var result = Crypto.VerifyHashedPassword(hash, password);
-            return result;
+            return Crypto.VerifyHashedPassword(hash, password);
         }
     }
 }
