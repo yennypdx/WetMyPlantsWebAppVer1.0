@@ -6,6 +6,7 @@
 // Utilizes the BCrypt.Net package to provide the methods.
 // Information found on https://cmatskas.com/a-simple-net-password-hashing-implementation-using-bcrypt/
 
+using DevOne.Security.Cryptography.BCrypt;
 
 namespace DbHelper
 {
@@ -13,17 +14,17 @@ namespace DbHelper
     {
         private static string GetNewSalt()
         {
-            return BCrypt.Net.BCrypt.GenerateSalt(10);
+            return BCryptHelper.GenerateSalt(10);
         }
 
         public static string HashPassword(string password)
         {
-            return BCrypt.Net.BCrypt.HashPassword(password, GetNewSalt());
+            return BCryptHelper.HashPassword(password, GetNewSalt());
         }
 
         public static bool ValidatePassword(string plainTextPassword, string hashedPassword)
         {
-            return BCrypt.Net.BCrypt.Verify(plainTextPassword, hashedPassword);
+            return BCryptHelper.CheckPassword(plainTextPassword, hashedPassword);
         }
     }
 }
