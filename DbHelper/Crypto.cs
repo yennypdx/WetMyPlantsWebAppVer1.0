@@ -11,16 +11,14 @@ namespace DbHelper
 {
     public static class Crypto
     {
-        public static string GetNewSalt()
+        private static string GetNewSalt()
         {
             return BCrypt.Net.BCrypt.GenerateSalt(10);
         }
 
-        public static string HashPassword(string password, string salt = null)
+        public static string HashPassword(string password)
         {
-            return salt != null
-                ? BCrypt.Net.BCrypt.HashPassword(password, salt)
-                : BCrypt.Net.BCrypt.HashPassword(password, 10);
+            return BCrypt.Net.BCrypt.HashPassword(password, GetNewSalt());
         }
 
         public static bool ValidatePassword(string plainTextPassword, string hashedPassword)
