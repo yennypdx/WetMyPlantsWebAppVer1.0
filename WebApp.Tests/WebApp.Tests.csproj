@@ -60,9 +60,6 @@
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
     </Reference>
@@ -97,7 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WebApp\WebApp.csproj">
-      <Project>{B156B8C8-06AA-4D66-BA97-0802B62D698B}</Project>
+      <Project>{b156b8c8-06aa-4d66-ba97-0802b62d698b}</Project>
       <Name>WebApp</Name>
     </ProjectReference>
   </ItemGroup>
