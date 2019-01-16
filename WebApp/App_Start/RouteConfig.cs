@@ -16,7 +16,34 @@ namespace WebApp
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Account", action = "Login", id = UrlParameter.Optional }
+                defaults: new
+                {
+                    controller = "Home",
+                    action = "Index",
+                    id = UrlParameter.Optional
+                }
+            );
+
+            routes.MapRoute(
+                name: "Registration",
+                url: "RegUser/{action}/{id}",
+                defaults: new
+                {
+                    controller = "Registration",
+                    action = "RegUser",
+                    id = UrlParameter.Optional
+                }
+            );
+
+            routes.MapRoute(
+                name: "Registration",
+                url: "SubmitUser/{usernm}/{mail}/{passwd}/{phone}",
+                defaults: new
+                {
+                    controller = "Registration",
+                    action = "SubmitUser",
+                    id = UrlParameter.Optional
+                }
             );
         }
     }
