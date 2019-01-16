@@ -1,5 +1,4 @@
-﻿using System;
-using DbHelper;
+﻿using DbHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DbHelperTests
@@ -18,7 +17,7 @@ namespace DbHelperTests
         [TestMethod]
         public void CryptoTestVerifyHashedPassword()
         {
-            var password = "password";
+            const string password = "password";
             var hash = Crypto.HashPassword(password);
 
             var isCorrect = Crypto.ValidatePassword(password, hash);
@@ -28,8 +27,8 @@ namespace DbHelperTests
         [TestMethod]
         public void CryptoTestVerifyBadPassword()
         {
-            var correctPassword = "password";
-            var incorrectPassword = "notPassword";
+            const string correctPassword = "password";
+            const string incorrectPassword = "notPassword";
 
             var hash = Crypto.HashPassword(correctPassword);
 
