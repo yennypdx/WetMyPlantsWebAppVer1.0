@@ -1,5 +1,5 @@
 ﻿// Andrew Horn
-// 0/15/2019
+// 01/19/2019
 //
 // Crypto class to provide secure cryptography
 // and authentication by hashing and verifying passwords.
@@ -14,17 +14,20 @@ namespace DbHelper
     {
         private static string GetNewSalt()
         {
-            return BCryptHelper.GenerateSalt(10);
+            // returns a new salt; anything over 12 is stronger, but slower
+            return BCryptHelper.GenerateSalt(12);
         }
 
-        public static string HashPassword(string password)
+        public static string HashPassword(string plaintextPassword)
         {
-            return BCryptHelper.HashPassword(password, GetNewSalt());
+            // will generate a new salt with every hash (never re-use a salt)
+            return BCryptHelper.HashPassword(plaintextPassword, GetNewSalt());
         }
 
-        public static bool ValidatePassword(string plainTextPassword, string hashedPassword)
+        public static bool ValidatePassword(string plaintextPassword, string hashedPassword)
         {
-            return BCryptHelper.CheckPassword(plainTextPassword, hashedPassword);
+            // can validate a hashed password + salt without knowing the salt
+            return BCryptHelper.CheckPassword(plaintextPassword, hashedPassword);
         }
     }
 }
