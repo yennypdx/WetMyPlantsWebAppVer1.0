@@ -6,7 +6,7 @@ using System.Web;
 
 namespace WebApp.Models.AccountViewModels
 {
-    public class RegistrationViewModel
+    public class Registration1ViewModel
     {
         [Required]
         [DataType(DataType.Text)]
