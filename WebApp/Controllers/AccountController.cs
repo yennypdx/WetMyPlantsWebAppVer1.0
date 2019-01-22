@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using WebApp.Models.AccountViewModels;
 
 namespace WebApp.Controllers
 {
@@ -13,6 +14,12 @@ namespace WebApp.Controllers
         public ActionResult Login()
         {
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult LoginUser(LoginViewModel model)
+        {
+            return null;
         }
 
         public ActionResult ForgotPassword()
