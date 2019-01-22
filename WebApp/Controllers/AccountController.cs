@@ -20,6 +20,7 @@ namespace WebApp.Controllers
             return View();
         }
 
+        
         public ActionResult Registration()
         {
             return View();

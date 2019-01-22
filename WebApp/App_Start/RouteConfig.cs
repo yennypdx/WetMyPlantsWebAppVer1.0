@@ -24,7 +24,7 @@ namespace WebApp
                 }
             );
 
-            routes.MapRoute(
+        /*    routes.MapRoute(
                 name: "Registration",
                 url: "RegUser/{action}/{id}",
                 defaults: new
@@ -43,8 +43,8 @@ namespace WebApp
                     controller = "Registration",
                     action = "SubmitUser",
                     id = UrlParameter.Optional
-                }
-            );
+                }*/
+            //);
         }
     }
 }
