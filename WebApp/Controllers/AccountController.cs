@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebApp.Models;
+using WebApp.Models.AccountViewModels;
 
 namespace WebApp.Controllers
 {
@@ -33,19 +34,19 @@ namespace WebApp.Controllers
 
         //POST: Registration/Register
         [HttpPost]
-        public ActionResult RegUser(UserModel uModel)
+        public ActionResult Register(RegistrationViewModel uModel)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    ViewData["FirstName"] = uModel.FirstName;
-                    ViewData["LastName"] = uModel.LastName;
-                    ViewData["Phone"] = uModel.Phone;
-                    ViewData["Email"] = uModel.Email;
-                    ViewData["ConfirmPassword"] = uModel.Password;
+                    var fname = uModel.FirstName;
+                    var lname = uModel.LastName;
+                    var phn = uModel.Phone;
+                    var email = uModel.Email;
+                    var pass = uModel.Password;
 
-                    SubmitUserDataToDb(uModel);
+                    SubmitUserDataToDb(fname, lname, phn, email, pass);
                     return View("Register");
                 }
                 else
@@ -59,7 +60,7 @@ namespace WebApp.Controllers
             }
         }
 
-        public void SubmitUserDataToDb(UserModel uModel)
+        public void SubmitUserDataToDb(string inFname, string inLname, string inPhn, string inEmail, string inPass)
         {
             //TODO: get the connection from DBHelper
             var connectionStr = "";
@@ -70,11 +71,11 @@ namespace WebApp.Controllers
             using (var connection = new SqlConnection(connectionStr))
             {
                 var commandUserDb = new SqlCommand(queryInsertDataToUserDb, connection);
-                commandUserDb.Parameters.AddWithValue("@fname", uModel.FirstName);
-                commandUserDb.Parameters.AddWithValue("@lname", uModel.LastName);
-                commandUserDb.Parameters.AddWithValue("@phn", uModel.Phone);
-                commandUserDb.Parameters.AddWithValue("@mail", uModel.Email);
-                commandUserDb.Parameters.AddWithValue("@pass", uModel.Password);
+                commandUserDb.Parameters.AddWithValue("@fname", inFname);
+                commandUserDb.Parameters.AddWithValue("@lname", inLname);
+                commandUserDb.Parameters.AddWithValue("@phn", inPhn);
+                commandUserDb.Parameters.AddWithValue("@mail", inEmail);
+                commandUserDb.Parameters.AddWithValue("@pass", inPass);
 
                 try
                 {
