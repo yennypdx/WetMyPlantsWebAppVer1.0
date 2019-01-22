@@ -1,28 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Data;
-
-namespace DBHelper
+﻿namespace DBHelper
 {
-    class AccessHelper
+    public static class AccessHelper
     {
-        string connectionString = string.Empty;
-        public AccessHelper()
-        {
-            try
-            {
-                connectionString = ConfigurationManager.ConnectionStrings["Data Source=wetmyplants.database.windows.net;Initial Catalog=WetMyPlants;User ID=wetmyplants;Password=********;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"].ConnectionString;
-            }
-            catch(Exception ex)
-            {
-                throw new Exception("Error in AccessHelper constructor" + ex.Message);
-            }
+        private static readonly string connectionString = @"Data Source=wetmyplants.database.windows.net;Initial Catalog=WetMyPlants;User ID=wetmyplants;Password=Gr33nThumb;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
+        public static string GetDbConnectionString()
+        {
+            return connectionString;
         }
        
     }

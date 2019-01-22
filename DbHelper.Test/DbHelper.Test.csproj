@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="CryptoTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AccessHelperTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
