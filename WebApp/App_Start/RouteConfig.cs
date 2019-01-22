@@ -23,28 +23,6 @@ namespace WebApp
                     id = UrlParameter.Optional
                 }
             );
-
-            //routes.MapRoute(
-            //    name: "Registration",
-            //    url: "RegUser/{action}/{id}",
-            //    defaults: new
-            //    {
-            //        controller = "Registration",
-            //        action = "RegUser",
-            //        id = UrlParameter.Optional
-            //    }
-            //);
-
-            //routes.MapRoute(
-            //    name: "Registration",
-            //    url: "SubmitUser/{usernm}/{mail}/{passwd}/{phone}",
-            //    defaults: new
-            //    {
-            //        controller = "Registration",
-            //        action = "SubmitUser",
-            //        id = UrlParameter.Optional
-            //    }
-            //);
         }
     }
 }
