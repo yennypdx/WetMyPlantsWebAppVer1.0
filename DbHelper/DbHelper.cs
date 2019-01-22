@@ -6,7 +6,7 @@ using Models;
 
 namespace DBHelper
 {
-    enum UserColumns
+    internal enum UserColumns
     {
         Id,
         FirstName,
@@ -30,12 +30,17 @@ namespace DBHelper
         // its current state. It will always be open when you need it.
         private SqlConnection Open()
         {
+            // Need to reset the connection string anytime the connection closes.
+            // The using() statements in the helper methods below will close the
+            // connection once the block's execution completes.
             _dbConnection.ConnectionString = _dbConnectionString;
             if (_dbConnection.State != ConnectionState.Open)
                 _dbConnection.Open();
             return _dbConnection;
         }
 
+        // RunScalar() executes the SQL scalar command and returns a single value,
+        // typically an ID or a count.
         private string RunScalar(string commandString)
         {
             var sqlCommand = new SqlCommand(commandString, _dbConnection);
@@ -47,6 +52,7 @@ namespace DBHelper
             }
         }
 
+        // RunReader executes a SQL query command, returning a collection of data.
         private DataTableReader RunReader(string connectionString)
         {
             var sqlCommand = new SqlCommand(connectionString, _dbConnection);
@@ -60,6 +66,8 @@ namespace DBHelper
             }
         }
 
+        // RunNonQuery executes a SQL command that does not return a query value, but
+        // will return the number of rows affected by the action.
         private bool RunNonQuery(string connectionString)
         {
             var sqlCommand = new SqlCommand(connectionString, _dbConnection);
@@ -72,13 +80,16 @@ namespace DBHelper
                     return result != 0;
                 }
             }
-            catch(Exception)
+            catch(Exception e)
             {
+                Console.WriteLine($"Exception: {e}");
                 return false;
             }
         }
 
-        private User FindUserByEmail(string email)
+        // Queries the SQL database for a single user and all its data,
+        // returns a filled User object
+        public User FindUserByEmail(string email)
         {
             if (email == null) return null;
 
@@ -86,12 +97,14 @@ namespace DBHelper
 
             var result = RunReader(queryString);
 
+            // If there are no results to the query, the result will not contain
+            // any rows, and attempting to read it will throw an exception.
             if (!result.HasRows) return null;
 
-            result.Read();
+            result.Read(); // Move to the first (and only) record.
             var user = new User
             {
-                Id = result.GetString((int) UserColumns.Id),
+                Id = result.GetInt32((int) UserColumns.Id),
                 FirstName = result.GetString((int) UserColumns.FirstName),
                 LastName = result.GetString((int) UserColumns.LastName),
                 Email = result.GetString((int) UserColumns.Email),
@@ -101,16 +114,31 @@ namespace DBHelper
             return user;
         }
 
+        // Inserts a new tuple into the User table containing all the user's values,
+        // returns whether or not the insertion was successful
         public bool CreateNewUser(string firstName, string lastName, string phone, string email, string password)
         {
+            // Do not create the user if a user with the same email
+            // already exists.
             if (FindUserByEmail(email) != null) return false;
 
+            // Never store the password directly, always use its hash.
             var passwordHash = Crypto.HashPassword(password);
 
             var queryString = "INSERT INTO Users (FirstName, LastName, Phone, Email, Hash) " +
-                              $"VALUES ({firstName}, {lastName}, {phone}, {email}, {passwordHash})";
+                              $"VALUES ('{firstName}', '{lastName}', '{phone}', '{email}', '{passwordHash}');";
 
             var result = RunNonQuery(queryString);
+            return result;
+        }
+
+        // Deletes a user (tuple) from the database
+        public bool RemoveUser(string email)
+        {
+            var removeString = $"DELETE FROM Users WHERE Email = '{email}';";
+
+            var result = RunNonQuery(removeString);
+
             return result;
         }
     }
