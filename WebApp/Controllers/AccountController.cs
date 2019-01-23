@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using DBHelper;
-using WebApp.Models;
+﻿using System.Web.Mvc;
 using WebApp.Models.AccountViewModels;
 
 namespace WebApp.Controllers
@@ -82,7 +75,5 @@ namespace WebApp.Controllers
 
             return View("Login");
         }
-
-
-}
+    }
 }
