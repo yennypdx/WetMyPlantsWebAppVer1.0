@@ -34,37 +34,44 @@ namespace WebApp.Controllers
             return View();
         }
 
-        public ActionResult Registration()
+        public ActionResult Register()
         {
             return View();
         }
 
         //POST: Registration/Register
         [HttpPost]
-        public ActionResult Register(RegistrationViewModel uModel)
+        public ActionResult RegisterUser(RegistrationViewModel uModel)
         {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    var fname = uModel.FirstName;
-                    var lname = uModel.LastName;
-                    var phn = uModel.Phone;
-                    var email = uModel.Email;
-                    var pass = uModel.Password;
+            var result = _db.CreateNewUser(
+                uModel.FirstName,
+                uModel.LastName,
+                uModel.Phone,
+                uModel.Email,
+                uModel.Password);
+            //try
+            //{
+            //    if (ModelState.IsValid)
+            //    {
+            //        var fname = uModel.FirstName;
+            //        var lname = uModel.LastName;
+            //        var phn = uModel.Phone;
+            //        var email = uModel.Email;
+            //        var pass = uModel.Password;
 
-                    _db.CreateNewUser(fname, lname, phn, email, pass);
-                    return View("Register");
-                }
-                else
-                {
-                    return View();
-                }
-            }
-            catch
-            {
-                return View();
-            }
+            //        _db.CreateNewUser(fname, lname, phn, email, pass);
+            //        return View("Register");
+            //    }
+            //    else
+            //    {
+            //        return View();
+            //    }
+            //}
+            //catch
+            //{
+            //    return View();
+            //}
+            return View("Login");
         }
 
         

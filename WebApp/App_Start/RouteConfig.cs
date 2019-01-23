@@ -18,8 +18,8 @@ namespace WebApp
                 url: "{controller}/{action}/{id}",
                 defaults: new
                 {
-                    controller = "Home",
-                    action = "Index",
+                    controller = "Account",
+                    action = "Login",
                     id = UrlParameter.Optional
                 }
             );
