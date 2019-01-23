@@ -141,5 +141,20 @@ namespace DBHelper
 
             return result;
         }
+
+        public bool UpdateUser(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Login(string email, string password)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ResetPassword(string email, string newPassword)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

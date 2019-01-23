@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DbHelper.Test
 {
@@ -85,6 +86,97 @@ namespace DbHelper.Test
             var result = _db.FindUserByEmail("other@email.com");
 
             Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public void DbHelperUpdateUserEmailTest()
+        {
+            _db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
+
+            var user = _db.FindUserByEmail(Email);
+            user.Email = "newemail@test.com";
+
+            var result = _db.UpdateUser(user);
+
+            Assert.IsTrue(result);
+            Assert.AreEqual("newemail@test.com", _db.FindUserByEmail(Email).Email);
+        }
+
+        [TestMethod]
+        public void DbHelperUpdateUserFirstNameTest()
+        {
+            _db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
+
+            var user = _db.FindUserByEmail(Email);
+            user.FirstName = "NewFirstName";
+
+            var result = _db.UpdateUser(user);
+
+            Assert.IsTrue(result);
+
+            Assert.AreEqual("NewFirstName", _db.FindUserByEmail(Email).FirstName);
+        }
+
+        [TestMethod]
+        public void DbHelperUpdateUserLastNameTest()
+        {
+            _db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
+
+            var user = _db.FindUserByEmail(Email);
+            user.LastName = "NewLastName";
+
+            var result = _db.UpdateUser(user);
+
+            Assert.IsTrue(result);
+            Assert.AreEqual("NewLastName", _db.FindUserByEmail(Email).LastName);
+        }
+
+        [TestMethod]
+        public void DbHelperUpdateUserPhoneNumberTest()
+        {
+            _db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
+
+            var user = _db.FindUserByEmail(Email);
+            user.Phone = "1112223333";
+
+            var result = _db.UpdateUser(user);
+
+            Assert.IsTrue(result);
+            Assert.AreEqual("1112223333", _db.FindUserByEmail(Email).Phone);
+        }
+
+        [TestMethod]
+        public void DbHelperUpdateUserPasswordTest()
+        {
+            _db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
+
+            var login = _db.Login(Email, Password);
+
+            _db.ResetPassword(Email, "NewPassword");
+
+            var result = _db.Login(Email, "NewPassword");
+
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void DbHelperLoginSuccessTest()
+        {
+            _db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
+
+            var result = _db.Login(Email, Password);
+
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void DbHelperLoginUnsuccessfulTest()
+        {
+            _db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
+
+            var result = _db.Login(Email, "WrongPassword");
+
+            Assert.IsFalse(result);
         }
     }
 }
