@@ -11,9 +11,9 @@ namespace DBHelper
         Id,
         FirstName,
         LastName,
+        Hash,
         Phone,
-        Email,
-        Hash
+        Email
     }
 
     public class DbHelper
@@ -149,7 +149,12 @@ namespace DBHelper
 
         public bool Login(string email, string password)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            var userHash = FindUserByEmail(email).Hash;
+
+            var isValid = Crypto.ValidatePassword(password, userHash);
+
+            return isValid;
         }
 
         public bool ResetPassword(string email, string newPassword)

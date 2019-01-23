@@ -91,7 +91,7 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperUpdateUserEmailTest()
         {
-            _db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
+            //_db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
 
             var user = _db.FindUserByEmail(Email);
             user.Email = "newemail@test.com";
@@ -105,7 +105,7 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperUpdateUserFirstNameTest()
         {
-            _db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
+            //_db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
 
             var user = _db.FindUserByEmail(Email);
             user.FirstName = "NewFirstName";
@@ -120,7 +120,7 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperUpdateUserLastNameTest()
         {
-            _db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
+            //_db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
 
             var user = _db.FindUserByEmail(Email);
             user.LastName = "NewLastName";
@@ -134,7 +134,7 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperUpdateUserPhoneNumberTest()
         {
-            _db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
+            //_db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
 
             var user = _db.FindUserByEmail(Email);
             user.Phone = "1112223333";
@@ -148,7 +148,7 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperUpdateUserPasswordTest()
         {
-            _db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
+            //_db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
 
             var login = _db.Login(Email, Password);
 
@@ -162,7 +162,7 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperLoginSuccessTest()
         {
-            _db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
+            //_db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
 
             var result = _db.Login(Email, Password);
 
@@ -172,7 +172,7 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperLoginUnsuccessfulTest()
         {
-            _db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
+            //_db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
 
             var result = _db.Login(Email, "WrongPassword");
 
