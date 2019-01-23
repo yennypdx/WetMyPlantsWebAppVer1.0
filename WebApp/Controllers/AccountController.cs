@@ -18,6 +18,7 @@ namespace WebApp.Controllers
         {
             _db = new DBHelper.DbHelper();
         }
+
         // GET: Account
         public ActionResult Index()
         {
@@ -74,6 +75,14 @@ namespace WebApp.Controllers
             return View("Login");
         }
 
-        
-    }
+        [HttpPost]
+        public ActionResult LoginUser(LoginViewModel model)
+        {
+            var result = _db.Login(model.Email, model.Password);
+
+            return View("Login");
+        }
+
+
+}
 }
