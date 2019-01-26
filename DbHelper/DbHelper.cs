@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using DbHelper;
@@ -104,30 +105,32 @@ namespace DBHelper
             // any rows, and attempting to read it will throw an exception.
             if (!result.HasRows) return null;
 
+            result.Read();
             return BuildUser(result);
-            //result.Read(); // Move to the first (and only) record.
-            //var user = new User
-            //{
-            //    Id = result.GetInt32((int) UserColumns.Id),
-            //    FirstName = result.GetString((int) UserColumns.FirstName),
-            //    LastName = result.GetString((int) UserColumns.LastName),
-            //    Email = result.GetString((int) UserColumns.Email),
-            //    Phone = result.GetString((int) UserColumns.Phone),
-            //    Hash = result.GetString((int) UserColumns.Hash)
-            //};
-            //return user;
+        }
+
+        public List<User> GetAll()
+        {
+            var query = "SELECT * FROM Users";
+            var results = RunReader(query);
+            var users = new List<User>();
+            while (results.Read())
+                users.Add(BuildUser(results));
+            return users;
         }
 
         public User FindUserById(int id)
         {
             var query = $"SELECT * FROM Users WHERE UserID = {id};";
             var result = RunReader(query);
-            return BuildUser(result);
+            return result.Read()
+                ? BuildUser(result)
+                : null;
         }
 
         private static User BuildUser(DataTableReader reader)
         {
-            reader.Read();
+            //reader.Read();
             return new User
             {
                 Id = reader.GetInt32((int) UserColumns.Id),
@@ -162,42 +165,20 @@ namespace DBHelper
         // Deletes a user (tuple) from the database
         public bool DeleteUser(string email)
         {
-            var removeString = $"DELETE FROM Users WHERE Email = '{email}';";
+            var id = FindUserByEmail(email)?.Id;
+            if (id == null) return false;
 
-            var result = RunNonQuery(removeString);
+            var tokenQuery = $"DELETE FROM Tokens WHERE UserID = {id};";
+            RunNonQuery(tokenQuery);
 
-            return result;
+            var userQuery = $"DELETE FROM Users WHERE Email = '{email}';";
+            return RunNonQuery(userQuery);
         }
 
         public bool UpdateUser(string email, UserColumns col, string newValue)
         {
             var user = FindUserByEmail(email);
-
-            switch(col)
-            {
-                case UserColumns.Email:
-                    user.Email = newValue;
-                    break;
-                case UserColumns.FirstName:
-                    user.FirstName = newValue;
-                    break;
-                case UserColumns.LastName:
-                    user.LastName = newValue;
-                    break;
-                case UserColumns.Phone:
-                    user.Phone = newValue;
-                    break;
-            }
-
-            return SubmitUpdate(user);
-        }
-
-        private bool SubmitUpdate(User user)
-        {
-            var query = $"DELETE FROM Users WHERE Email = '{user.Email}';";
-            RunNonQuery(query);
-            query = $"INSERT INTO Users (FirstName, LastName, Email, Phone) " +
-                    $"VALUES ('{user.FirstName}', '{user.LastName}', '{user.Email}', '{user.Phone}');";
+            var query = $"UPDATE Users SET {col.ToString()} = '{newValue}' WHERE UserID = {user.Id};";
             return RunNonQuery(query);
         }
 
@@ -232,7 +213,7 @@ namespace DBHelper
             // otherwise, generate a new hash from the given password and update
             // the field in the Users table
             var newHash = Crypto.HashPassword(newPassword);
-            var query = $"UPDATE TABLE Users SET Hash = '{newHash}' WHERE UserID = {id};";
+            var query = $"UPDATE Users SET Hash = '{newHash}' WHERE UserID = {id};";
             return RunNonQuery(query);
         }
 
@@ -271,11 +252,11 @@ namespace DBHelper
 
         private bool DeleteUserToken(int userId)
         {
-            var query = $"DELETE FROM TABLE Tokens WHERE UserID = '{userId}';";
+            var query = $"DELETE FROM TABLE Tokens WHERE UserID = {userId};";
             return RunNonQuery(query);
         }
 
-        private string GenerateNewToken()
+        private static string GenerateNewToken()
         {
             // generate a new token based on the current date and time
             var dateString = DateTime.Today.Ticks.ToString();

@@ -35,10 +35,8 @@ namespace DbHelper.Test
         [TestCleanup]
         public void Dispose()
         {
-            while (_db.FindUserByEmail(Email) != null)
-            {
-                _db.DeleteUser(Email);
-            }
+            var list = _db.GetAll();
+            list.ForEach(i => _db.DeleteUser(i.Email));
         }
 
         [TestMethod]
@@ -88,28 +86,20 @@ namespace DbHelper.Test
             Assert.IsNull(result);
         }
 
-        //[TestMethod]
-        //public void DbHelperUpdateUserEmailTest()
-        //{
-        //    //_db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
+        [TestMethod]
+        public void DbHelperUpdateUserEmailTest()
+        {
+            const string newEmail = "new@email.test";
 
-        //    var user = _db.FindUserByEmail(Email);
-        //    user.Email = "newemail@test.com";
+            var result = _db.UpdateUser(Email, UserColumns.Email, newEmail);
 
-        //    var result = _db.UpdateUser(user);
-
-        //    Assert.IsTrue(result);
-        //    Assert.AreEqual("newemail@test.com", _db.FindUserByEmail(Email).Email);
-        //}
+            Assert.IsTrue(result);
+            Assert.AreEqual(newEmail, _db.FindUserByEmail(newEmail).Email);
+        }
 
         [TestMethod]
         public void DbHelperUpdateUserFirstNameTest()
         {
-            //_db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
-
-            //var user = _db.FindUserByEmail(Email);
-            //user.FirstName = "NewFirstName";
-            //var id = _db.FindUserByEmail(Email);
             const string newFirstName = "NewFirstName";
             var result = _db.UpdateUser(Email, UserColumns.FirstName, newFirstName);
 
@@ -118,50 +108,40 @@ namespace DbHelper.Test
             Assert.AreEqual(newFirstName, _db.FindUserByEmail(Email).FirstName);
         }
 
-        //[TestMethod]
-        //public void DbHelperUpdateUserLastNameTest()
-        //{
-        //    //_db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
+        [TestMethod]
+        public void DbHelperUpdateUserLastNameTest()
+        {
+            const string newLastName = "NewLastName";
 
-        //    var user = _db.FindUserByEmail(Email);
-        //    user.LastName = "NewLastName";
+            var result = _db.UpdateUser(Email, UserColumns.LastName, newLastName);
 
-        //    var result = _db.UpdateUser(user);
-
-        //    Assert.IsTrue(result);
-        //    Assert.AreEqual("NewLastName", _db.FindUserByEmail(Email).LastName);
-        //}
-
-        //[TestMethod]
-        //public void DbHelperUpdateUserPhoneNumberTest()
-        //{
-        //    //_db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
-
-        //    var user = _db.FindUserByEmail(Email);
-        //    user.Phone = "1112223333";
-
-        //    var result = _db.UpdateUser(user);
-
-        //    Assert.IsTrue(result);
-        //    Assert.AreEqual("1112223333", _db.FindUserByEmail(Email).Phone);
-        //}
-
-        //[TestMethod]
-        //public void DbHelperUpdateUserPasswordTest()
-        //{
-        //    //_db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
-
-        //    var login = _db.Login(Email, Password);
-
-        //    _db.ResetPassword(Email, "NewPassword");
-
-        //    var result = _db.Login(Email, "NewPassword");
-
-        //    Assert.IsTrue(result);
-        //}
+            Assert.IsTrue(result);
+            Assert.AreEqual(newLastName, _db.FindUserByEmail(Email).LastName);
+        }
 
         [TestMethod]
-        public void DbHelperLoginSuccessTest()
+        public void DbHelperUpdateUserPhoneNumberTest()
+        {
+            const string newPhone = "1112223333";
+
+            var result = _db.UpdateUser(Email, UserColumns.Phone, newPhone);
+
+            Assert.IsTrue(result);
+            Assert.AreEqual(newPhone, _db.FindUserByEmail(Email).Phone);
+        }
+
+        [TestMethod]
+        public void DbHelperUpdateUserPasswordTest()
+        {
+            _db.ResetPassword(Email, "NewPassword");
+
+            var result = _db.AuthenticateUser(Email, "NewPassword");
+
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void DbHelperAuthenticateUserSuccessTest()
         {
             var result = _db.AuthenticateUser(Email, Password);
 
@@ -169,11 +149,27 @@ namespace DbHelper.Test
         }
 
         [TestMethod]
-        public void DbHelperLoginUnsuccessfulTest()
+        public void DbHelperAuthenticateUserInvalidPasswordTest()
         {
             var result = _db.AuthenticateUser(Email, "WrongPassword");
 
             Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void DbHelperLoginAndGetTokenTest()
+        {
+            var result = _db.LoginAndGetToken(Email, Password);
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void DbHelperLoginAndGetTokenInvalidPasswordTest()
+        {
+            var result = _db.LoginAndGetToken(Email, "WrongPassword");
+
+            Assert.IsNull(result);
         }
     }
 };
