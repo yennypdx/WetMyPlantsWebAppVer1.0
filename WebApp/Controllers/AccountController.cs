@@ -71,7 +71,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public ActionResult LoginUser(LoginViewModel model)
         {
-            var result = _db.Login(model.Email, model.Password);
+            var result = _db.LoginAndGetToken(model.Email, model.Password);
 
             return View("Login");
         }

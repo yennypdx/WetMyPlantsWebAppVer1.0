@@ -16,7 +16,15 @@ namespace DBHelper
         Email
     }
 
-    public class DbHelper
+    internal enum TokenColumns
+    {
+        Id,
+        UserId,
+        Token,
+        Expiry
+    }
+
+    public class DbHelper : IDbHelper
     {
         private readonly string _dbConnectionString = AccessHelper.GetDbConnectionString();
         private readonly SqlConnection _dbConnection;
@@ -41,9 +49,9 @@ namespace DBHelper
 
         // RunScalar() executes the SQL scalar command and returns a single value,
         // typically an ID or a count.
-        private string RunScalar(string commandString)
+        private string RunScalar(string queryString)
         {
-            var sqlCommand = new SqlCommand(commandString, _dbConnection);
+            var sqlCommand = new SqlCommand(queryString, _dbConnection);
 
             using(Open())
             {
@@ -53,9 +61,9 @@ namespace DBHelper
         }
 
         // RunReader executes a SQL query command, returning a collection of data.
-        private DataTableReader RunReader(string connectionString)
+        private DataTableReader RunReader(string queryString)
         {
-            var sqlCommand = new SqlCommand(connectionString, _dbConnection);
+            var sqlCommand = new SqlCommand(queryString, _dbConnection);
             var adapter = new SqlDataAdapter(sqlCommand);
             var dataSet = new DataSet();
 
@@ -68,9 +76,9 @@ namespace DBHelper
 
         // RunNonQuery executes a SQL command that does not return a query value, but
         // will return the number of rows affected by the action.
-        private bool RunNonQuery(string connectionString)
+        private bool RunNonQuery(string queryString)
         {
-            var sqlCommand = new SqlCommand(connectionString, _dbConnection);
+            var sqlCommand = new SqlCommand(queryString, _dbConnection);
 
             try
             {
@@ -133,7 +141,7 @@ namespace DBHelper
         }
 
         // Deletes a user (tuple) from the database
-        public bool RemoveUser(string email)
+        public bool DeleteUser(string email)
         {
             var removeString = $"DELETE FROM Users WHERE Email = '{email}';";
 
@@ -147,19 +155,105 @@ namespace DBHelper
             throw new NotImplementedException();
         }
 
-        public bool Login(string email, string password)
+        public bool AuthenticateUser(string email, string password)
         {
-            //throw new NotImplementedException();
+            // get the user's hash for comparison
             var userHash = FindUserByEmail(email).Hash;
+            // validate the given password
+            return Crypto.ValidatePassword(password, userHash);
+        }
 
-            var isValid = Crypto.ValidatePassword(password, userHash);
+        public string LoginAndGetToken(string email, string password)
+        {
+            // authenticate the email and password combo
+            // if invalid, return nothing
+            if (!AuthenticateUser(email, password))
+                return null;
 
-            return isValid;
+            // if valid, get the user's id
+            var userId = FindUserByEmail(email).Id;
+            // use the id to get the valid token
+            return GetUserToken(userId);
         }
 
         public bool ResetPassword(string email, string newPassword)
         {
-            throw new NotImplementedException();
+            // find the user and get their ID
+            var id = FindUserByEmail(email)?.Id;
+            // if no user (and no ID) was found, return false
+            if (id == null) return false;
+
+            // otherwise, generate a new hash from the given password and update
+            // the field in the Users table
+            var newHash = Crypto.HashPassword(newPassword);
+            var query = $"UPDATE TABLE Users SET Hash = '{newHash}' WHERE UserID = {id};";
+            return RunNonQuery(query);
+        }
+
+        private string GetUserToken(int id)
+        {
+            // get the token for this user
+            var query = $"SELECT * FROM Tokens WHERE UserID = '{id}';";
+            var result = RunReader(query);
+
+            // if no token exists, generate a new one
+            if (!result.HasRows)
+                return GenerateNewTokenForUser(id);
+
+            // read the token and expiration date
+            result.Read();
+            var expiry = result.GetString((int)TokenColumns.Expiry);
+            var token = result.GetString((int)TokenColumns.Token);
+
+            // if the token has expired, generate a new one
+            // if it's still valid, return the token
+            return ToDateTime(expiry) > DateTime.Today 
+                ? GenerateNewTokenForUser(id) 
+                : token;
+        }
+
+        private string GenerateNewTokenForUser(int id)
+        {
+            // remove the old token, as we should only have one per user
+            DeleteUserToken(id);
+            // generate a new token based on the current date and time
+            var newToken = GenerateNewToken();
+            // set the new token
+            SetTokenForUser(id, newToken);
+            return newToken;
+        }
+
+        private bool DeleteUserToken(int userId)
+        {
+            var query = $"DELETE FROM TABLE Tokens WHERE UserID = '{userId}';";
+            return RunNonQuery(query);
+        }
+
+        private string GenerateNewToken()
+        {
+            // generate a new token based on the current date and time
+            var dateString = DateTime.Today.Ticks.ToString();
+            return Crypto.HashPassword(dateString);
+        }
+
+        private bool SetTokenForUser(int userId, string token)
+        {
+            // set an expiration date for two weeks in the future
+            var expiry = DateTime.Today;
+            expiry = expiry.AddDays(14);
+            var query = $"INSERT INTO Tokens (UserID, Token, Expiry) VALUES ({userId}, '{token}', '{expiry}');";
+            return RunNonQuery(query);
+        }
+
+        private static DateTime ToDateTime(string dateTime)
+        {
+            // convert a datetime string to a DateTime object
+            // datetime string expected in ddmmyyyy format
+            var d = new DateTime();
+            d = d.AddYears(Convert.ToInt32(dateTime.Substring(4, 4)));
+            d = d.AddMonths(Convert.ToInt32(dateTime.Substring(2, 2)));
+            d = d.AddDays(Convert.ToDouble(dateTime.Substring(0, 2)));
+            return d;
         }
     }
 }
