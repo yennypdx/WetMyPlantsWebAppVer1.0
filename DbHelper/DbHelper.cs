@@ -6,7 +6,7 @@ using Models;
 
 namespace DBHelper
 {
-    internal enum UserColumns
+    public enum UserColumns
     {
         Id,
         FirstName,
@@ -24,15 +24,10 @@ namespace DBHelper
         Expiry
     }
 
-    public class DbHelper : IDbHelper
+    public class DbHelper
     {
-        private readonly string _dbConnectionString = AccessHelper.GetDbConnectionString();
-        private readonly SqlConnection _dbConnection;
-
-        public DbHelper()
-        {
-            _dbConnection = new SqlConnection(_dbConnectionString);
-        }
+        private static readonly string DefaultConnectionString = AccessHelper.GetDbConnectionString();
+        private readonly SqlConnection _dbConnection = new SqlConnection(DefaultConnectionString);
 
         // Open() makes it easier to use the SqlConnection without worrying about
         // its current state. It will always be open when you need it.
@@ -41,7 +36,7 @@ namespace DBHelper
             // Need to reset the connection string anytime the connection closes.
             // The using() statements in the helper methods below will close the
             // connection once the block's execution completes.
-            _dbConnection.ConnectionString = _dbConnectionString;
+            _dbConnection.ConnectionString = DefaultConnectionString;
             if (_dbConnection.State != ConnectionState.Open)
                 _dbConnection.Open();
             return _dbConnection;
@@ -109,17 +104,41 @@ namespace DBHelper
             // any rows, and attempting to read it will throw an exception.
             if (!result.HasRows) return null;
 
-            result.Read(); // Move to the first (and only) record.
-            var user = new User
+            return BuildUser(result);
+            //result.Read(); // Move to the first (and only) record.
+            //var user = new User
+            //{
+            //    Id = result.GetInt32((int) UserColumns.Id),
+            //    FirstName = result.GetString((int) UserColumns.FirstName),
+            //    LastName = result.GetString((int) UserColumns.LastName),
+            //    Email = result.GetString((int) UserColumns.Email),
+            //    Phone = result.GetString((int) UserColumns.Phone),
+            //    Hash = result.GetString((int) UserColumns.Hash)
+            //};
+            //return user;
+        }
+
+        public User FindUserById(int id)
+        {
+            var query = $"SELECT * FROM Users WHERE UserID = {id};";
+            var result = RunReader(query);
+            return BuildUser(result);
+        }
+
+        private static User BuildUser(DataTableReader reader)
+        {
+            reader.Read();
+            return new User
             {
-                Id = result.GetInt32((int) UserColumns.Id),
-                FirstName = result.GetString((int) UserColumns.FirstName),
-                LastName = result.GetString((int) UserColumns.LastName),
-                Email = result.GetString((int) UserColumns.Email),
-                Phone = result.GetString((int) UserColumns.Phone),
-                Hash = result.GetString((int) UserColumns.Hash)
+                Id = reader.GetInt32((int) UserColumns.Id),
+                FirstName = reader.GetString((int) UserColumns.FirstName),
+                LastName = reader.GetString((int) UserColumns.LastName),
+                Email = reader.GetString((int) UserColumns.Email),
+                Phone = reader.GetString((int) UserColumns.Phone),
+                Hash = reader.IsDBNull((int) UserColumns.Hash) 
+                    ? ""
+                    : reader.GetString((int) UserColumns.Hash)
             };
-            return user;
         }
 
         // Inserts a new tuple into the User table containing all the user's values,
@@ -150,9 +169,36 @@ namespace DBHelper
             return result;
         }
 
-        public bool UpdateUser(User user)
+        public bool UpdateUser(string email, UserColumns col, string newValue)
         {
-            throw new NotImplementedException();
+            var user = FindUserByEmail(email);
+
+            switch(col)
+            {
+                case UserColumns.Email:
+                    user.Email = newValue;
+                    break;
+                case UserColumns.FirstName:
+                    user.FirstName = newValue;
+                    break;
+                case UserColumns.LastName:
+                    user.LastName = newValue;
+                    break;
+                case UserColumns.Phone:
+                    user.Phone = newValue;
+                    break;
+            }
+
+            return SubmitUpdate(user);
+        }
+
+        private bool SubmitUpdate(User user)
+        {
+            var query = $"DELETE FROM Users WHERE Email = '{user.Email}';";
+            RunNonQuery(query);
+            query = $"INSERT INTO Users (FirstName, LastName, Email, Phone) " +
+                    $"VALUES ('{user.FirstName}', '{user.LastName}', '{user.Email}', '{user.Phone}');";
+            return RunNonQuery(query);
         }
 
         public bool AuthenticateUser(string email, string password)

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DBHelper;
+﻿using DBHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Models;
-using Moq;
+
 
 namespace DbHelper.Test
 {
+
     [TestClass]
     public class DbHelperTest
     {
@@ -38,8 +35,10 @@ namespace DbHelper.Test
         [TestCleanup]
         public void Dispose()
         {
-            while(_db.FindUserByEmail(Email) != null)
+            while (_db.FindUserByEmail(Email) != null)
+            {
                 _db.DeleteUser(Email);
+            }
         }
 
         [TestMethod]
@@ -53,7 +52,8 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperCreateNewUserEmailCollisionTest()
         {
-            var result = _db.CreateNewUser("test", "test", "phone", Email, "pwd"); // Create a user with the same email address.
+            var result =
+                _db.CreateNewUser("test", "test", "phone", Email, "pwd"); // Create a user with the same email address.
             Assert.IsFalse(result);
         }
 
@@ -76,7 +76,7 @@ namespace DbHelper.Test
         public void DbHelperFindUserByEmailTest()
         {
             var user = _db.FindUserByEmail(Email);
-            
+
             Assert.IsNotNull(user);
         }
 
@@ -102,20 +102,21 @@ namespace DbHelper.Test
         //    Assert.AreEqual("newemail@test.com", _db.FindUserByEmail(Email).Email);
         //}
 
-        //[TestMethod]
-        //public void DbHelperUpdateUserFirstNameTest()
-        //{
-        //    //_db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
+        [TestMethod]
+        public void DbHelperUpdateUserFirstNameTest()
+        {
+            //_db.CreateNewUser(FirstName, LastName, Phone, Email, Password);
 
-        //    var user = _db.FindUserByEmail(Email);
-        //    user.FirstName = "NewFirstName";
+            //var user = _db.FindUserByEmail(Email);
+            //user.FirstName = "NewFirstName";
+            //var id = _db.FindUserByEmail(Email);
+            const string newFirstName = "NewFirstName";
+            var result = _db.UpdateUser(Email, UserColumns.FirstName, newFirstName);
 
-        //    var result = _db.UpdateUser(user);
+            Assert.IsTrue(result);
 
-        //    Assert.IsTrue(result);
-
-        //    Assert.AreEqual("NewFirstName", _db.FindUserByEmail(Email).FirstName);
-        //}
+            Assert.AreEqual(newFirstName, _db.FindUserByEmail(Email).FirstName);
+        }
 
         //[TestMethod]
         //public void DbHelperUpdateUserLastNameTest()
@@ -175,4 +176,4 @@ namespace DbHelper.Test
             Assert.IsFalse(result);
         }
     }
-}
+};
