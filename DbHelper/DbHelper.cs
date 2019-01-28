@@ -25,10 +25,16 @@ namespace DBHelper
         Expiry
     }
 
-    public class DbHelper
+    public class DbHelper : IDbHelper
     {
-        private static readonly string DefaultConnectionString = AccessHelper.GetDbConnectionString();
-        private readonly SqlConnection _dbConnection = new SqlConnection(DefaultConnectionString);
+        private readonly string _connectionString;
+        private readonly SqlConnection _dbConnection;
+
+        public DbHelper(string connectionString = null)
+        {
+            _connectionString = connectionString ?? AccessHelper.GetDbConnectionString();
+            _dbConnection = new SqlConnection(_connectionString);
+        }
 
         // Open() makes it easier to use the SqlConnection without worrying about
         // its current state. It will always be open when you need it.
@@ -37,7 +43,7 @@ namespace DBHelper
             // Need to reset the connection string anytime the connection closes.
             // The using() statements in the helper methods below will close the
             // connection once the block's execution completes.
-            _dbConnection.ConnectionString = DefaultConnectionString;
+            _dbConnection.ConnectionString = _connectionString;
             if (_dbConnection.State != ConnectionState.Open)
                 _dbConnection.Open();
             return _dbConnection;
@@ -95,18 +101,15 @@ namespace DBHelper
         // returns a filled User object
         public User FindUserByEmail(string email)
         {
-            if (email == null) return null;
-
             var queryString = $"SELECT * FROM Users WHERE Email = '{email}';";
 
             var result = RunReader(queryString);
 
             // If there are no results to the query, the result will not contain
             // any rows, and attempting to read it will throw an exception.
-            if (!result.HasRows) return null;
-
-            result.Read();
-            return BuildUser(result);
+            return result.Read()
+                ? BuildUserFromDataReader(result)
+                : null;
         }
 
         public List<User> GetAll()
@@ -115,7 +118,7 @@ namespace DBHelper
             var results = RunReader(query);
             var users = new List<User>();
             while (results.Read())
-                users.Add(BuildUser(results));
+                users.Add(BuildUserFromDataReader(results));
             return users;
         }
 
@@ -124,11 +127,11 @@ namespace DBHelper
             var query = $"SELECT * FROM Users WHERE UserID = {id};";
             var result = RunReader(query);
             return result.Read()
-                ? BuildUser(result)
+                ? BuildUserFromDataReader(result)
                 : null;
         }
 
-        private static User BuildUser(DataTableReader reader)
+        private static User BuildUserFromDataReader(DataTableReader reader)
         {
             //reader.Read();
             return new User
@@ -156,7 +159,11 @@ namespace DBHelper
             var passwordHash = Crypto.HashPassword(password);
 
             var queryString = "INSERT INTO Users (FirstName, LastName, Phone, Email, Hash) " +
-                              $"VALUES ('{firstName}', '{lastName}', '{phone}', '{email}', '{passwordHash}');";
+                              $"VALUES ('{firstName}'" +
+                              $", '{lastName}'" +
+                              $", '{phone}'" +
+                              $", '{email}'" +
+                              $", '{passwordHash}');";
 
             var result = RunNonQuery(queryString);
             return result;
@@ -175,17 +182,31 @@ namespace DBHelper
             return RunNonQuery(userQuery);
         }
 
-        public bool UpdateUser(string email, UserColumns col, string newValue)
+        public bool UpdateUserByParam(string email, UserColumns col, string newValue)
         {
-            var user = FindUserByEmail(email);
-            var query = $"UPDATE Users SET {col.ToString()} = '{newValue}' WHERE UserID = {user.Id};";
+            var id = FindUserByEmail(email)?.Id;
+            var query = $"UPDATE Users SET {col.ToString()} = '{newValue}' WHERE UserID = {id};";
+            return RunNonQuery(query);
+        }
+
+        public bool UpdateUser(User update)
+        {
+            if (FindUserById(update.Id) == null) return false;
+
+            var query = "UPDATE Users SET " +
+                        $"FirstName = '{update.FirstName}', " +
+                        $"LastName = '{update.LastName}', " +
+                        $"Email = '{update.Email}', " +
+                        $"Phone = '{update.Phone}' " +
+                        $"WHERE UserId = {update.Id};";
+
             return RunNonQuery(query);
         }
 
         public bool AuthenticateUser(string email, string password)
         {
             // get the user's hash for comparison
-            var userHash = FindUserByEmail(email).Hash;
+            var userHash = FindUserByEmail(email)?.Hash;
             // validate the given password
             return Crypto.ValidatePassword(password, userHash);
         }
@@ -198,9 +219,10 @@ namespace DBHelper
                 return null;
 
             // if valid, get the user's id
-            var userId = FindUserByEmail(email).Id;
+            var userId = FindUserByEmail(email)?.Id;
+            if (userId == null) throw new DataException("Unable to find user");
             // use the id to get the valid token
-            return GetUserToken(userId);
+            return GetUserToken(Convert.ToInt32(userId));
         }
 
         public bool ResetPassword(string email, string newPassword)
@@ -208,7 +230,7 @@ namespace DBHelper
             // find the user and get their ID
             var id = FindUserByEmail(email)?.Id;
             // if no user (and no ID) was found, return false
-            if (id == null) return false;
+            if (id == null) throw new DataException("Unable to find user");
 
             // otherwise, generate a new hash from the given password and update
             // the field in the Users table
@@ -219,6 +241,18 @@ namespace DBHelper
 
         private string GetUserToken(int id)
         {
+            // verify that a corresponding user exists
+            var user = FindUserById(id);
+            if (user == null) throw new DataException("Unable to find user");
+
+            // make sure there are zero (0) or one (1) tokens for any user,
+            // if there are two (2) or more, this is an error.
+            // correct this error by erasing all tokens associated
+            // with that user and generating one (1) replacement token.
+            var numTokens = RunScalar($"SELECT COUNT(*) FROM Tokens WHERE UserId = '{user.Id}';");
+            if (numTokens != null && Convert.ToInt32(numTokens) != 1)
+                DeleteUserToken(id);
+
             // get the token for this user
             var query = $"SELECT * FROM Tokens WHERE UserID = '{id}';";
             var result = RunReader(query);
@@ -227,13 +261,13 @@ namespace DBHelper
             if (!result.HasRows)
                 return GenerateNewTokenForUser(id);
 
-            // read the token and expiration date
+            // otherwise, get the token and its expiration date
             result.Read();
-            var expiry = result.GetString((int)TokenColumns.Expiry);
+            var expiry = result.GetDateTime((int)TokenColumns.Expiry).ToString("ddMMyyyy");
             var token = result.GetString((int)TokenColumns.Token);
 
             // if the token has expired, generate a new one
-            // if it's still valid, return the token
+            // otherwise return the valid token
             return ToDateTime(expiry) > DateTime.Today 
                 ? GenerateNewTokenForUser(id) 
                 : token;
@@ -241,7 +275,7 @@ namespace DBHelper
 
         private string GenerateNewTokenForUser(int id)
         {
-            // remove the old token, as we should only have one per user
+            // remove any old tokens, as we should only have one per user
             DeleteUserToken(id);
             // generate a new token based on the current date and time
             var newToken = GenerateNewToken();
@@ -252,7 +286,7 @@ namespace DBHelper
 
         private bool DeleteUserToken(int userId)
         {
-            var query = $"DELETE FROM TABLE Tokens WHERE UserID = {userId};";
+            var query = $"DELETE FROM Tokens WHERE UserID = {userId};";
             return RunNonQuery(query);
         }
 
@@ -276,11 +310,11 @@ namespace DBHelper
         {
             // convert a datetime string to a DateTime object
             // datetime string expected in ddmmyyyy format
-            var d = new DateTime();
-            d = d.AddYears(Convert.ToInt32(dateTime.Substring(4, 4)));
-            d = d.AddMonths(Convert.ToInt32(dateTime.Substring(2, 2)));
-            d = d.AddDays(Convert.ToDouble(dateTime.Substring(0, 2)));
-            return d;
+            if (!dateTime.Length.Equals(8)) throw new ArgumentException("dateTime string must be in format ddmmyyyy");
+            return new DateTime()
+                    .AddYears((Convert.ToInt32(dateTime.Substring(4, 4))))
+                    .AddMonths(Convert.ToInt32(dateTime.Substring(2, 2)))
+                    .AddDays(Convert.ToDouble(dateTime.Substring(0, 2)));
         }
     }
 }

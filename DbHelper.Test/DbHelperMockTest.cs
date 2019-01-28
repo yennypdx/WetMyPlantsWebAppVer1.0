@@ -153,7 +153,7 @@ namespace DbHelper.Test
         //    var user = _db.FindUserByEmail(Email);
         //    user.Email = "newemail@test.com";
 
-        //    var result = _db.UpdateUser(user);
+        //    var result = _db.UpdateUserByParam(user);
 
         //    Assert.IsTrue(result);
         //    Assert.AreEqual("newemail@test.com", _db.FindUserByEmail(Email).Email);
@@ -167,7 +167,7 @@ namespace DbHelper.Test
         //    var user = _db.FindUserByEmail(Email);
         //    user.FirstName = "NewFirstName";
 
-        //    var result = _db.UpdateUser(user);
+        //    var result = _db.UpdateUserByParam(user);
 
         //    Assert.IsTrue(result);
 
@@ -182,7 +182,7 @@ namespace DbHelper.Test
         //    var user = _db.FindUserByEmail(Email);
         //    user.LastName = "NewLastName";
 
-        //    var result = _db.UpdateUser(user);
+        //    var result = _db.UpdateUserByParam(user);
 
         //    Assert.IsTrue(result);
         //    Assert.AreEqual("NewLastName", _db.FindUserByEmail(Email).LastName);
@@ -196,7 +196,7 @@ namespace DbHelper.Test
         //    var user = _db.FindUserByEmail(Email);
         //    user.Phone = "1112223333";
 
-        //    var result = _db.UpdateUser(user);
+        //    var result = _db.UpdateUserByParam(user);
 
         //    Assert.IsTrue(result);
         //    Assert.AreEqual("1112223333", _db.FindUserByEmail(Email).Phone);
