@@ -11,7 +11,7 @@ namespace DbHelper.Test
     public class DbHelperTest
     {
         private readonly DBHelper.DbHelper _db;
-        private readonly string _connectionString = "Data Source=.;Initial Catalog=WetMyPlantsTest;Integrated Security=True;";
+        private readonly string _connectionString = "Data Source=wetmyplants-test.c9yldqomj91e.us-west-2.rds.amazonaws.com,1433;Initial Catalog=WetMyPlantsTest;User ID=wetmyplants;Password=GR33nThumb;";
 
         private const string FirstName = "Test";
         private const string LastName = "User";
