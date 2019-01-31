@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using WebApp.Models.HomeViewModels;
 
 namespace WebApp.Controllers
 {
@@ -6,7 +7,7 @@ namespace WebApp.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            return View(new DashboardViewModel());
         }
     }
 }

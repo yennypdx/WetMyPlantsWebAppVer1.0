@@ -3,39 +3,68 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - WetMyPlants</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Wet My Plants", "Login", "Account", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Login", "Login", "Account")</li>
-                    <li>@Html.ActionLink("RegUser", "Registration", "Reg")</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+<style>
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+    #nav-user-options {
+        position: absolute;
+        right: 10px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        -webkit-justify-content: flex-end;
+    }
+</style>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark text-white">
+    <a class="navbar-brand">WetMyPlants</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navigation">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a class="nav-item nav-link" href="~/home">Home</a>
+                </li>
+                <li>
+                    <a class="nav-item nav-link" href="~/home/plants">My Plants</a>
+                </li>
+            </ul>
+            @* Somehow change nav bar from "Login | Register" to "My Account" when a user is logged in *@
+            <ul class="nav navbar-nav" id="nav-user-options">
+                <li>
+                    <a class="nav-item nav-link" href="/account/login">Login</a>
+                </li>
+                <li>
+                    <a class="nav-item nav-link" href="/account/register">Register</a>
+                </li>
+                <li>
+                    <a class="nav-item nav-link" href="/account">My Account</a>
+                </li>
+            </ul>
+    </div>
+</nav>
+
+<div class="container body-content">
+    @RenderBody()
+    <hr/>
+    <footer>
+        <p>&copy; @DateTime.Now.Year - WetMyPlants</p>
+    </footer>
+</div>
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@RenderSection("scripts", required: false)
 </body>
 </html>
