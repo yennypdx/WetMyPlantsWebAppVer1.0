@@ -53,6 +53,7 @@
     <Compile Include="AccessHelper.cs" />
     <Compile Include="Crypto.cs" />
     <Compile Include="DbHelper.cs" />
+    <Compile Include="IDbHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
