@@ -145,6 +145,7 @@
     <Compile Include="Models\AccountViewModels\ForgotPasswordViewModel.cs" />
     <Compile Include="Models\AccountViewModels\LoginViewModel.cs" />
     <Compile Include="Models\AccountViewModels\RegistrationViewModel.cs" />
+    <Compile Include="Models\HomeViewModels\DashboardViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +202,8 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Home\PlantListPartial.cshtml" />
+    <Content Include="Views\Shared\NavbarPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -216,6 +219,10 @@
     <ProjectReference Include="..\DBHelper\DBHelper.csproj">
       <Project>{2d088a89-0542-4d61-acf9-9c36dfd19696}</Project>
       <Name>DBHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{15aaf300-c672-4ff7-9ec8-b9e3de57e990}</Project>
+      <Name>Models</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
