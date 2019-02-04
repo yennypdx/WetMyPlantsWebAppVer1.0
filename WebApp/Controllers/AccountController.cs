@@ -7,14 +7,22 @@ namespace WebApp.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly DBHelper.DbHelper _db;
+        //private readonly DBHelper.DbHelper _db;
 
-        public AccountController()
-        {
-            _db = new DBHelper.DbHelper();
-        }
+        //public AccountController()
+        //{
+        //    _db = new DBHelper.DbHelper();
+        //}
 
         // GET: Account
+        private readonly DBHelper.IDbHelper _db;
+
+        // Inject Dependency
+        public AccountController(DBHelper.IDbHelper db)
+        {
+            _db = db;
+        }
+
         public ActionResult Index()
         {
             return View();
