@@ -25,6 +25,26 @@ namespace DBHelper
         Expiry
     }
 
+    public enum SpeciesColumns
+    {
+        Id,
+        CommonName,
+        LatinName,
+        WaterMax,
+        WaterMin,
+        LightMax,
+        LightMin
+    }
+
+    public enum PlantColumns
+    {
+        Id,
+        SpeciesId,
+        Nickname,
+        CurrentWater,
+        CurrentLight
+    }
+
     public class DbHelper : IDbHelper
     {
         private readonly string _connectionString;
@@ -203,6 +223,62 @@ namespace DBHelper
             return RunNonQuery(query);
         }
 
+        public bool AddNewSpecies(string commonName, string latinName, double waterMax, double waterMin, double lightMax,
+            double lightMin)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Species FindSpeciesByLatinName(string latinName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Species FindSpeciesByCommonName(string commonName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Species FindSpeciesById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UpdateSpecies(int id, SpeciesColumns property, string newValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteSpecies(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AddNewPlant(int id, string nickname, double currentWater, double currentLight)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Plant> FindPlantsByNickname(string nickname)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Plant FindPlantById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UpdatePlant(int id, PlantColumns property, string newValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeletePlant(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool AuthenticateUser(string email, string password)
         {
             // get the user's hash for comparison
@@ -316,5 +392,7 @@ namespace DBHelper
                     .AddMonths(Convert.ToInt32(dateTime.Substring(2, 2)))
                     .AddDays(Convert.ToDouble(dateTime.Substring(0, 2)));
         }
+
+
     }
 }
