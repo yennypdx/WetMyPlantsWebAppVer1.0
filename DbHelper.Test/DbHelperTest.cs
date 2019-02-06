@@ -397,7 +397,7 @@ namespace DbHelper.Test
 
             var currentToken = _db.LoginAndGetToken(_user.Email, _user.Password); // get the current (new) token
 
-            Assert.AreNotEqual(originalToken, currentToken); // verify it NEW and not the same as the original one
+            Assert.AreNotEqual(originalToken, currentToken); // verify it is NEW and not the same as the original one
         }
 
         /*
@@ -443,11 +443,11 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperGetPlantSpeciesByIdTest()
         {
-            var id = _db.FindSpeciesByLatinName(_user.Plants[0].Species.LatinName).Id;
+            var id = _db.FindSpeciesByLatinName(_user.Plants[0].Species.LatinName).Id; // get the id
 
-            var result = _db.FindSpeciesById(id);
+            var result = _db.FindSpeciesById(id); // use the id to find the plant
 
-            Assert.AreEqual(_user.Plants[0].Species.LatinName, result.LatinName);
+            Assert.AreEqual(_user.Plants[0].Species.LatinName, result.LatinName); // compare plant data
         }
 
         [TestMethod]
@@ -456,7 +456,7 @@ namespace DbHelper.Test
             var id = _db.FindSpeciesByCommonName(_user.Plants[0].Species.CommonName).Id; // necessary to get the id for the next step
             _db.UpdateSpecies(id, SpeciesColumns.LatinName, "New latin name"); // update with a new latin name
 
-            var result = _db.FindSpeciesById(id).LatinName; // get the species from the database using the new latin name
+            var result = _db.FindSpeciesById(id).LatinName; // get the species' latin name from the database
 
             Assert.AreEqual("New latin name", result); // the species should have the new latin name
         }
@@ -464,10 +464,10 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperUpdateSpeciesCommonNameTest()
         {
-            var id = _db.FindSpeciesByCommonName(_user.Plants[0].Species.CommonName).Id; // necessary to get the id for the next step
+            var id = _db.FindSpeciesByCommonName(_user.Plants[0].Species.CommonName).Id; // get the id
             _db.UpdateSpecies(id, SpeciesColumns.CommonName, "New common name"); // update with a new common name
 
-            var result = _db.FindSpeciesById(id).CommonName; // get the species from the database using the new common name
+            var result = _db.FindSpeciesById(id).CommonName; // get the species' common name using its id
 
             Assert.AreEqual("New common name", result); // the species should have the new common name
         }
@@ -519,10 +519,10 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperDeleteSpeciesTest()
         {
-            var id = _db.FindSpeciesByLatinName(_user.Plants[0].Species.LatinName).Id;
-            _db.DeleteSpecies(id);
+            var id = _db.FindSpeciesByLatinName(_user.Plants[0].Species.LatinName).Id; // get the id
+            _db.DeleteSpecies(id); // delete the species from the database
 
-            var result = _db.FindSpeciesById(id);
+            var result = _db.FindSpeciesById(id); // ensure the species is really gone
 
             Assert.IsNull(result);
         }
@@ -551,26 +551,26 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperGetPlantByNicknameTest()
         {
-            var result = _db.FindPlantsByNickname(_user.Plants[0].Nickname)[0];
+            var result = _db.FindPlantsByNickname(_user.Plants[0].Nickname)[0]; // find a plant using a nickname
 
-            Assert.AreEqual(_user.Plants[0].Species.Id, result.SpeciesId);
+            Assert.AreEqual(_user.Plants[0].Nickname, result.Nickname; // should return the same plant
         }
 
         [TestMethod]
         public void DbHelperGetPlantsByNicknameEmptyTest()
         {
-            var result = _db.FindPlantsByNickname("Invalid nickname");
+            var result = _db.FindPlantsByNickname("Invalid nickname"); // use an invalid nickname
 
-            Assert.IsNull(result);
+            Assert.IsNull(result); // should return null
         }
 
         [TestMethod]
         public void DbHelperGetPlantByIdTest()
         {
-            var id = _db.FindPlantsByNickname(_user.Plants[0].Nickname)[0].Id;
-            var result = _db.FindPlantById(id);
+            var id = _db.FindPlantsByNickname(_user.Plants[0].Nickname)[0].Id; // get the id of a specific plant
+            var result = _db.FindPlantById(id); // use the id to get the plant from the database
 
-            Assert.AreEqual(_user.Plants[0].Nickname, result.Nickname);
+            Assert.AreEqual(id, result.Id); // ensure they are the same plant based on the id
         }
 
         [TestMethod]
@@ -587,21 +587,21 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperUpdatePlantNicknameTest()
         {
-            var id = _db.FindPlantsByNickname(_user.Plants[0].Nickname)[0].Id; // necessary to get the id for the next step
+            var id = _db.FindPlantsByNickname(_user.Plants[0].Nickname)[0].Id; // get the id
             _db.UpdatePlant(id, PlantColumns.Nickname, "New nickname"); // update with a new nickname
 
-            var result = _db.FindPlantById(id).Nickname; // get the species from the database using the new common name
+            var result = _db.FindPlantById(id).Nickname; // get the plant from the database using the new nickname
 
-            Assert.AreEqual("New nickname", result); // the species should have the new nickname
+            Assert.AreEqual("New nickname", result); // the plant should have the new nickname
         }
 
         [TestMethod]
         public void DbHelperUpdatePlantCurrentWaterTest()
         {
-            var id = _db.FindPlantsByNickname(_user.Plants[0].Nickname)[0].Id;
-            _db.UpdatePlant(id, PlantColumns.CurrentWater, "-1.00");
+            var id = _db.FindPlantsByNickname(_user.Plants[0].Nickname)[0].Id; // get the id
+            _db.UpdatePlant(id, PlantColumns.CurrentWater, "-1.00"); // update the with a new water level
 
-            var result = _db.FindPlantById(id).CurrentWater;
+            var result = _db.FindPlantById(id).CurrentWater; // get the plant's water level from the database
 
             Assert.AreEqual(-1.00, result);
         }
@@ -609,10 +609,10 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperUpdatePlantCurrentLightTest()
         {
-            var id = _db.FindPlantsByNickname(_user.Plants[0].Nickname)[0].Id;
-            _db.UpdatePlant(id, PlantColumns.CurrentLight, "-1.00");
+            var id = _db.FindPlantsByNickname(_user.Plants[0].Nickname)[0].Id; // get the id
+            _db.UpdatePlant(id, PlantColumns.CurrentLight, "-1.00"); // update with a new light level
 
-            var result = _db.FindPlantById(id).CurrentLight;
+            var result = _db.FindPlantById(id).CurrentLight; // get the plant's light level from the database
 
             Assert.AreEqual(-1.00, result);
         }
@@ -620,10 +620,10 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperDeletePlantTest()
         {
-            var id = _db.FindPlantsByNickname(_user.Plants[0].Nickname)[0].Id;
-            _db.DeletePlant(id);
+            var id = _db.FindPlantsByNickname(_user.Plants[0].Nickname)[0].Id; // get the id
+            _db.DeletePlant(id); // delete the plant
 
-            var result = _db.FindPlantById(id);
+            var result = _db.FindPlantById(id); // ensure the plant is gone
 
             Assert.IsNull(result);
         }
