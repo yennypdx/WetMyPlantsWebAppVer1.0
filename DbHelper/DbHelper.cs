@@ -1,17 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Threading.Tasks;
 using DbHelper;
 using Models;
-using System.Net.Http;
-using System.Net.Mail;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 
 namespace DBHelper
 {
-    internal enum UserColumns
+    public enum UserColumns
     {
         Id,
         FirstName,
@@ -21,14 +17,23 @@ namespace DBHelper
         Email
     }
 
-    public class DbHelper
+    internal enum TokenColumns
     {
-        private readonly string _dbConnectionString = AccessHelper.GetDbConnectionString();
+        Id,
+        UserId,
+        Token,
+        Expiry
+    }
+
+    public class DbHelper : IDbHelper
+    {
+        private readonly string _connectionString;
         private readonly SqlConnection _dbConnection;
 
-        public DbHelper()
+        public DbHelper(string connectionString = null)
         {
-            _dbConnection = new SqlConnection(_dbConnectionString);
+            _connectionString = connectionString ?? AccessHelper.GetDbConnectionString();
+            _dbConnection = new SqlConnection(_connectionString);
         }
 
         // Open() makes it easier to use the SqlConnection without worrying about
@@ -38,7 +43,7 @@ namespace DBHelper
             // Need to reset the connection string anytime the connection closes.
             // The using() statements in the helper methods below will close the
             // connection once the block's execution completes.
-            _dbConnection.ConnectionString = _dbConnectionString;
+            _dbConnection.ConnectionString = _connectionString;
             if (_dbConnection.State != ConnectionState.Open)
                 _dbConnection.Open();
             return _dbConnection;
@@ -46,9 +51,9 @@ namespace DBHelper
 
         // RunScalar() executes the SQL scalar command and returns a single value,
         // typically an ID or a count.
-        private string RunScalar(string commandString)
+        private string RunScalar(string queryString)
         {
-            var sqlCommand = new SqlCommand(commandString, _dbConnection);
+            var sqlCommand = new SqlCommand(queryString, _dbConnection);
 
             using(Open())
             {
@@ -58,9 +63,9 @@ namespace DBHelper
         }
 
         // RunReader executes a SQL query command, returning a collection of data.
-        private DataTableReader RunReader(string connectionString)
+        private DataTableReader RunReader(string queryString)
         {
-            var sqlCommand = new SqlCommand(connectionString, _dbConnection);
+            var sqlCommand = new SqlCommand(queryString, _dbConnection);
             var adapter = new SqlDataAdapter(sqlCommand);
             var dataSet = new DataSet();
 
@@ -73,9 +78,9 @@ namespace DBHelper
 
         // RunNonQuery executes a SQL command that does not return a query value, but
         // will return the number of rows affected by the action.
-        private bool RunNonQuery(string connectionString)
+        private bool RunNonQuery(string queryString)
         {
-            var sqlCommand = new SqlCommand(connectionString, _dbConnection);
+            var sqlCommand = new SqlCommand(queryString, _dbConnection);
 
             try
             {
@@ -96,27 +101,50 @@ namespace DBHelper
         // returns a filled User object
         public User FindUserByEmail(string email)
         {
-            if (email == null) return null;
-
             var queryString = $"SELECT * FROM Users WHERE Email = '{email}';";
 
             var result = RunReader(queryString);
 
             // If there are no results to the query, the result will not contain
             // any rows, and attempting to read it will throw an exception.
-            if (!result.HasRows) return null;
+            return result.Read()
+                ? BuildUserFromDataReader(result)
+                : null;
+        }
 
-            result.Read(); // Move to the first (and only) record.
-            var user = new User
+        public List<User> GetAll()
+        {
+            var query = "SELECT * FROM Users";
+            var results = RunReader(query);
+            var users = new List<User>();
+            while (results.Read())
+                users.Add(BuildUserFromDataReader(results));
+            return users;
+        }
+
+        public User FindUserById(int id)
+        {
+            var query = $"SELECT * FROM Users WHERE UserID = {id};";
+            var result = RunReader(query);
+            return result.Read()
+                ? BuildUserFromDataReader(result)
+                : null;
+        }
+
+        private static User BuildUserFromDataReader(DataTableReader reader)
+        {
+            //reader.Read();
+            return new User
             {
-                Id = result.GetInt32((int) UserColumns.Id),
-                FirstName = result.GetString((int) UserColumns.FirstName),
-                LastName = result.GetString((int) UserColumns.LastName),
-                Email = result.GetString((int) UserColumns.Email),
-                Phone = result.GetString((int) UserColumns.Phone),
-                Hash = result.GetString((int) UserColumns.Hash)
+                Id = reader.GetInt32((int) UserColumns.Id),
+                FirstName = reader.GetString((int) UserColumns.FirstName),
+                LastName = reader.GetString((int) UserColumns.LastName),
+                Email = reader.GetString((int) UserColumns.Email),
+                Phone = reader.GetString((int) UserColumns.Phone),
+                Hash = reader.IsDBNull((int) UserColumns.Hash) 
+                    ? ""
+                    : reader.GetString((int) UserColumns.Hash)
             };
-            return user;
         }
 
         // Inserts a new tuple into the User table containing all the user's values,
@@ -131,64 +159,162 @@ namespace DBHelper
             var passwordHash = Crypto.HashPassword(password);
 
             var queryString = "INSERT INTO Users (FirstName, LastName, Phone, Email, Hash) " +
-                              $"VALUES ('{firstName}', '{lastName}', '{phone}', '{email}', '{passwordHash}');";
+                              $"VALUES ('{firstName}'" +
+                              $", '{lastName}'" +
+                              $", '{phone}'" +
+                              $", '{email}'" +
+                              $", '{passwordHash}');";
 
             var result = RunNonQuery(queryString);
             return result;
         }
 
         // Deletes a user (tuple) from the database
-        public bool RemoveUser(string email)
+        public bool DeleteUser(string email)
         {
-            var removeString = $"DELETE FROM Users WHERE Email = '{email}';";
+            var id = FindUserByEmail(email)?.Id;
+            if (id == null) return false;
 
-            var result = RunNonQuery(removeString);
+            var tokenQuery = $"DELETE FROM Tokens WHERE UserID = {id};";
+            RunNonQuery(tokenQuery);
 
-            return result;
+            var userQuery = $"DELETE FROM Users WHERE Email = '{email}';";
+            return RunNonQuery(userQuery);
         }
 
-        public bool UpdateUser(User user)
+        public bool UpdateUserByParam(string email, UserColumns col, string newValue)
         {
-            throw new NotImplementedException();
+            var id = FindUserByEmail(email)?.Id;
+            var query = $"UPDATE Users SET {col.ToString()} = '{newValue}' WHERE UserID = {id};";
+            return RunNonQuery(query);
         }
 
-        public bool Login(string email, string password)
+        public bool UpdateUser(User update)
         {
-            //throw new NotImplementedException();
-            var userHash = FindUserByEmail(email).Hash;
+            if (FindUserById(update.Id) == null) return false;
 
-            var isValid = Crypto.ValidatePassword(password, userHash);
+            var query = "UPDATE Users SET " +
+                        $"FirstName = '{update.FirstName}', " +
+                        $"LastName = '{update.LastName}', " +
+                        $"Email = '{update.Email}', " +
+                        $"Phone = '{update.Phone}' " +
+                        $"WHERE UserId = {update.Id};";
 
-            return isValid;
+            return RunNonQuery(query);
         }
 
-        public bool ForgotPassword(string email)
+        public bool AuthenticateUser(string email, string password)
         {
-            SendPasswordResetEmail(email).Wait();
-            return true;
+            // get the user's hash for comparison
+            var userHash = FindUserByEmail(email)?.Hash;
+            // validate the given password
+            return Crypto.ValidatePassword(password, userHash);
         }
 
-        public bool ResetPassword(string email)
+        public string LoginAndGetToken(string email, string password)
         {
-           // SendPasswordResetEmail(email);
-           
-            return true;
+            // authenticate the email and password combo
+            // if invalid, return nothing
+            if (!AuthenticateUser(email, password))
+                return null;
+
+            // if valid, get the user's id
+            var userId = FindUserByEmail(email)?.Id;
+            if (userId == null) throw new DataException("Unable to find user");
+            // use the id to get the valid token
+            return GetUserToken(Convert.ToInt32(userId));
         }
 
-        //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
-        static public async Task SendPasswordResetEmail(string email)
+        public bool ResetPassword(string email, string newPassword)
         {
-            string apiKey = System.Environment.GetEnvironmentVariable("SENDGRID_APIKEY");
-            var client = new SendGridClient(apiKey);
-            var msg = new SendGridMessage()
-            {
-                From = new EmailAddress("resetpassword@wetmyplants.com", "WetMyPlants Team"),
-                Subject = "Reset Password",
-                PlainTextContent = "Please click on this link to reset your password: https://wetmyplants.azurewebsites.net/Account/ResetPassword",
-                HtmlContent = "<strong>Please click on this link to reset your password: </strong><a href='https://wetmyplants.azurewebsites.net/Account/ResetPassword'></a>"
-            };
-            msg.AddTo(new EmailAddress(email, "user"));
-            var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
+            // find the user and get their ID
+            var id = FindUserByEmail(email)?.Id;
+            // if no user (and no ID) was found, return false
+            if (id == null) throw new DataException("Unable to find user");
+
+            // otherwise, generate a new hash from the given password and update
+            // the field in the Users table
+            var newHash = Crypto.HashPassword(newPassword);
+            var query = $"UPDATE Users SET Hash = '{newHash}' WHERE UserID = {id};";
+            return RunNonQuery(query);
+        }
+
+        private string GetUserToken(int id)
+        {
+            // verify that a corresponding user exists
+            var user = FindUserById(id);
+            if (user == null) throw new DataException("Unable to find user");
+
+            // make sure there are zero (0) or one (1) tokens for any user,
+            // if there are two (2) or more, this is an error.
+            // correct this error by erasing all tokens associated
+            // with that user and generating one (1) replacement token.
+            var numTokens = RunScalar($"SELECT COUNT(*) FROM Tokens WHERE UserId = '{user.Id}';");
+            if (numTokens != null && Convert.ToInt32(numTokens) != 1)
+                DeleteUserToken(id);
+
+            // get the token for this user
+            var query = $"SELECT * FROM Tokens WHERE UserID = '{id}';";
+            var result = RunReader(query);
+
+            // if no token exists, generate a new one
+            if (!result.HasRows)
+                return GenerateNewTokenForUser(id);
+
+            // otherwise, get the token and its expiration date
+            result.Read();
+            var expiry = result.GetDateTime((int)TokenColumns.Expiry).ToString("ddMMyyyy");
+            var token = result.GetString((int)TokenColumns.Token);
+
+            // if the token has expired, generate a new one
+            // otherwise return the valid token
+            return ToDateTime(expiry) > DateTime.Today 
+                ? GenerateNewTokenForUser(id) 
+                : token;
+        }
+
+        private string GenerateNewTokenForUser(int id)
+        {
+            // remove any old tokens, as we should only have one per user
+            DeleteUserToken(id);
+            // generate a new token based on the current date and time
+            var newToken = GenerateNewToken();
+            // set the new token
+            SetTokenForUser(id, newToken);
+            return newToken;
+        }
+
+        private bool DeleteUserToken(int userId)
+        {
+            var query = $"DELETE FROM Tokens WHERE UserID = {userId};";
+            return RunNonQuery(query);
+        }
+
+        private static string GenerateNewToken()
+        {
+            // generate a new token based on the current date and time
+            var dateString = DateTime.Today.Ticks.ToString();
+            return Crypto.HashPassword(dateString);
+        }
+
+        private bool SetTokenForUser(int userId, string token)
+        {
+            // set an expiration date for two weeks in the future
+            var expiry = DateTime.Today;
+            expiry = expiry.AddDays(14);
+            var query = $"INSERT INTO Tokens (UserID, Token, Expiry) VALUES ({userId}, '{token}', '{expiry}');";
+            return RunNonQuery(query);
+        }
+
+        private static DateTime ToDateTime(string dateTime)
+        {
+            // convert a datetime string to a DateTime object
+            // datetime string expected in ddmmyyyy format
+            if (!dateTime.Length.Equals(8)) throw new ArgumentException("dateTime string must be in format ddmmyyyy");
+            return new DateTime()
+                    .AddYears((Convert.ToInt32(dateTime.Substring(4, 4))))
+                    .AddMonths(Convert.ToInt32(dateTime.Substring(2, 2)))
+                    .AddDays(Convert.ToDouble(dateTime.Substring(0, 2)));
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System.Web.Mvc;
+using Models;
 using WebApp.Models.AccountViewModels;
+using WebApp.Models.HomeViewModels;
 
 namespace WebApp.Controllers
 {
@@ -55,35 +57,27 @@ namespace WebApp.Controllers
                 uModel.Phone,
                 uModel.Email,
                 uModel.Password);
-            //try
-            //{
-            //    if (ModelState.IsValid)
-            //    {
-            //        var fname = uModel.FirstName;
-            //        var lname = uModel.LastName;
-            //        var phn = uModel.Phone;
-            //        var email = uModel.Email;
-            //        var pass = uModel.Password;
 
-            //        _db.CreateNewUser(fname, lname, phn, email, pass);
-            //        return View("Register");
-            //    }
-            //    else
-            //    {
-            //        return View();
-            //    }
-            //}
-            //catch
-            //{
-            //    return View();
-            //}
-            return View("Login");
+            if (!result) return RedirectToAction("Register");
+
+            var token = _db.LoginAndGetToken(uModel.Email, uModel.Password);
+
+            if (token == null) return RedirectToAction("Register");
+
+            // store token in a cookie here
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
         public ActionResult LoginUser(LoginViewModel model)
         {
-            var result = _db.Login(model.Email, model.Password);
+            var result = _db.LoginAndGetToken(model.Email, model.Password);
+            
+            if (result != null)
+            {
+                // store token as a cookie here
+                return RedirectToAction("Index", "Home");
+            }
 
             return View("Login");
         }
