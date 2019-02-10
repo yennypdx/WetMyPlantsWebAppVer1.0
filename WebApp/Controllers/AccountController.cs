@@ -28,6 +28,18 @@ namespace WebApp.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult ForgotUserPassword(ForgotPasswordViewModel uModel)
+        {
+            var result = _db.ForgotPassword(uModel.Email);
+            return View("Login");
+        }
+
+        public ActionResult ResetPassword(ResetPasswordViewModel uModel)
+        {
+            return View();
+        }
+
         public ActionResult Register()
         {
             return View();

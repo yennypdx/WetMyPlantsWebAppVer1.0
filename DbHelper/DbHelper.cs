@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using DbHelper;
 using Models;
+using System.Net.Http;
+using System.Net.Mail;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace DBHelper
 {
@@ -157,9 +162,33 @@ namespace DBHelper
             return isValid;
         }
 
-        public bool ResetPassword(string email, string newPassword)
+        public bool ForgotPassword(string email)
         {
-            throw new NotImplementedException();
+            SendPasswordResetEmail(email).Wait();
+            return true;
+        }
+
+        public bool ResetPassword(string email)
+        {
+           // SendPasswordResetEmail(email);
+           
+            return true;
+        }
+
+        //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
+        static public async Task SendPasswordResetEmail(string email)
+        {
+            string apiKey = System.Environment.GetEnvironmentVariable("SENDGRID_APIKEY");
+            var client = new SendGridClient(apiKey);
+            var msg = new SendGridMessage()
+            {
+                From = new EmailAddress("resetpassword@wetmyplants.com", "WetMyPlants Team"),
+                Subject = "Reset Password",
+                PlainTextContent = "Please click on this link to reset your password: https://wetmyplants.azurewebsites.net/Account/ResetPassword",
+                HtmlContent = "<strong>Please click on this link to reset your password: </strong><a href='https://wetmyplants.azurewebsites.net/Account/ResetPassword'></a>"
+            };
+            msg.AddTo(new EmailAddress(email, "user"));
+            var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
         }
     }
 }
