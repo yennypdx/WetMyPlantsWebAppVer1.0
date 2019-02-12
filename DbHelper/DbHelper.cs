@@ -228,9 +228,9 @@ namespace DBHelper
         public bool ResetPassword(string email, string newPassword)
         {
             // find the user and get their ID
-            var id = FindUserByEmail(email)?.Id;
+          //  var id = FindUserByEmail(email)?.Id;
             // if no user (and no ID) was found, return false
-            if (id == null) throw new DataException("Unable to find user");
+           // if (id == null) throw new DataException("Unable to find user");
 
             // otherwise, generate a new hash from the given password and update
             // the field in the Users table
