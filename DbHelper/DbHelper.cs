@@ -132,7 +132,7 @@ namespace DBHelper
                 : null;
         }
 
-        public List<User> GetAll()
+        public List<User> GetAllUsers()
         {
             var query = "SELECT * FROM Users";
             var results = RunReader(query);
@@ -243,14 +243,7 @@ namespace DBHelper
             var userQuery = $"DELETE FROM Users WHERE Email = '{email}';";
             return RunNonQuery(userQuery);
         }
-
-        public bool UpdateUserByParam(string email, UserColumns col, string newValue)
-        {
-            var id = FindUserByEmail(email)?.Id;
-            var query = $"UPDATE Users SET {col.ToString()} = '{newValue}' WHERE UserID = {id};";
-            return RunNonQuery(query);
-        }
-
+        
         public bool UpdateUser(User update)
         {
             if (FindUserById(update.Id) == null) return false;
@@ -265,7 +258,7 @@ namespace DBHelper
             return RunNonQuery(query);
         }
 
-        public bool AddNewSpecies(string commonName, string latinName, double waterMax = 0, double waterMin = 0, double lightMax = 0,
+        public bool CreateNewSpecies(string commonName, string latinName, double waterMax = 0, double waterMin = 0, double lightMax = 0,
             double lightMin = 0)
         {
             var query = "INSERT INTO Species (CommonName, LatinName, WaterMax, WaterMin, LightMax, LightMin) VALUES " +
@@ -361,7 +354,7 @@ namespace DBHelper
             return result;
         }
 
-        public bool AddNewPlant(int speciesId, string nickname, double currentWater = 0, double currentLight = 0)
+        public bool CreateNewPlant(int speciesId, string nickname, double currentWater = 0, double currentLight = 0)
         {
             var query = $"INSERT INTO Plants (SpeciesID, Nickname, CurrentWater, CurrentLight) VALUES " +
                         $"({speciesId}, '{nickname}', {currentWater}, {currentLight});";

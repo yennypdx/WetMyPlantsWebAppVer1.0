@@ -7,6 +7,7 @@ namespace DBHelper
     public interface IDbHelper
     {
         bool CreateNewUser(string firstName, string lastName, string phone, string email, string password);
+        List<User> GetAllUsers();
         User FindUserByEmail(string email);
         bool AuthenticateUser(string email, string password);
         string LoginAndGetToken(string email, string password);
@@ -14,7 +15,7 @@ namespace DBHelper
         bool ResetPassword(string email, string newPassword);
         bool UpdateUser(User user);
 
-        bool AddNewSpecies(string commonName, string latinName, double waterMax, double waterMin, double lightMax,
+        bool CreateNewSpecies(string commonName, string latinName, double waterMax, double waterMin, double lightMax,
             double lightMin);
 
         List<Species> GetAllSpecies();
@@ -24,7 +25,7 @@ namespace DBHelper
         bool UpdateSpecies(Species update);
         bool DeleteSpecies(int id);
 
-        bool AddNewPlant(int speciesId, string nickname, double currentWater, double currentLight);
+        bool CreateNewPlant(int speciesId, string nickname, double currentWater, double currentLight);
         List<Plant> GetAllPlants();
         List<Plant> FindPlantsByNickname(string nickname);
         Plant FindPlantById(int id);

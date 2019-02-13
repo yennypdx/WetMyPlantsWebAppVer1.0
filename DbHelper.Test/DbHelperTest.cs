@@ -65,21 +65,21 @@ namespace DbHelper.Test
         public void Init()
         {
             _db.CreateNewUser(firstName, lastName, phone, email, password); // only added here after CreateNewUser was tested
-            _db.AddNewSpecies(speciesOneCommonName, speciesOneLatinName, speciesOneWaterMax, speciesOneWaterMin, speciesOneLightMax, speciesOneLightMin);
-            _db.AddNewSpecies(speciesTwoCommonName, speciesTwoLatinName, speciesTwoWaterMax, speciesTwoWaterMin, speciesTwoLightMax, speciesTwoLightMin);
+            _db.CreateNewSpecies(speciesOneCommonName, speciesOneLatinName, speciesOneWaterMax, speciesOneWaterMin, speciesOneLightMax, speciesOneLightMin);
+            _db.CreateNewSpecies(speciesTwoCommonName, speciesTwoLatinName, speciesTwoWaterMax, speciesTwoWaterMin, speciesTwoLightMax, speciesTwoLightMin);
 
             var species = _db.GetAllSpecies();
             var idOne = species[0].Id;
             var idTwo = species[1].Id;
 
-            _db.AddNewPlant(idOne, plantOneAlias, plantOneCurrentWater, plantOneCurrentLight);
-            _db.AddNewPlant(idTwo, plantTwoAlias, plantTwoCurrentWater, plantTwoCurrentLight);
+            _db.CreateNewPlant(idOne, plantOneAlias, plantOneCurrentWater, plantOneCurrentLight);
+            _db.CreateNewPlant(idTwo, plantTwoAlias, plantTwoCurrentWater, plantTwoCurrentLight);
         }
 
         [TestCleanup]
         public void Dispose()
         {
-            var users = _db.GetAll();
+            var users = _db.GetAllUsers();
             var species = _db.GetAllSpecies();
             var plants = _db.GetAllPlants();
 
@@ -146,17 +146,6 @@ namespace DbHelper.Test
         }
 
         [TestMethod]
-        public void DbHelperUpdateUserByParamEmailTest()
-        {
-            const string newEmail = "new@email.test";
-
-            var result = _db.UpdateUserByParam(email, UserColumns.Email, newEmail);
-
-            Assert.IsTrue(result);
-            Assert.AreEqual(newEmail, _db.FindUserByEmail(newEmail).Email);
-        }
-
-        [TestMethod]
         public void DbHelperUpdateUserEmailTest()
         {
             const string newEmail = "new@email.test";
@@ -166,17 +155,6 @@ namespace DbHelper.Test
 
             Assert.IsTrue(result);
             Assert.AreEqual(newEmail, _db.FindUserById(user.Id).Email);
-        }
-
-        [TestMethod]
-        public void DbHelperUpdateUserByParamFirstNameTest()
-        {
-            const string newFirstName = "NewFirstName";
-            var result = _db.UpdateUserByParam(email, UserColumns.FirstName, newFirstName);
-
-            Assert.IsTrue(result);
-
-            Assert.AreEqual(newFirstName, _db.FindUserByEmail(email).FirstName);
         }
 
         [TestMethod]
@@ -193,17 +171,6 @@ namespace DbHelper.Test
         }
 
         [TestMethod]
-        public void DbHelperUpdateUserByParamLastNameTest()
-        {
-            const string newLastName = "NewLastName";
-
-            var result = _db.UpdateUserByParam(email, UserColumns.LastName, newLastName);
-
-            Assert.IsTrue(result);
-            Assert.AreEqual(newLastName, _db.FindUserByEmail(email).LastName);
-        }
-
-        [TestMethod]
         public void DbHelperUpdateUserLastNameTest()
         {
             const string newLastName = "NewLastName";
@@ -213,17 +180,6 @@ namespace DbHelper.Test
 
             Assert.IsTrue(result);
             Assert.AreEqual(newLastName, _db.FindUserById(user.Id).LastName);
-        }
-
-        [TestMethod]
-        public void DbHelperUpdateUserByParamPhoneNumberTest()
-        {
-            const string newPhone = "1112223333";
-
-            var result = _db.UpdateUserByParam(email, UserColumns.Phone, newPhone);
-
-            Assert.IsTrue(result);
-            Assert.AreEqual(newPhone, _db.FindUserByEmail(email).Phone);
         }
 
         [TestMethod]
@@ -348,7 +304,7 @@ namespace DbHelper.Test
         {
             // use DbHelper to register a new plant species
             // this method should return true if the query was successful, false otherwise
-            var result = _db.AddNewSpecies("Test Species", "Testicus speciesi", 7.99, 2.34, 3.59, 2.00);
+            var result = _db.CreateNewSpecies("Test Species", "Testicus speciesi", 7.99, 2.34, 3.59, 2.00);
 
             Assert.IsTrue(result);
         }
@@ -469,7 +425,7 @@ namespace DbHelper.Test
             var testSpeciesLightMax = 10.00;
             var testSpeciesLightMin = 1.00;
 
-            _db.AddNewSpecies(testSpeciesCommonName, testSpeciesLatinName, testSpeciesWaterMax, testSpeciesWaterMin,
+            _db.CreateNewSpecies(testSpeciesCommonName, testSpeciesLatinName, testSpeciesWaterMax, testSpeciesWaterMin,
                 testSpeciesLightMax, testSpeciesLightMin);
 
             var id = _db.FindSpeciesByLatinName(testSpeciesLatinName).Id; // get the id
@@ -493,7 +449,7 @@ namespace DbHelper.Test
             // use DbHelper to register a new plant
             // this method should return true if the query was successful, false otherwise
             var id = _db.GetAllSpecies()[0].Id;
-            var result = _db.AddNewPlant(id, plantOneAlias, plantOneCurrentWater, plantOneCurrentLight);
+            var result = _db.CreateNewPlant(id, plantOneAlias, plantOneCurrentWater, plantOneCurrentLight);
 
             Assert.IsTrue(result);
         }
