@@ -16,16 +16,19 @@ namespace DBHelper
 
         bool AddNewSpecies(string commonName, string latinName, double waterMax, double waterMin, double lightMax,
             double lightMin);
+
+        List<Species> GetAllSpecies();
         Species FindSpeciesByLatinName(string latinName);
         Species FindSpeciesByCommonName(string commonName);
         Species FindSpeciesById(int id);
-        bool UpdateSpecies(int id, SpeciesColumns property, string newValue);
+        bool UpdateSpecies(Species update);
         bool DeleteSpecies(int id);
 
-        bool AddNewPlant(int id, string nickname, double currentWater, double currentLight);
+        bool AddNewPlant(int speciesId, string nickname, double currentWater, double currentLight);
+        List<Plant> GetAllPlants();
         List<Plant> FindPlantsByNickname(string nickname);
         Plant FindPlantById(int id);
-        bool UpdatePlant(int id, PlantColumns property, string newValue);
+        bool UpdatePlant(Plant update);
         bool DeletePlant(int id);
     }
 }

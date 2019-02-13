@@ -167,6 +167,48 @@ namespace DBHelper
             };
         }
 
+        private static Species BuildSpeciesFromDataReader(DataTableReader reader)
+        {
+            try
+            {
+                var species = new Species
+                {
+                    Id = reader.GetInt32((int) SpeciesColumns.Id),
+                    LatinName = reader.GetString((int) SpeciesColumns.LatinName),
+                    CommonName = reader.GetString((int) SpeciesColumns.CommonName),
+                    LightMax = reader.GetDouble((int) SpeciesColumns.LightMax),
+                    LightMin = reader.GetDouble((int) SpeciesColumns.LightMin),
+                    WaterMax = reader.GetDouble((int) SpeciesColumns.WaterMax),
+                    WaterMin = reader.GetDouble((int) SpeciesColumns.WaterMin)
+                };
+                return species;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        private static Plant BuildPlantFromDataReader(DataTableReader reader)
+        {
+            try
+            {
+                var plant = new Plant
+                {
+                    Id = reader.GetInt32((int) PlantColumns.Id),
+                    Nickname = reader.GetString((int) PlantColumns.Nickname),
+                    SpeciesId = reader.GetInt32((int) PlantColumns.SpeciesId),
+                    CurrentLight = reader.GetDouble((int) PlantColumns.CurrentLight),
+                    CurrentWater = reader.GetDouble((int) PlantColumns.CurrentWater)
+                };
+                return plant;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
         // Inserts a new tuple into the User table containing all the user's values,
         // returns whether or not the insertion was successful
         public bool CreateNewUser(string firstName, string lastName, string phone, string email, string password)
@@ -223,60 +265,178 @@ namespace DBHelper
             return RunNonQuery(query);
         }
 
-        public bool AddNewSpecies(string commonName, string latinName, double waterMax, double waterMin, double lightMax,
-            double lightMin)
+        public bool AddNewSpecies(string commonName, string latinName, double waterMax = 0, double waterMin = 0, double lightMax = 0,
+            double lightMin = 0)
         {
-            throw new NotImplementedException();
+            var query = "INSERT INTO Species (CommonName, LatinName, WaterMax, WaterMin, LightMax, LightMin) VALUES " +
+                        $"('{commonName}', '{latinName}', {waterMax}, {waterMin}, {lightMax}, {lightMin});";
+
+            var result = RunNonQuery(query);
+            return result;
+        }
+
+        public List<Species> GetAllSpecies()
+        {
+            var query = $"SELECT * FROM Species;";
+            var reader = RunReader(query);
+
+            if (!reader.HasRows) return null;
+
+            var list = new List<Species>();
+
+            while (reader.Read())
+            {
+                list.Add(BuildSpeciesFromDataReader(reader));
+            }
+
+            return list;
         }
 
         public Species FindSpeciesByLatinName(string latinName)
         {
-            throw new NotImplementedException();
+            var query = $"SELECT * FROM Species WHERE LatinName = '{latinName}';";
+
+            var reader = RunReader(query);
+
+            if (!reader.HasRows) return null;
+            reader.Read();
+
+            var species = BuildSpeciesFromDataReader(reader);
+
+            return species;
         }
 
         public Species FindSpeciesByCommonName(string commonName)
         {
-            throw new NotImplementedException();
+            var query = $"SELECT * FROM Species WHERE CommonName = '{commonName}';";
+
+            var reader = RunReader(query);
+
+            if (!reader.HasRows) return null;
+
+            reader.Read();
+            var species = BuildSpeciesFromDataReader(reader);
+
+            return species;
         }
 
         public Species FindSpeciesById(int id)
         {
-            throw new NotImplementedException();
+            var query = $"SELECT * FROM Species WHERE SpeciesID = {id};";
+
+            var reader = RunReader(query);
+
+            if (!reader.HasRows) return null;
+
+            reader.Read();
+            var species = BuildSpeciesFromDataReader(reader);
+
+            return species;
         }
 
-        public bool UpdateSpecies(int id, SpeciesColumns property, string newValue)
+        public bool UpdateSpecies(Species update)
         {
-            throw new NotImplementedException();
+            if (FindSpeciesById(update.Id) == null) return false;
+
+            var query = $"UPDATE Species SET " +
+                        $"LatinName = '{update.LatinName}', " +
+                        $"CommonName = '{update.CommonName}', " +
+                        $"WaterMax = {update.WaterMax}, " +
+                        $"WaterMin = {update.WaterMin}, " +
+                        $"LightMax = {update.LightMax}, " +
+                        $"LightMin = {update.LightMin} " +
+                        $"WHERE SpeciesID = {update.Id};";
+
+            var result = RunNonQuery(query);
+
+            return result;
         }
 
         public bool DeleteSpecies(int id)
         {
-            throw new NotImplementedException();
+            var query = $"DELETE FROM Species WHERE SpeciesID = {id};";
+
+            var result = RunNonQuery(query);
+
+            return result;
         }
 
-        public bool AddNewPlant(int id, string nickname, double currentWater, double currentLight)
+        public bool AddNewPlant(int speciesId, string nickname, double currentWater = 0, double currentLight = 0)
         {
-            throw new NotImplementedException();
+            var query = $"INSERT INTO Plants (SpeciesID, Nickname, CurrentWater, CurrentLight) VALUES " +
+                        $"({speciesId}, '{nickname}', {currentWater}, {currentLight});";
+
+            var result = RunNonQuery(query);
+
+            return result;
+        }
+
+        public List<Plant> GetAllPlants()
+        {
+            var query = $"SELECT * FROM Plants;";
+            var reader = RunReader(query);
+
+            if(!reader.HasRows)
+                return null;
+
+            var list = new List<Plant>();
+
+            while (reader.Read())
+                list.Add(BuildPlantFromDataReader(reader));
+
+            return list;
         }
 
         public List<Plant> FindPlantsByNickname(string nickname)
         {
-            throw new NotImplementedException();
+            var query = $"SELECT * FROM Plants WHERE Nickname = '{nickname}';";
+
+            var reader = RunReader(query);
+
+            if (!reader.HasRows) return null;
+
+            var list = new List<Plant>();
+            while (reader.Read())
+                list.Add(BuildPlantFromDataReader(reader));
+
+            return list;
         }
 
         public Plant FindPlantById(int id)
         {
-            throw new NotImplementedException();
+            var query = $"SELECT * FROM Plants WHERE PlantID = {id};";
+
+            var result = RunReader(query);
+
+            if (!result.HasRows) return null;
+
+            result.Read();
+            var plant = BuildPlantFromDataReader(result);
+
+            return plant;
         }
 
-        public bool UpdatePlant(int id, PlantColumns property, string newValue)
+        public bool UpdatePlant(Plant update)
         {
-            throw new NotImplementedException();
+            var query = $"UPDATE Plants SET " +
+                        $"SpeciesID = {update.SpeciesId}, " +
+                        $"Nickname = '{update.Nickname}', " +
+                        $"CurrentWater = {update.CurrentWater}, " +
+                        $"CurrentLight = {update.CurrentLight} " +
+                        $"WHERE PlantID = {update.Id};";
+
+            var result = RunNonQuery(query);
+
+            return result;
         }
 
         public bool DeletePlant(int id)
         {
-            throw new NotImplementedException();
+            var query = $"DELETE FROM Plants WHERE PlantID = {id};";
+
+            var result = RunNonQuery(query);
+
+            return result;
         }
 
         public bool AuthenticateUser(string email, string password)
