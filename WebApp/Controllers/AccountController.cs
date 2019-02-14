@@ -65,7 +65,7 @@ namespace WebApp.Controllers
             //{
             //    return View();
             //}
-            return View("Login");
+            return View("Login"); //[!!] isn't this suposed to go to Dashboard view?
         }
 
         [HttpPost]
