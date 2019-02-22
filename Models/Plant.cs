@@ -3,10 +3,9 @@
     public class Plant
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Alias { get; set; }
-        public string  Species { get; set; }
-        public double Sunlight { get; set; }
-        public double Moisture { get; set; }
+        public string Nickname { get; set; }
+        public int  SpeciesId { get; set; }
+        public double CurrentLight { get; set; }
+        public double CurrentWater { get; set; }
     }
 }
