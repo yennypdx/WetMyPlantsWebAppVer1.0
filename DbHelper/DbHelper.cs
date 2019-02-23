@@ -25,6 +25,26 @@ namespace DBHelper
         Expiry
     }
 
+    public enum SpeciesColumns
+    {
+        Id,
+        CommonName,
+        LatinName,
+        WaterMax,
+        WaterMin,
+        LightMax,
+        LightMin
+    }
+
+    public enum PlantColumns
+    {
+        Id,
+        SpeciesId,
+        Nickname,
+        CurrentWater,
+        CurrentLight
+    }
+
     public class DbHelper : IDbHelper
     {
         private readonly string _connectionString;
@@ -112,7 +132,7 @@ namespace DBHelper
                 : null;
         }
 
-        public List<User> GetAll()
+        public List<User> GetAllUsers()
         {
             var query = "SELECT * FROM Users";
             var results = RunReader(query);
@@ -145,6 +165,48 @@ namespace DBHelper
                     ? ""
                     : reader.GetString((int) UserColumns.Hash)
             };
+        }
+
+        private static Species BuildSpeciesFromDataReader(DataTableReader reader)
+        {
+            try
+            {
+                var species = new Species
+                {
+                    Id = reader.GetInt32((int) SpeciesColumns.Id),
+                    LatinName = reader.GetString((int) SpeciesColumns.LatinName),
+                    CommonName = reader.GetString((int) SpeciesColumns.CommonName),
+                    LightMax = reader.GetDouble((int) SpeciesColumns.LightMax),
+                    LightMin = reader.GetDouble((int) SpeciesColumns.LightMin),
+                    WaterMax = reader.GetDouble((int) SpeciesColumns.WaterMax),
+                    WaterMin = reader.GetDouble((int) SpeciesColumns.WaterMin)
+                };
+                return species;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        private static Plant BuildPlantFromDataReader(DataTableReader reader)
+        {
+            try
+            {
+                var plant = new Plant
+                {
+                    Id = reader.GetInt32((int) PlantColumns.Id),
+                    Nickname = reader.GetString((int) PlantColumns.Nickname),
+                    SpeciesId = reader.GetInt32((int) PlantColumns.SpeciesId),
+                    CurrentLight = reader.GetDouble((int) PlantColumns.CurrentLight),
+                    CurrentWater = reader.GetDouble((int) PlantColumns.CurrentWater)
+                };
+                return plant;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
         // Inserts a new tuple into the User table containing all the user's values,
@@ -181,15 +243,7 @@ namespace DBHelper
             var userQuery = $"DELETE FROM Users WHERE Email = '{email}';";
             return RunNonQuery(userQuery);
         }
-
-        public bool UpdateUserByParam(string email, UserColumns col, string newValue)
-        {
-            var id = FindUserByEmail(email)?.Id;
-            var query = $"UPDATE Users SET {col.ToString()} = '{newValue}' WHERE UserID = {id};";
-            return RunNonQuery(query);
-        }
-
-
+        
         public bool UpdateUser(User update)
         {
             if (FindUserById(update.Id) == null) return false;
@@ -202,6 +256,180 @@ namespace DBHelper
                         $"WHERE UserId = {update.Id};";
 
             return RunNonQuery(query);
+        }
+
+        public bool CreateNewSpecies(string commonName, string latinName, double waterMax = 0, double waterMin = 0, double lightMax = 0,
+            double lightMin = 0)
+        {
+            var query = "INSERT INTO Species (CommonName, LatinName, WaterMax, WaterMin, LightMax, LightMin) VALUES " +
+                        $"('{commonName}', '{latinName}', {waterMax}, {waterMin}, {lightMax}, {lightMin});";
+
+            var result = RunNonQuery(query);
+            return result;
+        }
+
+        public List<Species> GetAllSpecies()
+        {
+            var query = $"SELECT * FROM Species;";
+            var reader = RunReader(query);
+
+            if (!reader.HasRows) return null;
+
+            var list = new List<Species>();
+
+            while (reader.Read())
+            {
+                list.Add(BuildSpeciesFromDataReader(reader));
+            }
+
+            return list;
+        }
+
+        public Species FindSpeciesByLatinName(string latinName)
+        {
+            var query = $"SELECT * FROM Species WHERE LatinName = '{latinName}';";
+
+            var reader = RunReader(query);
+
+            if (!reader.HasRows) return null;
+            reader.Read();
+
+            var species = BuildSpeciesFromDataReader(reader);
+
+            return species;
+        }
+
+        public Species FindSpeciesByCommonName(string commonName)
+        {
+            var query = $"SELECT * FROM Species WHERE CommonName = '{commonName}';";
+
+            var reader = RunReader(query);
+
+            if (!reader.HasRows) return null;
+
+            reader.Read();
+            var species = BuildSpeciesFromDataReader(reader);
+
+            return species;
+        }
+
+        public Species FindSpeciesById(int id)
+        {
+            var query = $"SELECT * FROM Species WHERE SpeciesID = {id};";
+
+            var reader = RunReader(query);
+
+            if (!reader.HasRows) return null;
+
+            reader.Read();
+            var species = BuildSpeciesFromDataReader(reader);
+
+            return species;
+        }
+
+        public bool UpdateSpecies(Species update)
+        {
+            if (FindSpeciesById(update.Id) == null) return false;
+
+            var query = $"UPDATE Species SET " +
+                        $"LatinName = '{update.LatinName}', " +
+                        $"CommonName = '{update.CommonName}', " +
+                        $"WaterMax = {update.WaterMax}, " +
+                        $"WaterMin = {update.WaterMin}, " +
+                        $"LightMax = {update.LightMax}, " +
+                        $"LightMin = {update.LightMin} " +
+                        $"WHERE SpeciesID = {update.Id};";
+
+            var result = RunNonQuery(query);
+
+            return result;
+        }
+
+        public bool DeleteSpecies(int id)
+        {
+            var query = $"DELETE FROM Species WHERE SpeciesID = {id};";
+
+            var result = RunNonQuery(query);
+
+            return result;
+        }
+
+        public bool CreateNewPlant(int speciesId, string nickname, double currentWater = 0, double currentLight = 0)
+        {
+            var query = $"INSERT INTO Plants (SpeciesID, Nickname, CurrentWater, CurrentLight) VALUES " +
+                        $"({speciesId}, '{nickname}', {currentWater}, {currentLight});";
+
+            var result = RunNonQuery(query);
+
+            return result;
+        }
+
+        public List<Plant> GetAllPlants()
+        {
+            var query = $"SELECT * FROM Plants;";
+            var reader = RunReader(query);
+
+            if(!reader.HasRows)
+                return null;
+
+            var list = new List<Plant>();
+
+            while (reader.Read())
+                list.Add(BuildPlantFromDataReader(reader));
+
+            return list;
+        }
+
+        public List<Plant> FindPlantsByNickname(string nickname)
+        {
+            var query = $"SELECT * FROM Plants WHERE Nickname = '{nickname}';";
+
+            var reader = RunReader(query);
+
+            if (!reader.HasRows) return null;
+
+            var list = new List<Plant>();
+            while (reader.Read())
+                list.Add(BuildPlantFromDataReader(reader));
+
+            return list;
+        }
+
+        public Plant FindPlantById(int id)
+        {
+            var query = $"SELECT * FROM Plants WHERE PlantID = {id};";
+
+            var result = RunReader(query);
+
+            if (!result.HasRows) return null;
+
+            result.Read();
+            var plant = BuildPlantFromDataReader(result);
+
+            return plant;
+        }
+
+        public bool UpdatePlant(Plant update)
+        {
+            var query = $"UPDATE Plants SET " +
+                        $"SpeciesID = {update.SpeciesId}, " +
+                        $"Nickname = '{update.Nickname}', " +
+                        $"CurrentWater = {update.CurrentWater}, " +
+                        $"CurrentLight = {update.CurrentLight} " +
+                        $"WHERE PlantID = {update.Id};";
+
+            var result = RunNonQuery(query);
+
+            return result;
+        }
+
+        public bool DeletePlant(int id)
+        {
+            var query = $"DELETE FROM Plants WHERE PlantID = {id};";
+
+            var result = RunNonQuery(query);
+
+            return result;
         }
 
         public bool AuthenticateUser(string email, string password)
@@ -317,5 +545,7 @@ namespace DBHelper
                     .AddMonths(Convert.ToInt32(dateTime.Substring(2, 2)))
                     .AddDays(Convert.ToDouble(dateTime.Substring(0, 2)));
         }
+
+
     }
 }
