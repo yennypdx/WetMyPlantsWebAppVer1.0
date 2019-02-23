@@ -23,20 +23,21 @@ namespace WebApp.Controllers
             //{
                 var model = new DashboardViewModel();
                 model.User = user;
+            model.Plants = new List<Plant>();
             //var u = _helper.FindUserByEmail("test@test.test");
             //model.User = u;
-                model.Plants = new List<Plant>
-                {
-                    new Plant
-                    {
-                        Name = "Test Plant",
-                        Alias = "Lil' Testy",
-                        Id = 1,
-                        Moisture = 0.0876,
-                        Sunlight = 0.0556,
-                        Species = "Planticus unrealus"
-                    }
-                };
+                //model.Plants = new List<Plant>
+                //{
+                //    new Plant
+                //    {
+                //        Name = "Test Plant",
+                //        Alias = "Lil' Testy",
+                //        Id = 1,
+                //        Moisture = 0.0876,
+                //        Sunlight = 0.0556,
+                //        Species = "Planticus unrealus"
+                //    }
+                //};
 
             // ViewBag.Token = token;
             ViewBag.User = user;
