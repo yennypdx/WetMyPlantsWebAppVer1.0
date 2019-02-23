@@ -11,14 +11,22 @@ namespace WebApp.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly DBHelper.DbHelper _db;
+        //private readonly DBHelper.DbHelper _db;
 
-        public AccountController()
-        {
-            _db = new DBHelper.DbHelper();
-        }
+        //public AccountController()
+        //{
+        //    _db = new DBHelper.DbHelper();
+        //}
 
         // GET: Account
+        private readonly DBHelper.IDbHelper _db;
+
+        // Inject Dependency
+        public AccountController(DBHelper.IDbHelper db)
+        {
+            _db = db;
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -75,6 +83,12 @@ namespace WebApp.Controllers
             return View();
         }
 
+        public ActionResult MyAccount()
+        {
+            var user = Session["User"];
+            return View(user);
+        }
+
         //POST: Registration/Register
         [HttpPost]
         public ActionResult RegisterUser(RegistrationViewModel uModel)
@@ -92,22 +106,45 @@ namespace WebApp.Controllers
 
             if (token == null) return RedirectToAction("Register");
 
+            ViewBag.User = result;
+            ViewBag.Token = token;
+
+            // set the session
+            Session["User"] = _db.FindUserByEmail(uModel.Email);
+
             // store token in a cookie here
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home", result);
         }
 
         [HttpPost]
         public ActionResult LoginUser(LoginViewModel model)
         {
-            var result = _db.LoginAndGetToken(model.Email, model.Password);
-            
-            if (result != null)
+            // Merge errors for name change from result to token!
+            var token = _db.LoginAndGetToken(model.Email, model.Password);
+
+            if (token != null)
             {
+                var user = _db.FindUserByEmail(model.Email);
+                ViewBag.User = user;
+                ViewBag.Token = token;
+
+                // set the session 
+                Session["User"] = user;
+
                 // store token as a cookie here
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", user);
             }
 
             return View("Login");
+        }
+
+        [HttpPost]
+        public ActionResult UpdateUser(User user)
+        {
+            // update the session
+            Session["User"] = user;
+            _db.UpdateUser(user);
+            return RedirectToAction("MyAccount", "Account", user);
         }
     }
 }

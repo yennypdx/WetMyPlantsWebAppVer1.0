@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 
 namespace WebApp.Models.AccountViewModels
-{
+{ 
     public class RegistrationViewModel
     {
         [Required]
