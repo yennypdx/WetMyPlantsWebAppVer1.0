@@ -189,6 +189,7 @@ namespace DBHelper
             return RunNonQuery(query);
         }
 
+
         public bool UpdateUser(User update)
         {
             if (FindUserById(update.Id) == null) return false;

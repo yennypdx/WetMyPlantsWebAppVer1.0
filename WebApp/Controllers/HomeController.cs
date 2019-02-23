@@ -17,26 +17,32 @@ namespace WebApp.Controllers
         }
 
         public HomeController() => _helper = new DBHelper.DbHelper();
-        public ActionResult Index()
+        public ActionResult Index(User user)
         {
-            var model = new DashboardViewModel();
-
-            var user = _helper.FindUserByEmail("test@test.test");
-            model.User = user;
-            model.Plants = new List<Plant>
-            {
-                new Plant
+            //if (user != null && ViewBag.Token != null)
+            //{
+                var model = new DashboardViewModel();
+                model.User = user;
+            //var u = _helper.FindUserByEmail("test@test.test");
+            //model.User = u;
+                model.Plants = new List<Plant>
                 {
-                    Name = "Test Plant",
-                    Alias = "Lil' Testy",
-                    Id = 1,
-                    Moisture = 0.0876,
-                    Sunlight = 0.0556,
-                    Species = "Planticus unrealus"
-                }
-            };
+                    new Plant
+                    {
+                        Name = "Test Plant",
+                        Alias = "Lil' Testy",
+                        Id = 1,
+                        Moisture = 0.0876,
+                        Sunlight = 0.0556,
+                        Species = "Planticus unrealus"
+                    }
+                };
 
-            return View(model);
+            // ViewBag.Token = token;
+            ViewBag.User = user;
+                return View(model);
+            //}
+            return View();
         }
     }
 }
