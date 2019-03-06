@@ -354,12 +354,14 @@ namespace DBHelper
             return result;
         }
 
-        public bool CreateNewPlant(int speciesId, string nickname, double currentWater = 0, double currentLight = 0)
+        public int CreateNewPlant(int speciesId, string nickname, double currentWater = 0, double currentLight = 0)
         {
-            var query = $"INSERT INTO Plants (SpeciesID, Nickname, CurrentWater, CurrentLight) VALUES " +
+            var query = "INSERT INTO Plants (SpeciesID, Nickname, CurrentWater, CurrentLight)" +
+                        "OUTPUT Inserted.ID " +
+                        "VALUES " +
                         $"({speciesId}, '{nickname}', {currentWater}, {currentLight});";
 
-            var result = RunNonQuery(query);
+            var result = Convert.ToInt32(RunScalar(query));
 
             return result;
         }
@@ -378,6 +380,33 @@ namespace DBHelper
                 list.Add(BuildPlantFromDataReader(reader));
 
             return list;
+        }
+
+        public List<Plant> GetPlantsForUser(int id)
+        {
+            var plantIdQuery = $"SELECT PlantID FROM UserPlants WHERE UserID = {id};";
+
+            var plantIds = RunReader(plantIdQuery);
+
+            if (!plantIds.HasRows) return null;
+
+            var plants = new List<Plant>();
+
+            while (plantIds.Read())
+                plants.Add(FindPlantById(plantIds.GetInt32(0)));
+
+            return plants;
+        }
+
+        public bool RegisterPlantToUser(Plant plant, User user)
+        {
+            var plantId = CreateNewPlant(plant.SpeciesId, plant.Nickname, plant.CurrentWater, plant.CurrentLight);
+
+            var query = $"INSERT INTO UserPlants(PlantID, UserID) VALUES ({plantId}, {user.Id});";
+
+            var result = RunNonQuery(query);
+
+            return result;
         }
 
         public List<Plant> FindPlantsByNickname(string nickname)

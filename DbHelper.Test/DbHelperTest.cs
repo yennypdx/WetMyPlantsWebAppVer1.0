@@ -451,7 +451,7 @@ namespace DbHelper.Test
             var id = _db.GetAllSpecies()[0].Id;
             var result = _db.CreateNewPlant(id, plantOneAlias, plantOneCurrentWater, plantOneCurrentLight);
 
-            Assert.IsTrue(result);
+            Assert.IsTrue(result != 0);
         }
 
         [TestMethod]
