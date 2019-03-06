@@ -2,7 +2,6 @@
 using Models;
 using WebApp.Models.AccountViewModels;
 using System.Threading.Tasks;
-using System.Net;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using WebApp.Models.HomeViewModels;
@@ -36,46 +35,63 @@ namespace WebApp.Controllers
         {
             return View();
         }
-
+        
         public ActionResult ForgotPassword()
         {
             return View();
         }
 
-        [HttpPost]
+        public ActionResult ResetPassword()
+        {
+            return View();
+        }
+        [HttpGet]
         public ActionResult ForgotUserPassword(ForgotPasswordViewModel uModel)
         {
              var result = _db.FindUserByEmail(uModel.Email);
+            
             if (result.Email != null && result.Email == uModel.Email)
             {
-                SendPasswordResetEmail(uModel.Email).Wait();
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = result.Id, code = GetHashCode() }, protocol: Request.Url.Scheme);
+                SendPasswordResetEmail(uModel.Email, callbackUrl).Wait();
                 return View("Login");
             }
             else
-            {                
-                return Content("<script language= 'javascript' type='text/javascript'>alert ('User not Fonud '); </script>");
+            {
+                //return Content("<script language= 'javascript' type='text/javascript'>alert ('User not Fonud '); </script>");
+                return View("ForgotPassword");
             }
             
         }
 
-        static public async Task SendPasswordResetEmail(string email)
+        static public async Task SendPasswordResetEmail(string email, string urlString)
         {
             string apiKey = "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";//System.Environment.GetEnvironmentVariable("SENDGRID_APIKEY");
-            var client = new SendGridClient(apiKey);
+            var client = new SendGridClient(apiKey);            
             var msg = new SendGridMessage()
             {
                 From = new EmailAddress("resetpassword@wetmyplants.com", "WetMyPlants Team"),
                 Subject = "Reset Password",
                 PlainTextContent = "Please click on this link to reset your password: " + "http://wetmyplants.azurewebsites.net/Account/ResetPassword",
-                HtmlContent = "<strong>Please click on this link to reset your password: </strong><a href='http://wetmyplants.azurewebsites.net/Account/ResetPassword'> wetmyplants.azurewebsites.net/Account/ResetPassword</a>"
+                HtmlContent = "<strong>Please click on this link to reset your password: </strong><a href=\"" + urlString + "\" > wetmyplants.azurewebsites.net/Account/ResetPassword</a>"
             };
             msg.AddTo(new EmailAddress(email, "user"));
             var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
         }
 
-        public ActionResult ResetPassword(ResetPasswordViewModel uModel)
+        [HttpPost]
+        public ActionResult ResetUserPassword(ResetPasswordViewModel uModel)
         {
-            return View();
+            //string url = Request.Url.AbsolutePath;
+            //string[] UrlParts = url.Split('/');
+            //int id = System.Int32.Parse(url);
+            // int id = (int)RouteData.Values["userId"];
+            if(uModel.Password == uModel.ConfirmPassword)
+            {
+                _db.ResetPassword(uModel.Email, uModel.Password);
+            }
+            
+            return View("Login");
         }
 
         public ActionResult Register()

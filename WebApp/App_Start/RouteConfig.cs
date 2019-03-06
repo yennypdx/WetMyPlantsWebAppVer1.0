@@ -27,6 +27,16 @@ namespace WebApp
                     id = UrlParameter.Optional
                 }
             );
+            routes.MapRoute(
+              name: "ResetPassword",
+              url: "{controller}/{action}/{userId}",
+              defaults: new
+              {
+                  controller = "Account",
+                  action = "ResetUserPassword",
+                  userId = UrlParameter.Optional
+              }
+          );
         }
     }
 }

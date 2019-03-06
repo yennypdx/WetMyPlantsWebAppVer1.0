@@ -9,6 +9,7 @@ namespace DBHelper
         bool CreateNewUser(string firstName, string lastName, string phone, string email, string password);
         List<User> GetAllUsers();
         User FindUserByEmail(string email);
+        User FindUserById(int id);
         bool AuthenticateUser(string email, string password);
         string LoginAndGetToken(string email, string password);
         bool DeleteUser(string email);
