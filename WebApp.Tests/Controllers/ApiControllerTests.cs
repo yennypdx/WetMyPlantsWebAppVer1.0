@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
+using System.Web.Helpers;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using DBHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WebApp.Controllers;
@@ -32,7 +34,7 @@ namespace WebApp.Tests.Controllers
 
         public ApiControllerTests()
         {
-            _api = new ApiController(new DBHelper.DbHelper(AccessHelper.GetTestDbConnectionString()));
+            _api = new ApiController(new DBHelper.DbHelper(AccessHelper.GetDbConnectionString()));
         }
 
         [TestMethod]
@@ -71,6 +73,23 @@ namespace WebApp.Tests.Controllers
 
             Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result?.StatusCode);
             Assert.AreEqual("Invalid login", result?.StatusDescription);
+        }
+
+        [TestMethod]
+        public void ApiTestLoginSuccessRetrievesToken()
+        {
+            var model = new LoginViewModel
+            {
+                Email = "test@test.test",
+                Password = "password",
+                RememberMe = false
+            };
+            ValidateModel(model);
+
+            var result = _api.Login(model) as JsonResult;
+            var token = Json.Decode(result.Data.ToString())["token"].ToString();
+            
+            Assert.IsNotNull(token);
         }
     }
 }

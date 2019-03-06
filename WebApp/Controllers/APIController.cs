@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Http.Controllers;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -23,12 +24,13 @@ namespace WebApp.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest, description);
         }
 
-        private JsonResult Ok(string content) => Ok(Json(new {content}));
-        private JsonResult Ok(JsonResult content)
+        private ActionResult Ok(string content) => Ok(Json($"{{ content: '{content}' }}"));
+        private ActionResult Ok(JsonResult content)
         {
             //Response.Clear();
             //Response.StatusCode = (int) HttpStatusCode.OK; // 200
-            return Json(content);
+            return content;
+            //return new HttpStatusCodeResult(HttpStatusCode.OK, content.Data.ToString());
         }
 
         public ApiController(IDbHelper db) => _db = db;
@@ -67,7 +69,7 @@ namespace WebApp.Controllers
             var token = _db.LoginAndGetToken(model.Email, model.Password);
 
             if (token != null)
-                return Ok(token);
+                return Ok(Json($"{{ token : '{token}' }}"));
 
             return BadRequest("Invalid login");
         }
