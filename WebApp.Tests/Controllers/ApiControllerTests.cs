@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Web.Helpers;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
 using DBHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WebApp.Controllers;
@@ -54,7 +53,7 @@ namespace WebApp.Tests.Controllers
             var result = _api.Login(model) as HttpStatusCodeResult;
 
             Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result?.StatusCode);
-            Assert.AreEqual("Invalid login model", result?.StatusDescription);
+            Assert.AreEqual("Invalid login model", Json.Decode(result?.StatusDescription)["content"]);
         }
 
         [TestMethod]
@@ -72,7 +71,7 @@ namespace WebApp.Tests.Controllers
             var result = _api.Login(model) as HttpStatusCodeResult;
 
             Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result?.StatusCode);
-            Assert.AreEqual("Invalid login", result?.StatusDescription);
+            Assert.AreEqual("Invalid login", Json.Decode(result?.StatusDescription)["content"]);
         }
 
         [TestMethod]
@@ -86,10 +85,43 @@ namespace WebApp.Tests.Controllers
             };
             ValidateModel(model);
 
-            var result = _api.Login(model) as JsonResult;
-            var token = Json.Decode(result.Data.ToString())["token"].ToString();
+            var result = _api.Login(model) as HttpStatusCodeResult;
             
-            Assert.IsNotNull(token);
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), result?.StatusCode);
+            Assert.IsNotNull(Json.Decode(result?.StatusDescription)["content"]);
+        }
+
+        [TestMethod]
+        public void ApiTestRegisterFailUserAlreadyExists()
+        {
+            var model = new RegistrationViewModel()
+            {
+                Email = "test@test.test",
+                FirstName = "Test",
+                LastName = "Test",
+                Password = "password",
+                ConfirmPassword = "password",
+                Phone = "1234567890"
+            };
+
+            ValidateModel(model);
+
+            var result = _api.Register(model) as HttpStatusCodeResult;
+
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result.StatusCode);
+            Assert.AreEqual("Unable to register user", Json.Decode(result.StatusDescription)["content"]);
+        }
+
+        [TestMethod]
+        public void ApiTestRegisterUserFailInvalidModel()
+        {
+            var model = new RegistrationViewModel();
+            ValidateModel(model);
+
+            var result = _api.Register(model) as HttpStatusCodeResult;
+
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result.StatusCode);
+            Assert.AreEqual("Invalid registration model", Json.Decode(result.StatusDescription)["content"]);
         }
     }
 }

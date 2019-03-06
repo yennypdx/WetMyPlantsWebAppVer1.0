@@ -14,24 +14,14 @@ namespace WebApp.Controllers
     {
         private readonly IDbHelper _db;
 
-        //private JsonResult BadRequest(string content) => BadRequest(Json(new {content}));
-        private ActionResult BadRequest(string description)
-        {
-            //Response.Clear();
-            //Response.StatusCode = (int) HttpStatusCode.BadRequest; // 400
-            //return Json(content);
-            //return new EmptyResult();
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest, description);
-        }
+        private JsonResult Jsonify(string content) => Json($"{{ content: '{content}' }}");
+        private ActionResult BadRequest(string content) => BadRequest(Jsonify(content));
+        private ActionResult BadRequest(JsonResult content) =>
+            new HttpStatusCodeResult(HttpStatusCode.BadRequest, content.Data.ToString());
 
-        private ActionResult Ok(string content) => Ok(Json($"{{ content: '{content}' }}"));
-        private ActionResult Ok(JsonResult content)
-        {
-            //Response.Clear();
-            //Response.StatusCode = (int) HttpStatusCode.OK; // 200
-            return content;
-            //return new HttpStatusCodeResult(HttpStatusCode.OK, content.Data.ToString());
-        }
+        private ActionResult Ok(string content) => Ok(Jsonify(content));
+        private ActionResult Ok(JsonResult content) => 
+            new HttpStatusCodeResult(HttpStatusCode.OK, content.Data.ToString());
 
         public ApiController(IDbHelper db) => _db = db;
 
@@ -69,7 +59,7 @@ namespace WebApp.Controllers
             var token = _db.LoginAndGetToken(model.Email, model.Password);
 
             if (token != null)
-                return Ok(Json($"{{ token : '{token}' }}"));
+                return Ok(token);
 
             return BadRequest("Invalid login");
         }
