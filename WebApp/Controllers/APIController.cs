@@ -1,8 +1,11 @@
 ﻿using System.Net;
-using System.Web.Helpers;
+using System.Web;
+using System.Web.Http.Controllers;
 using System.Web.Mvc;
+using System.Web.Routing;
 using DBHelper;
 using WebApp.Models.AccountViewModels;
+using DbHelper = DBHelper.DbHelper;
 
 namespace WebApp.Controllers
 {
@@ -10,23 +13,26 @@ namespace WebApp.Controllers
     {
         private readonly IDbHelper _db;
 
-        private JsonResult BadRequest(string content) => BadRequest(Json(new {content}));
-        private JsonResult BadRequest(JsonResult content)
+        //private JsonResult BadRequest(string content) => BadRequest(Json(new {content}));
+        private ActionResult BadRequest(string description)
         {
-            Response.Clear();
-            Response.StatusCode = (int) HttpStatusCode.BadRequest; // 400
-            return Json(content);
+            //Response.Clear();
+            //Response.StatusCode = (int) HttpStatusCode.BadRequest; // 400
+            //return Json(content);
+            //return new EmptyResult();
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest, description);
         }
 
         private JsonResult Ok(string content) => Ok(Json(new {content}));
         private JsonResult Ok(JsonResult content)
         {
-            Response.Clear();
-            Response.StatusCode = (int) HttpStatusCode.OK; // 200
+            //Response.Clear();
+            //Response.StatusCode = (int) HttpStatusCode.OK; // 200
             return Json(content);
         }
 
         public ApiController(IDbHelper db) => _db = db;
+
         // GET: Api
         public string Index()
         {
@@ -37,7 +43,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public ActionResult Register(RegistrationViewModel model)
         {
-            if (!ModelState.IsValid) return BadRequest("Invalid registration data");
+            if (!ModelState.IsValid) return BadRequest("Invalid registration model");
 
             if (!_db.CreateNewUser(model.FirstName, model.LastName, model.Phone, model.Email, model.Password))
                 return BadRequest("Unable to register user");
@@ -56,14 +62,14 @@ namespace WebApp.Controllers
         [HttpPost]
         public ActionResult Login(LoginViewModel model)
         {
-            if (!ModelState.IsValid) return BadRequest("Invalid login data");
+            if (!ModelState.IsValid) return BadRequest("Invalid login model");
 
             var token = _db.LoginAndGetToken(model.Email, model.Password);
 
             if (token != null)
                 return Ok(token);
 
-            return BadRequest("Invalid login, check email and password and try again");
+            return BadRequest("Invalid login");
         }
     }
 }
