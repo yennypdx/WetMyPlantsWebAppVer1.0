@@ -59,8 +59,9 @@ namespace WebApp.Tests.Controllers
         [TestCleanup]
         public void Dispose()
         {
-            var users = _api.GetAllUsers();
-            users.ForEach(u => _api.DeleteUser(u.Id));
+            var data = _api.GetAllUsers();
+            var list = (List<User>) data.Data;
+            list.ForEach(u => _api.DeleteUser(u.Id));
         }
 
         [TestMethod]
@@ -74,9 +75,10 @@ namespace WebApp.Tests.Controllers
         [TestMethod]
         public void ApiTestGetAllUsers()
         {
-            var userList = _api.GetAllUsers();
+            var userList = _api.GetAllUsers().Data as List<User>;
 
-            Assert.IsInstanceOfType(userList, typeof(List<User>));
+            Assert.IsNotNull(userList);
+            Assert.AreNotEqual(0, userList.Count);
         }
 
         [TestMethod]
@@ -170,7 +172,8 @@ namespace WebApp.Tests.Controllers
         [TestMethod]
         public void ApiTestDeleteUserSuccess()
         {
-            var deleteResult = _api.DeleteUser(_api.GetAllUsers()[0].Id) as HttpStatusCodeResult;
+            var id = ((List<User>)_api.GetAllUsers().Data)[0].Id;
+            var deleteResult = _api.DeleteUser(id) as HttpStatusCodeResult;
 
             Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), deleteResult?.StatusCode);
             Assert.AreEqual("User deleted", Json.Decode(deleteResult?.StatusDescription)["content"]);

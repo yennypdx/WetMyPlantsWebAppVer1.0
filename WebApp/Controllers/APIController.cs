@@ -8,6 +8,7 @@ using WebApp.Models.AccountViewModels;
 
 namespace WebApp.Controllers
 {
+    [RoutePrefix("api")]
     public class ApiController : Controller
     {
         private readonly IDbHelper _db;
@@ -61,16 +62,20 @@ namespace WebApp.Controllers
         [HttpDelete, Route("user/delete/{id}")]
         public ActionResult DeleteUser(int id)
         {
-            var result = _db.DeleteUser(_db.GetAllUsers().Where(u => u.Id == id).ToList()[0].Email);
+            var users = _db.GetAllUsers();
+            var user = users?.FirstOrDefault(u => u.Id.Equals(id));
+            if (user == null) return BadRequest("Could not find user " + id);
+
+            var result = _db.DeleteUser(user?.Email);
 
             return result ? Ok("User deleted") : BadRequest("Error deleting user " + id.ToString());
         }
 
         // GET: api/users/all
         [HttpGet, Route("users/all")]
-        public List<User> GetAllUsers()
+        public JsonResult GetAllUsers()
         {
-            return _db.GetAllUsers();
+            return Json(_db.GetAllUsers(), JsonRequestBehavior.AllowGet);
         }
     }
 }
