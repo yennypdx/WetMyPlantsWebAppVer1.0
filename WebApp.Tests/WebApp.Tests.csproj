@@ -118,6 +118,10 @@
       <Project>{2D088A89-0542-4D61-ACF9-9C36DFD19696}</Project>
       <Name>DBHelper</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{15aaf300-c672-4ff7-9ec8-b9e3de57e990}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WebApp\WebApp.csproj">
       <Project>{B156B8C8-06AA-4D66-BA97-0802B62D698B}</Project>
       <Name>WebApp</Name>

@@ -7,6 +7,7 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using DBHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Models;
 using WebApp.Controllers;
 using WebApp.Models.AccountViewModels;
 using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
@@ -29,11 +30,37 @@ namespace WebApp.Tests.Controllers
             foreach (var x in results)
                 _api.ModelState.AddModelError(x.MemberNames.FirstOrDefault() ?? string.Empty, x.ErrorMessage);
         }
+
+        /*************************************************************************************************/
+
+        private readonly RegistrationViewModel _registrationViewModel;
         private readonly ApiController _api;
 
         public ApiControllerTests()
         {
-            _api = new ApiController(new DBHelper.DbHelper(AccessHelper.GetDbConnectionString()));
+            _api = new ApiController(new DBHelper.DbHelper(AccessHelper.GetTestDbConnectionString()));
+            _registrationViewModel = new RegistrationViewModel
+            {
+                Email = "test@test.test",
+                Password = "password",
+                ConfirmPassword = "password",
+                FirstName = "Test",
+                LastName = "User",
+                Phone = "1234567890"
+            };
+        }
+
+        [TestInitialize]
+        public void Init()
+        {
+            _api.Register(_registrationViewModel);
+        }
+
+        [TestCleanup]
+        public void Dispose()
+        {
+            var users = _api.GetAllUsers();
+            users.ForEach(u => _api.DeleteUser(u.Id));
         }
 
         [TestMethod]
@@ -42,6 +69,14 @@ namespace WebApp.Tests.Controllers
             var msg = _api.Index();
 
             Assert.AreEqual("hello world!", msg);
+        }
+
+        [TestMethod]
+        public void ApiTestGetAllUsers()
+        {
+            var userList = _api.GetAllUsers();
+
+            Assert.IsInstanceOfType(userList, typeof(List<User>));
         }
 
         [TestMethod]
@@ -61,7 +96,7 @@ namespace WebApp.Tests.Controllers
         {
             var model = new LoginViewModel
             {
-                Email = "test@test.test",
+                Email = _registrationViewModel.Email,
                 Password = "wrongPassword",
                 RememberMe = false
             };
@@ -94,22 +129,10 @@ namespace WebApp.Tests.Controllers
         [TestMethod]
         public void ApiTestRegisterFailUserAlreadyExists()
         {
-            var model = new RegistrationViewModel()
-            {
-                Email = "test@test.test",
-                FirstName = "Test",
-                LastName = "Test",
-                Password = "password",
-                ConfirmPassword = "password",
-                Phone = "1234567890"
-            };
+            var result = _api.Register(_registrationViewModel) as HttpStatusCodeResult;
 
-            ValidateModel(model);
-
-            var result = _api.Register(model) as HttpStatusCodeResult;
-
-            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result.StatusCode);
-            Assert.AreEqual("Unable to register user", Json.Decode(result.StatusDescription)["content"]);
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result?.StatusCode);
+            Assert.AreEqual("Unable to register user", Json.Decode(result?.StatusDescription)["content"]);
         }
 
         [TestMethod]
@@ -120,8 +143,17 @@ namespace WebApp.Tests.Controllers
 
             var result = _api.Register(model) as HttpStatusCodeResult;
 
-            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result.StatusCode);
-            Assert.AreEqual("Invalid registration model", Json.Decode(result.StatusDescription)["content"]);
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result?.StatusCode);
+            Assert.AreEqual("Invalid registration model", Json.Decode(result?.StatusDescription)["content"]);
+        }
+
+        [TestMethod]
+        public void ApiTestDeleteUserSuccess()
+        {
+            var deleteResult = _api.DeleteUser(_api.GetAllUsers()[0].Id) as HttpStatusCodeResult;
+
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), deleteResult?.StatusCode);
+            Assert.AreEqual("User deleted", Json.Decode(deleteResult?.StatusDescription)["content"]);
         }
     }
 }

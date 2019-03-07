@@ -1,12 +1,10 @@
-﻿using System.Net;
-using System.Web;
-using System.Web.Helpers;
-using System.Web.Http.Controllers;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Web.Mvc;
-using System.Web.Routing;
 using DBHelper;
+using Models;
 using WebApp.Models.AccountViewModels;
-using DbHelper = DBHelper.DbHelper;
 
 namespace WebApp.Controllers
 {
@@ -40,14 +38,18 @@ namespace WebApp.Controllers
             if (!_db.CreateNewUser(model.FirstName, model.LastName, model.Phone, model.Email, model.Password))
                 return BadRequest("Unable to register user");
 
-            var loginViewModel = new LoginViewModel
+            /*var loginViewModel = new LoginViewModel
             {
                 Email = model.Email,
                 Password = model.Password,
                 RememberMe = false
             };
 
-            return Login(loginViewModel);
+            return Login(loginViewModel);*/
+
+            var id = _db.GetAllUsers().Where(u => u.Email.Equals(model.Email)).ToArray()[0].Id;
+
+            return Ok(Json($"{{ id : '{id}' }}"));
         }
 
         // POST: api/login
@@ -62,6 +64,22 @@ namespace WebApp.Controllers
                 return Ok(token);
 
             return BadRequest("Invalid login");
+        }
+
+        // GET: api/deleteuser
+        [HttpDelete]
+        public ActionResult DeleteUser(int id)
+        {
+            var result = _db.DeleteUser(_db.GetAllUsers().Where(u => u.Id == id).ToList()[0].Email);
+
+            return result ? Ok("User deleted") : BadRequest("Error deleting user " + id.ToString());
+        }
+
+        // GET: api/users/all
+        [HttpGet, Route("users/all")]
+        public List<User> GetAllUsers()
+        {
+            return _db.GetAllUsers();
         }
     }
 }
