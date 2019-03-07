@@ -183,7 +183,7 @@ namespace DBHelper
                 };
                 return species;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -203,7 +203,7 @@ namespace DBHelper
                 };
                 return plant;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -238,9 +238,14 @@ namespace DBHelper
             if (id == null) return false;
 
             var tokenQuery = $"DELETE FROM Tokens WHERE UserID = {id};";
-            RunNonQuery(tokenQuery);
-
+            var unlinkPlantsQuery = $"DELETE FROM UserPlants WHERE UserID = {id};";
+            var removeLinkedPlantsQuery = "DELETE FROM Plants WHERE PlantID NOT IN (SELECT PlantID FROM UserPlants);";
             var userQuery = $"DELETE FROM Users WHERE Email = '{email}';";
+
+            RunNonQuery(tokenQuery);
+            RunNonQuery(unlinkPlantsQuery);
+            RunNonQuery(removeLinkedPlantsQuery);
+            
             return RunNonQuery(userQuery);
         }
         
@@ -258,19 +263,20 @@ namespace DBHelper
             return RunNonQuery(query);
         }
 
-        public bool CreateNewSpecies(string commonName, string latinName, double waterMax = 0, double waterMin = 0, double lightMax = 0,
+        public int CreateNewSpecies(string commonName, string latinName, double waterMax = 0, double waterMin = 0, double lightMax = 0,
             double lightMin = 0)
         {
             var query = "INSERT INTO Species (CommonName, LatinName, WaterMax, WaterMin, LightMax, LightMin) VALUES " +
-                        $"('{commonName}', '{latinName}', {waterMax}, {waterMin}, {lightMax}, {lightMin});";
+                        $"('{commonName}', '{latinName}', {waterMax}, {waterMin}, {lightMax}, {lightMin}) " +
+                        "SELECT SCOPE_IDENTITY();";
 
-            var result = RunNonQuery(query);
-            return result;
+            var result = RunScalar(query);
+            return result != null ? Convert.ToInt32(result) : 0;
         }
 
         public List<Species> GetAllSpecies()
         {
-            var query = $"SELECT * FROM Species;";
+            var query = "SELECT * FROM Species;";
             var reader = RunReader(query);
 
             if (!reader.HasRows) return null;
@@ -331,7 +337,7 @@ namespace DBHelper
         {
             if (FindSpeciesById(update.Id) == null) return false;
 
-            var query = $"UPDATE Species SET " +
+            var query = "UPDATE Species SET " +
                         $"LatinName = '{update.LatinName}', " +
                         $"CommonName = '{update.CommonName}', " +
                         $"WaterMax = {update.WaterMax}, " +
@@ -357,9 +363,8 @@ namespace DBHelper
         public int CreateNewPlant(int speciesId, string nickname, double currentWater = 0, double currentLight = 0)
         {
             var query = "INSERT INTO Plants (SpeciesID, Nickname, CurrentWater, CurrentLight)" +
-                        "OUTPUT Inserted.ID " +
-                        "VALUES " +
-                        $"({speciesId}, '{nickname}', {currentWater}, {currentLight});";
+                        $"VALUES ({speciesId}, '{nickname}', {currentWater}, {currentLight}) " +
+                        "SELECT SCOPE_IDENTITY();";
 
             var result = Convert.ToInt32(RunScalar(query));
 
@@ -368,7 +373,7 @@ namespace DBHelper
 
         public List<Plant> GetAllPlants()
         {
-            var query = $"SELECT * FROM Plants;";
+            var query = "SELECT * FROM Plants;";
             var reader = RunReader(query);
 
             if(!reader.HasRows)
@@ -440,7 +445,7 @@ namespace DBHelper
 
         public bool UpdatePlant(Plant update)
         {
-            var query = $"UPDATE Plants SET " +
+            var query = "UPDATE Plants SET " +
                         $"SpeciesID = {update.SpeciesId}, " +
                         $"Nickname = '{update.Nickname}', " +
                         $"CurrentWater = {update.CurrentWater}, " +
@@ -455,7 +460,9 @@ namespace DBHelper
         public bool DeletePlant(int id)
         {
             var query = $"DELETE FROM Plants WHERE PlantID = {id};";
+            var unlinkPlantQuery = $"DELETE FROM UserPlants WHERE PlantID = {id};";
 
+            RunNonQuery(unlinkPlantQuery);
             var result = RunNonQuery(query);
 
             return result;
@@ -542,10 +549,10 @@ namespace DBHelper
             return newToken;
         }
 
-        private bool DeleteUserToken(int userId)
+        private void DeleteUserToken(int userId)
         {
             var query = $"DELETE FROM Tokens WHERE UserID = {userId};";
-            return RunNonQuery(query);
+            RunNonQuery(query);
         }
 
         private static string GenerateNewToken()
@@ -555,13 +562,13 @@ namespace DBHelper
             return Crypto.HashPassword(dateString);
         }
 
-        private bool SetTokenForUser(int userId, string token)
+        private void SetTokenForUser(int userId, string token)
         {
             // set an expiration date for two weeks in the future
             var expiry = DateTime.Today;
             expiry = expiry.AddDays(14);
             var query = $"INSERT INTO Tokens (UserID, Token, Expiry) VALUES ({userId}, '{token}', '{expiry}');";
-            return RunNonQuery(query);
+            RunNonQuery(query);
         }
 
         private static DateTime ToDateTime(string dateTime)

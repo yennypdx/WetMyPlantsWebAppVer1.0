@@ -15,7 +15,7 @@ namespace DBHelper
         bool ResetPassword(string email, string newPassword);
         bool UpdateUser(User user);
 
-        bool CreateNewSpecies(string commonName, string latinName, double waterMax, double waterMin, double lightMax,
+        int CreateNewSpecies(string commonName, string latinName, double waterMax, double waterMin, double lightMax,
             double lightMin);
 
         List<Species> GetAllSpecies();
