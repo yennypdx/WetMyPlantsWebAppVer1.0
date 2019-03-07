@@ -23,29 +23,20 @@ namespace WebApp.Controllers
 
         public ApiController(IDbHelper db) => _db = db;
 
-        // GET: Api
+        // GET: api/
         public string Index()
         {
             return "hello world!";
         }
 
-        // POST: api/register
-        [HttpPost]
-        public ActionResult Register(RegistrationViewModel model)
+        // POST: api/user/register
+        [HttpPost, Route("user/register")]
+        public ActionResult RegisterUser(RegistrationViewModel model)
         {
             if (!ModelState.IsValid) return BadRequest("Invalid registration model");
 
             if (!_db.CreateNewUser(model.FirstName, model.LastName, model.Phone, model.Email, model.Password))
                 return BadRequest("Unable to register user");
-
-            /*var loginViewModel = new LoginViewModel
-            {
-                Email = model.Email,
-                Password = model.Password,
-                RememberMe = false
-            };
-
-            return Login(loginViewModel);*/
 
             var id = _db.GetAllUsers().Where(u => u.Email.Equals(model.Email)).ToArray()[0].Id;
 
@@ -66,8 +57,8 @@ namespace WebApp.Controllers
             return BadRequest("Invalid login");
         }
 
-        // GET: api/deleteuser
-        [HttpDelete]
+        // DELETE: api/user/delete/id
+        [HttpDelete, Route("user/delete/{id}")]
         public ActionResult DeleteUser(int id)
         {
             var result = _db.DeleteUser(_db.GetAllUsers().Where(u => u.Id == id).ToList()[0].Email);
