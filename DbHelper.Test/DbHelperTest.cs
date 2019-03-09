@@ -1,17 +1,15 @@
 ﻿/*
  * Last Author:             Andy Horn
- * Last Modified:           02/05/2019
+ * Last Modified:           03/06/2019
  *
  * Notes:                   These tests use the test database hosted on Andy's AWS account. They do not interfere with the
  *                          actual database hosted on Carter's Azure account.
  */
 
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using DBHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Models;
 
 
 namespace DbHelper.Test
@@ -22,33 +20,33 @@ namespace DbHelper.Test
         private readonly DBHelper.DbHelper _db;
         private readonly string _connectionString = "Data Source=wetmyplants-test.c9yldqomj91e.us-west-2.rds.amazonaws.com,1433;Initial Catalog=WetMyPlantsTest;User ID=wetmyplants;Password=GR33nThumb;";
 
-        private string email = "test@test.test";
-        private string password = "password";
-        private string phone = "1234567890";
-        private string firstName = "Test";
-        private string lastName = "User";
+        private readonly string email = "test@test.test";
+        private readonly string password = "password";
+        private readonly string phone = "1234567890";
+        private readonly string firstName = "Test";
+        private readonly string lastName = "User";
 
-        private string speciesOneLatinName = "Testicus speciesus";
-        private string speciesOneCommonName = "Test Species One";
-        private double speciesOneWaterMax = 8.00;
-        private double speciesOneWaterMin = 4.00;
-        private double speciesOneLightMax = 6.00;
-        private double speciesOneLightMin = 3.00;
+        private readonly string speciesOneLatinName = "Testicus speciesus";
+        private readonly string speciesOneCommonName = "Test Species One";
+        private readonly double speciesOneWaterMax = 8.00;
+        private readonly double speciesOneWaterMin = 4.00;
+        private readonly double speciesOneLightMax = 6.00;
+        private readonly double speciesOneLightMin = 3.00;
 
-        private string speciesTwoLatinName = "Testicus speciesus two";
-        private string speciesTwoCommonName = "Test Species Two";
-        private double speciesTwoWaterMax = 5.00;
-        private double speciesTwoWaterMin = 1.99;
-        private double speciesTwoLightMax = 9.99;
-        private double speciesTwoLightMin = 5.80;
+        private readonly string speciesTwoLatinName = "Testicus speciesus two";
+        private readonly string speciesTwoCommonName = "Test Species Two";
+        private readonly double speciesTwoWaterMax = 5.00;
+        private readonly double speciesTwoWaterMin = 1.99;
+        private readonly double speciesTwoLightMax = 9.99;
+        private readonly double speciesTwoLightMin = 5.80;
 
-        private string plantOneAlias = "Alfredo";
-        private double plantOneCurrentLight = 7.50;
-        private double plantOneCurrentWater = 3.99;
+        private readonly string plantOneAlias = "Alfredo";
+        private readonly double plantOneCurrentLight = 7.50;
+        private readonly double plantOneCurrentWater = 3.99;
 
-        private string plantTwoAlias = "Mr. Biggles";
-        private double plantTwoCurrentLight = 3.50;
-        private double plantTwoCurrentWater = 8.00;
+        private readonly string plantTwoAlias = "Mr. Biggles";
+        private readonly double plantTwoCurrentLight = 3.50;
+        private readonly double plantTwoCurrentWater = 8.00;
 
         public DbHelperTest()
         {
@@ -74,18 +72,22 @@ namespace DbHelper.Test
 
             _db.CreateNewPlant(idOne, plantOneAlias, plantOneCurrentWater, plantOneCurrentLight);
             _db.CreateNewPlant(idTwo, plantTwoAlias, plantTwoCurrentWater, plantTwoCurrentLight);
+
+            _db.RegisterPlantToUser(_db.FindPlantsByNickname(plantOneAlias)[0], _db.FindUserByEmail(email));
+            _db.RegisterPlantToUser(_db.FindPlantsByNickname(plantTwoAlias)[0], _db.FindUserByEmail(email));
         }
 
         [TestCleanup]
         public void Dispose()
         {
             var users = _db.GetAllUsers();
-            var species = _db.GetAllSpecies();
-            var plants = _db.GetAllPlants();
+            users?.ForEach(i => _db.DeleteUser(i.Email));
 
-            users.ForEach(i => _db.DeleteUser(i.Email));
-            species.ForEach(i => _db.DeleteSpecies(i.Id));
-            plants.ForEach(i => _db.DeletePlant(i.Id));
+            var plants = _db.GetAllPlants();
+            plants?.ForEach(i => _db.DeletePlant(i.Id));
+
+            var species = _db.GetAllSpecies();
+            species?.ForEach(i => _db.DeleteSpecies(i.Id));
         }
 
         [TestMethod]
@@ -246,7 +248,7 @@ namespace DbHelper.Test
             db.Open();
             for (var i = 0; i < 10; i++)
             {
-                var testQuery = $"INSERT INTO Tokens (UserID, Token, Expiry) " +
+                var testQuery = "INSERT INTO Tokens (UserID, Token, Expiry) " +
                                 $"VALUES ({userId}, '{new Random().Next(100000000, 999999999)}', 01012000);";
 
                 var testCommand = new SqlCommand(testQuery, db);
@@ -304,9 +306,9 @@ namespace DbHelper.Test
         {
             // use DbHelper to register a new plant species
             // this method should return true if the query was successful, false otherwise
-            var result = _db.CreateNewSpecies("Test Species", "Testicus speciesi", 7.99, 2.34, 3.59, 2.00);
+            var result = _db.CreateNewSpecies("Test Species", "Testicus specei", 7.99, 2.34, 3.59, 2.00);
 
-            Assert.IsTrue(result);
+            Assert.IsTrue(result != 0);
         }
 
         [TestMethod]
@@ -451,7 +453,7 @@ namespace DbHelper.Test
             var id = _db.GetAllSpecies()[0].Id;
             var result = _db.CreateNewPlant(id, plantOneAlias, plantOneCurrentWater, plantOneCurrentLight);
 
-            Assert.IsTrue(result);
+            Assert.IsTrue(result != 0);
         }
 
         [TestMethod]
