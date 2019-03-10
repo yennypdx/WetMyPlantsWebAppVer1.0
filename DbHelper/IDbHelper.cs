@@ -15,7 +15,7 @@ namespace DBHelper
         bool ResetPassword(string email, string newPassword);
         bool UpdateUser(User user);
 
-        bool CreateNewSpecies(string commonName, string latinName, double waterMax, double waterMin, double lightMax,
+        int CreateNewSpecies(string commonName, string latinName, double waterMax, double waterMin, double lightMax,
             double lightMin);
 
         List<Species> GetAllSpecies();
@@ -25,8 +25,10 @@ namespace DBHelper
         bool UpdateSpecies(Species update);
         bool DeleteSpecies(int id);
 
-        bool CreateNewPlant(int speciesId, string nickname, double currentWater, double currentLight);
+        int CreateNewPlant(int speciesId, string nickname, double currentWater, double currentLight);
+        bool RegisterPlantToUser(Plant plant, User user);
         List<Plant> GetAllPlants();
+        List<Plant> GetPlantsForUser(int id);
         List<Plant> FindPlantsByNickname(string nickname);
         Plant FindPlantById(int id);
         bool UpdatePlant(Plant update);
