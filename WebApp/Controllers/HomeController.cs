@@ -23,7 +23,7 @@ namespace WebApp.Controllers
 
             var plants = _db.GetPlantsForUser(user.Id);
 
-            var model = new DashboardViewModel {User = user, Plants = plants};
+            var model = new DashboardViewModel {User = user, Plants = plants?? new List<Plant>()};
 
             //ViewBag.User = user;
 
