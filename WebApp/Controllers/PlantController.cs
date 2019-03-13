@@ -37,5 +37,15 @@ namespace WebApp.Controllers
 
             return View(plant);
         }
+
+        [HttpGet, Route("update")]
+        public ActionResult UpdatePlant(Plant plant)
+        {
+            if (!ModelState.IsValid) return RedirectToAction("Index", "Home");
+
+            _db.UpdatePlant(plant);
+
+            return RedirectToAction("Edit", "Plant", new {id = plant.Id});
+        }
     }
 }
