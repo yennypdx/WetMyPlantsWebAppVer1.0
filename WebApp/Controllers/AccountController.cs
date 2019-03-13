@@ -42,6 +42,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public ActionResult RegisterUser(RegistrationViewModel uModel)
         {
+            // CreateNewUser will be refactored to return the ID of the newly created user
             var result = _db.CreateNewUser(
                 uModel.FirstName,
                 uModel.LastName,
@@ -80,9 +81,9 @@ namespace WebApp.Controllers
 
                 // set the session 
                 Session["User"] = user;
-
-                // store token as a cookie here
-                return RedirectToAction("Index", "Home", user);
+                return RedirectToAction("Index", "Home"); // since the user object is stored in Session here,
+                // it will be pulled out of Session in the HomeController's Index method
+                //return RedirectToAction("Index", "Home", user);
             }
 
             return View("Login");
