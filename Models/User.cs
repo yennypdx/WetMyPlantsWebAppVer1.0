@@ -10,6 +10,6 @@ namespace Models
         public string Phone { get; set; }
         public string Email { get; set; }
         public string Hash { get; set; }
-        public List<int> Plants { get; set; }
+        public List<int> Plants { get; set; } = new List<int>();
     }
 }
