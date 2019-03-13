@@ -23,6 +23,8 @@ namespace WebApp.Controllers
                 return RedirectToAction("Login", "Account");
 
             var plants = _db.GetPlantsForUser(user.Id);
+            foreach (var p in plants)
+                user.Plants.Add(p.Id);
 
             var model = new DashboardViewModel {User = user, Plants = plants ?? new List<Plant>()};
 
