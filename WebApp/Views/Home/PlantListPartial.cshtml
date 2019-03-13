@@ -24,8 +24,8 @@
             @p.CurrentWater
         </div>
         <div class="plant-links col-3">
-            <button class="button btn btn-outline-info btn-sm" id=@p.Id>Edit</button>
-            <button class="button btn btn-outline-danger btn-sm" id=@p.Id>Delete</button>
+            <a href="~/plant/edit/@p.Id"><button class="button btn btn-outline-info btn-sm">Edit</button></a>
+            <a href="~/plant/delete/@p.Id"><button class="button btn btn-outline-danger btn-sm">Delete</button></a>
         </div>
     </div>
 }
