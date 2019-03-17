@@ -14,21 +14,10 @@
             padding: 15px;
         }
         .plant-links {
-            display: flex;
-            flex-direction: row;
-            -o-justify-content: space-around;
-            -webkit-justify-content: space-around;
-            justify-content: space-around;
-            -ms-align-items: center;
-            -o-align-items: center;
-            -webkit-align-items: center;
-            align-items: center;
-            margin: 10px 0;
-            padding-bottom: 10px;
+
         }
 
         .plant-links > button {
-            max-height: 35px;
         }
     </style>
 }
@@ -43,6 +32,8 @@
                 <h4>Your plants:</h4>
             </div>
         </div>
-        @Html.Partial("PlantListPartial", Model.Plants)
+        <div>
+            @Html.Partial("PlantListPartial", Model.Plants)
+        </div>
     </div>
 </div>

@@ -5,39 +5,27 @@
 }
 
 <div class="row">
-    <div class="col-2 header" id="plant-name-header">Name</div>
-    <div class="col-2 header" id="plant-alias-header">Alias</div>
-    <div class="col-2 header" id="plant-species-header">Species</div>
-    <div class="col-2 header" id="plant-sunlight-header">Sunlight</div>
-    <div class="col-2 header" id="plant-moisture-header">Moisture</div>
-    <div class="col-2"></div>
+    <div class="col-3 header" id="plant-name-header">Name</div>
+    <div class="col-3 header" id="plant-sunlight-header">Sunlight</div>
+    <div class="col-3 header" id="plant-moisture-header">Moisture</div>
+    <div class="col-3"></div>
 </div>
 
 @foreach (var p in Model)
 {
     <div class="row">
-        <div class="plant-col plant-name col-2">
-            @p.Name
+        <div class="plant-col plant-name col-3">
+            @p.Nickname
         </div>
-        <div class="plant-col plant-alias col-2">
-            @p.Alias
+        <div class="plant-col plant-sunlight col-3">
+            @p.CurrentLight
         </div>
-        <div class="plant-col plant-species col-2">
-            @p.Species
+        <div class="plant-col plant-moisture col-3">
+            @p.CurrentWater
         </div>
-        <div class="plant-col plant-sunlight col-2">
-            @p.Sunlight
-        </div>
-        <div class="plant-col plant-moisture col-2">
-            @p.Moisture
-        </div>
-        <div class="plant-links col-2 row">
-            @*<div class="col-6">*@
-                <button class="button btn btn-outline-info btn-sm" id=@p.Id>Edit</button>
-            @*</div>*@
-            @*<div class="col-6">*@
-                <button class="button btn btn-outline-danger btn-sm" id=@p.Id>Delete</button>
-            @*</div>*@
+        <div class="plant-links col-3">
+            <button class="button btn btn-outline-info btn-sm" id=@p.Id>Edit</button>
+            <button class="button btn btn-outline-danger btn-sm" id=@p.Id>Delete</button>
         </div>
     </div>
 }

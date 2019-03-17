@@ -27,6 +27,7 @@ namespace DbHelper
         public static bool ValidatePassword(string plaintextPassword, string hashedPassword)
         {
             // can validate a hashed password + salt without knowing the salt
+            if (plaintextPassword == null || hashedPassword == null) return false;
             return BCryptHelper.CheckPassword(plaintextPassword, hashedPassword);
         }
     }

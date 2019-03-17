@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using DBHelper;
 using Models;
@@ -9,41 +10,25 @@ namespace WebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IDbHelper _helper;
+        private readonly IDbHelper _db;
 
-        public HomeController(IDbHelper helper)
-        {
-            _helper = helper;
-        }
+        // DbHelper injected
+        public HomeController(IDbHelper db) => _db = db;
 
-        public HomeController() => _helper = new DBHelper.DbHelper();
+        //public HomeController() => _helper = new DBHelper.DbHelper();
         public ActionResult Index(User user)
         {
-            //if (user != null && ViewBag.Token != null)
-            //{
-                var model = new DashboardViewModel();
-                model.User = user;
-            model.Plants = new List<Plant>();
-            //var u = _helper.FindUserByEmail("test@test.test");
-            //model.User = u;
-                //model.Plants = new List<Plant>
-                //{
-                //    new Plant
-                //    {
-                //        Name = "Test Plant",
-                //        Alias = "Lil' Testy",
-                //        Id = 1,
-                //        Moisture = 0.0876,
-                //        Sunlight = 0.0556,
-                //        Species = "Planticus unrealus"
-                //    }
-                //};
+            if (user == null)
+                return RedirectToAction("Login", "Account");
 
-            // ViewBag.Token = token;
-            ViewBag.User = user;
-                return View(model);
-            //}
-            return View();
+            var plants = _db.GetPlantsForUser(user.Id);
+
+            var model = new DashboardViewModel {User = user, Plants = plants?? new List<Plant>()};
+
+            //ViewBag.User = user;
+
+            Session["User"] = user;
+            return View(model);
         }
     }
 }

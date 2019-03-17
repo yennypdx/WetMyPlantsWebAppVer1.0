@@ -9,6 +9,8 @@ namespace WebApp
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapMvcAttributeRoutes(); // Enable attribute routing
+
             routes.MapRoute(
                 name: "Home",
                 url: "",

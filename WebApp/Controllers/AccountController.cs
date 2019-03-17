@@ -10,21 +10,10 @@ namespace WebApp.Controllers
 {
     public class AccountController : Controller
     {
-        //private readonly DBHelper.DbHelper _db;
-
-        //public AccountController()
-        //{
-        //    _db = new DBHelper.DbHelper();
-        //}
-
-        // GET: Account
         private readonly DBHelper.IDbHelper _db;
 
         // Inject Dependency
-        public AccountController(DBHelper.IDbHelper db)
-        {
-            _db = db;
-        }
+        public AccountController(DBHelper.IDbHelper db) => _db = db;
 
         public ActionResult Index()
         {
@@ -105,7 +94,7 @@ namespace WebApp.Controllers
             return View(user);
         }
 
-        //POST: Registration/Register
+        //POST: Account/RegisterUser
         [HttpPost]
         public ActionResult RegisterUser(RegistrationViewModel uModel)
         {
@@ -122,14 +111,15 @@ namespace WebApp.Controllers
 
             if (token == null) return RedirectToAction("Register");
 
-            ViewBag.User = result;
+            //ViewBag.User = result;
             ViewBag.Token = token;
 
             // set the session
-            Session["User"] = _db.FindUserByEmail(uModel.Email);
+            var user = _db.FindUserByEmail(uModel.Email);
+            //Session["User"] = _db.FindUserByEmail(uModel.Email);
+            Session["User"] = user;
 
-            // store token in a cookie here
-            return RedirectToAction("Index", "Home", result);
+            return RedirectToAction("Index", "Home", user);
         }
 
         [HttpPost]
