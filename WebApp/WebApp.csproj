@@ -81,9 +81,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\.nuget\packages\newtonsoft.json\9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SendGrid, Version=9.10.0.0, Culture=neutral, PublicKeyToken=4f047e93159395ca, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\.nuget\packages\sendgrid\9.10.0\lib\netstandard2.0\SendGrid.dll</HintPath>
+    <Reference Include="SendGrid">
+      <HintPath>..\packages\Sendgrid.9.10.0\lib\net452\SendGrid.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

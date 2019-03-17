@@ -258,19 +258,6 @@ namespace DBHelper
             return RunNonQuery(query);
         }
 
-        public bool ResetPassword(string email, string password)
-        {
-            User currentUser = FindUserByEmail(email);
-            if (currentUser == null) return false;
-
-            var passwordHash = Crypto.HashPassword(password);
-            int id = currentUser.Id;
-            var query = "UPDATE Users SET " +
-                       $"Hash = '{passwordHash}'" +
-                       $"WHERE UserId = {id};";
-            return RunNonQuery(query);
-        }
-
         public bool CreateNewSpecies(string commonName, string latinName, double waterMax = 0, double waterMin = 0, double lightMax = 0,
             double lightMin = 0)
         {
@@ -467,7 +454,7 @@ namespace DBHelper
             return GetUserToken(Convert.ToInt32(userId));
         }
 
-      /*  public bool ResetPassword(string email, string newPassword)
+        public bool ResetPassword(string email, string newPassword)
         {
             // find the user and get their ID
             var id = FindUserByEmail(email)?.Id;
@@ -479,7 +466,7 @@ namespace DBHelper
             var newHash = Crypto.HashPassword(newPassword);
             var query = $"UPDATE Users SET Hash = '{newHash}' WHERE UserID = {id};";
             return RunNonQuery(query);
-        }*/
+        }
 
         private string GetUserToken(int id)
         {
