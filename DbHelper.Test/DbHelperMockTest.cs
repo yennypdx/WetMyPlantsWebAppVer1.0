@@ -77,7 +77,7 @@ namespace DbHelper.Test
                     return true;
                 });
 
-            _db.Setup(d => d.FindUserByEmail(It.IsAny<string>()))
+            _db.Setup(d => d.FindUser(It.IsAny<string>()))
                 .Returns((string email) => { return userDb.FirstOrDefault(u => u.Email.Equals(email)); });
         }
 
@@ -92,7 +92,7 @@ namespace DbHelper.Test
         [TestCleanup]
         public void Dispose()
         {
-            while(_db.Object.FindUserByEmail(Email) != null)
+            while(_db.Object.FindUser(Email) != null)
             {
                 _db.Object.DeleteUser(Email);
             }
@@ -132,7 +132,7 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperFindUserByEmailTest()
         {
-            var user = _db.Object.FindUserByEmail(Email);
+            var user = _db.Object.FindUser(Email);
 
             Assert.IsNotNull(user);
         }
@@ -140,7 +140,7 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperFindUserByEmailTestFail()
         {
-            var result = _db.Object.FindUserByEmail("other@email.com");
+            var result = _db.Object.FindUser("other@email.com");
             
             Assert.IsNull(result);
         }

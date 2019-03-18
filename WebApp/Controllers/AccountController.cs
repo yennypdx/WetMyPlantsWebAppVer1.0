@@ -37,7 +37,7 @@ namespace WebApp.Controllers
         [HttpGet]
         public ActionResult ForgotUserPassword(ForgotPasswordViewModel uModel)
         {
-             var result = _db.FindUserByEmail(uModel.Email);
+             var result = _db.FindUser(uModel.Email);
             
             if (result.Email != null && result.Email == uModel.Email)
             {
@@ -115,7 +115,7 @@ namespace WebApp.Controllers
             ViewBag.Token = token;
 
             // set the session
-            var user = _db.FindUserByEmail(uModel.Email);
+            var user = _db.FindUser(uModel.Email);
             //Session["User"] = _db.FindUserByEmail(uModel.Email);
             Session["User"] = user;
 
@@ -130,7 +130,7 @@ namespace WebApp.Controllers
 
             if (token != null)
             {
-                var user = _db.FindUserByEmail(model.Email);
+                var user = _db.FindUser(model.Email);
                 ViewBag.User = user;
                 ViewBag.Token = token;
 
