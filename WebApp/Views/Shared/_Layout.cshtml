@@ -32,6 +32,8 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navigation">
+        @if (Session["User"] != null)
+        {
             <ul class="nav navbar-nav">
                 <li>
                     <a class="nav-item nav-link" href="~/home">Home</a>
@@ -40,6 +42,14 @@
                     <a class="nav-item nav-link" href="~/home/plants">My Plants</a>
                 </li>
             </ul>
+            <ul class="nav navbar-nav" id="nav-user-options">
+                <li>
+                    <a class="nav-item nav-link" href="/account/myaccount">My Account</a>
+                </li>
+            </ul>
+        }
+        else
+        {
             @* Somehow change nav bar from "Login | Register" to "My Account" when a user is logged in *@
             <ul class="nav navbar-nav" id="nav-user-options">
                 <li>
@@ -47,11 +57,9 @@
                 </li>
                 <li>
                     <a class="nav-item nav-link" href="/account/register">Register</a>
-                </li>
-                <li>
-                    <a class="nav-item nav-link" href="/account/myaccount">My Account</a>
-                </li>
+                </li>              
             </ul>
+        }
     </div>
 </nav>
 
