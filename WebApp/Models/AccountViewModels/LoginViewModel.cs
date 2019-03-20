@@ -6,6 +6,8 @@ using System.Web;
 
 namespace WebApp.Models.AccountViewModels
 {
+    [Newtonsoft.Json.JsonObject]
+    [Serializable]
     public class LoginViewModel
     {
         [Required]

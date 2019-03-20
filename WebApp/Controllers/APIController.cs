@@ -39,7 +39,7 @@ namespace WebApp.Controllers
         // POST: api/user/register
         // POST requests to this URI containing RegistrationViewModel data will create a new user
         [HttpPost, Route("user/register")]
-        public ActionResult RegisterUser(RegistrationViewModel model)
+        public ActionResult RegisterUser([System.Web.Http.FromBody]RegistrationViewModel model)
         {
             if (!ModelState.IsValid) return BadRequest("Invalid registration model");
 

@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json;
 
 namespace WebApp.Models.AccountViewModels
 { 
+    [JsonObject]
+    [Serializable]
     public class RegistrationViewModel
     {
         [Required]
         [DataType(DataType.Text)]
         [Display(Name = "First Name")]
+        [JsonProperty(PropertyName = "FirstName")]
         public string FirstName { get; set; }
 
         [Required]
