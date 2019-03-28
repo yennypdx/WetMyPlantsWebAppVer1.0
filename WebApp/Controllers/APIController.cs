@@ -39,18 +39,16 @@ namespace WebApp.Controllers
         // POST: api/user/register
         // POST requests to this URI containing RegistrationViewModel data will create a new user
         [HttpPost, Route("user/register")]
-        public ActionResult RegisterUser([System.Web.Http.FromBody] string FirstName, [System.Web.Http.FromBody] string LastName,
-            [System.Web.Http.FromBody] string Phone, [System.Web.Http.FromBody] string Email, [System.Web.Http.FromBody] string Password)
+        public ActionResult RegisterUser(RegistrationViewModel model)
         {
             if (!ModelState.IsValid) return BadRequest("Invalid registration model");
 
-            //if (!_db.CreateNewUser(model.FirstName, model.LastName, model.Phone, model.Email, model.Password))
-            //    return BadRequest("Unable to register user");
+            if (!_db.CreateNewUser(model.FirstName, model.LastName, model.Phone, model.Email, model.Password))
+                return BadRequest("Unable to register user");
 
-            //var id = _db.GetAllUsers().Where(u => u.Email.Equals(model.Email)).ToArray()[0].Id;
+            var id = _db.GetAllUsers().Where(u => u.Email.Equals(model.Email)).ToArray()[0].Id;
 
-            //return Ok(Json($"{{ id : '{id}' }}"));
-            return Ok(Json($"{{ Email : '{Email}' }}"));
+            return Ok(Json($"{{ id : '{id}' }}"));
         }
 
         // POST: api/login
