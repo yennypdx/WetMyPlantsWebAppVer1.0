@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,6 +7,8 @@ using System.Web;
 
 namespace WebApp.Models.AccountViewModels
 {
+    [JsonObject]
+    [Serializable]
     public class LoginViewModel
     {
         [Required]

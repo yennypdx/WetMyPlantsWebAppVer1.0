@@ -41,6 +41,7 @@ namespace WebApp.Controllers
         [HttpPost, Route("user/register")]
         public ActionResult RegisterUser(RegistrationViewModel model)
         {
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
             if (!ModelState.IsValid) return BadRequest("Invalid registration model");
 
             if (!_db.CreateNewUser(model.FirstName, model.LastName, model.Phone, model.Email, model.Password))
