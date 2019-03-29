@@ -291,7 +291,7 @@ namespace DBHelper
             return list;
         }
 
-        public Species FindSpecies(string commonName = null, string latinName= null)
+        public Species FindSpecies(string commonName = null, string latinName = null)
         {
             if(commonName != null)
             {
@@ -306,7 +306,7 @@ namespace DBHelper
 
                 return species;
             }
-            else if(latinName != null)
+            if (latinName != null)
             {
                 var query = $"SELECT * FROM Species WHERE LatinName = '{latinName}';";
 
@@ -321,9 +321,22 @@ namespace DBHelper
             }
             //something went wrong, return null
             return null;
-           
         }
-        
+
+        public Species FindSpecies(string commonName)
+        {
+            var query = $"SELECT * FROM Species WHERE CommonName = '{commonName}';";
+
+            var reader = RunReader(query);
+
+            if (!reader.HasRows) return null;
+
+            reader.Read();
+            var species = BuildSpeciesFromDataReader(reader);
+
+            return species;
+        }
+
         public Species FindSpecies(int id)
         {
             var query = $"SELECT * FROM Species WHERE SpeciesID = {id};";

@@ -4,6 +4,7 @@ using WebApp.Models.AccountViewModels;
 using System.Threading.Tasks;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using System.Net.Http;
 using WebApp.Models.HomeViewModels;
 
 namespace WebApp.Controllers
