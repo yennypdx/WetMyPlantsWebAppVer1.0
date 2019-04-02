@@ -43,7 +43,7 @@ namespace WebApp.Tests.Controllers
             {
                 Email = "test@test.test",
                 Password = "password",
-                ConfirmPassword = "password",
+                //ConfirmPassword = "password",
                 FirstName = "Test",
                 LastName = "User",
                 Phone = "1234567890"
@@ -156,7 +156,7 @@ namespace WebApp.Tests.Controllers
             {
                 Email = "new@user.test",
                 Password = "password",
-                ConfirmPassword = "password",
+                //ConfirmPassword = "password",
                 FirstName = "New",
                 LastName = "User",
                 Phone = "1234567890"
