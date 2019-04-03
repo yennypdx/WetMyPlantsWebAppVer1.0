@@ -1,0 +1,1319 @@
+﻿1>------ Build started: Project: WebApp, Configuration: Debug Any CPU ------
+1>Build started 1/30/2019 1:19:18 AM.
+1>Building with tools version "15.0".
+1>Target "ValidateMSBuildToolsVersion" skipped, due to false condition; ('$(BuildingProject)' == 'true') was evaluated as ('false' == 'true').
+1>Target "EntityDeploy" skipped, due to false condition; ('@(EntityDeploy)' != '') was evaluated as ('' != '').
+1>Target "EnableIntermediateOutputPathMismatchWarning" skipped, due to false condition; ('$(RestoreProjectStyle)' == 'PackageReference') was evaluated as ('' == 'PackageReference').
+1>Target "_CheckForInvalidConfigurationAndPlatform" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "EntityDeploy" depends on it):
+1>Task "Error" skipped, due to false condition; ( '$(_InvalidConfigurationError)' == 'true' ) was evaluated as ( '' == 'true' ).
+1>Task "Warning" skipped, due to false condition; ( '$(_InvalidConfigurationWarning)' == 'true' ) was evaluated as ( '' == 'true' ).
+1>Using "Message" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "Message"
+1>  Configuration=Debug
+1>Done executing task "Message".
+1>Task "Message"
+1>  Platform=AnyCPU
+1>Done executing task "Message".
+1>Task "Error" skipped, due to false condition; ('$(OutDir)' != '' and !HasTrailingSlash('$(OutDir)')) was evaluated as ('bin\' != '' and !HasTrailingSlash('bin\')).
+1>Task "Error" skipped, due to false condition; ('$(BaseIntermediateOutputPath)' != '' and !HasTrailingSlash('$(BaseIntermediateOutputPath)')) was evaluated as ('obj\' != '' and !HasTrailingSlash('obj\')).
+1>Task "Error" skipped, due to false condition; ('$(IntermediateOutputPath)' != '' and !HasTrailingSlash('$(IntermediateOutputPath)')) was evaluated as ('obj\Debug\' != '' and !HasTrailingSlash('obj\Debug\')).
+1>Task "Error" skipped, due to false condition; ( '$(_InitialMSBuildProjectExtensionsPath)' != '' And '$(MSBuildProjectExtensionsPath)' != '$(_InitialMSBuildProjectExtensionsPath)' ) was evaluated as ( 'C:\Users\Me\Source\empty\WebApp\obj\' != '' And 'C:\Users\Me\Source\empty\WebApp\obj\' != 'C:\Users\Me\Source\empty\WebApp\obj\' ).
+1>Task "Warning" skipped, due to false condition; ( '$(EnableBaseIntermediateOutputPathMismatchWarning)' == 'true' And '$(_InitialBaseIntermediateOutputPath)' != '$(BaseIntermediateOutputPath)' And '$(BaseIntermediateOutputPath)' != '$(MSBuildProjectExtensionsPath)' ) was evaluated as ( '' == 'true' And 'obj\' != 'obj\' And 'obj\' != 'C:\Users\Me\Source\empty\WebApp\obj\' ).
+1>Done building target "_CheckForInvalidConfigurationAndPlatform" in project "WebApp.csproj".
+1>Target "_WaitForServiceFabricApplicationCleanupBeforeBuild" skipped, due to false condition; ('$(IsServiceFabricServiceProject)' == 'true') was evaluated as ('' == 'true').
+1>Target "BeforeBuild" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "Build" depends on it):
+1>Done building target "BeforeBuild" in project "WebApp.csproj".
+1>Target "BuildOnlySettings" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CoreBuild" depends on it):
+1>Done building target "BuildOnlySettings" in project "WebApp.csproj".
+1>Target "GetFrameworkPaths" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.NETFramework.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "PrepareForBuild" depends on it):
+1>Done building target "GetFrameworkPaths" in project "WebApp.csproj".
+1>Target "GetWinFXPath" skipped, due to false condition; (('@(Page)' != '' or '@(ApplicationDefinition)' != '' or '@(Resource)' != '') and ('$(GetWinFXNativePath)' != '' or '$(GetWinFXWoWPath)' != '' )) was evaluated as (('' != '' or '' != '' or '' != '') and ('' != '' or '' != '' )).
+1>Target "GetFrameworkPaths" skipped. Previously built successfully.
+1>Target "GetReferenceAssemblyPaths" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "PrepareForBuild" depends on it):
+1>Using "GetReferenceAssemblyPaths" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "GetReferenceAssemblyPaths"
+1>Done executing task "GetReferenceAssemblyPaths".
+1>Done building target "GetReferenceAssemblyPaths" in project "WebApp.csproj".
+1>Target "AssignLinkMetadata" skipped, due to false condition; ( '$(SynthesizeLinkMetadata)' == 'true' ) was evaluated as ( '' == 'true' ).
+1>Target "EnsureNuGetPackageBuildImports" in project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "PrepareForBuild" depends on it):
+1>Task "Error" skipped, due to false condition; (!Exists('..\packages\Microsoft.Net.Compilers.2.10.0\build\Microsoft.Net.Compilers.props')) was evaluated as (!Exists('..\packages\Microsoft.Net.Compilers.2.10.0\build\Microsoft.Net.Compilers.props')).
+1>Done building target "EnsureNuGetPackageBuildImports" in project "WebApp.csproj".
+1>Target "PrepareForBuild" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CoreBuild" depends on it):
+1>Task "FindAppConfigFile" skipped, due to false condition; ('$(AppConfig)'=='') was evaluated as ('Web.config'=='').
+1>Using "MakeDir" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "MakeDir"
+1>Done executing task "MakeDir".
+1>Done building target "PrepareForBuild" in project "WebApp.csproj".
+1>Target "PreBuildEvent" skipped, due to false condition; ('$(PreBuildEvent)'!='') was evaluated as (''!='').
+1>Target "BeforeResolveReferences" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "ResolveReferences" depends on it):
+1>Done building target "BeforeResolveReferences" in project "WebApp.csproj".
+1>Target "AssignProjectConfiguration" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "ResolveReferences" depends on it):
+1>Using "AssignProjectConfiguration" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "AssignProjectConfiguration"
+1>  Project reference "..\DBHelper\DBHelper.csproj" has been assigned the "Debug|AnyCPU" configuration.
+1>Done executing task "AssignProjectConfiguration".
+1>Done building target "AssignProjectConfiguration" in project "WebApp.csproj".
+1>Target "AssignProjectConfiguration" skipped. Previously built successfully.
+1>Target "_SplitProjectReferencesByFileExistence" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "PrepareProjectReferences" depends on it):
+1>Using "ResolveNonMSBuildProjectOutput" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "ResolveNonMSBuildProjectOutput"
+1>  Resolving project reference "..\DBHelper\DBHelper.csproj".
+1>  Project reference "..\DBHelper\DBHelper.csproj" has not been resolved.
+1>Done executing task "ResolveNonMSBuildProjectOutput".
+1>Done building target "_SplitProjectReferencesByFileExistence" in project "WebApp.csproj".
+1>Target "_GetProjectReferenceTargetFrameworkProperties" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "PrepareProjectReferences" depends on it):
+1>Using "MSBuild" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "MSBuild"
+1>  Global Properties:
+1>    Configuration=Debug
+1>    Platform=AnyCPU
+1>  Removing Properties:
+1>    TargetFramework
+1>    RuntimeIdentifier
+1>Building with tools version "15.0".
+1>Target "ValidateMSBuildToolsVersion" skipped, due to false condition; ('$(BuildingProject)' == 'true') was evaluated as ('false' == 'true').
+1>Target "GetTargetFrameworks" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\DBHelper\DBHelper.csproj" (entry point):
+1>Done building target "GetTargetFrameworks" in project "DBHelper.csproj".
+1>Done executing task "MSBuild".
+1>Using "GetReferenceNearestTargetFrameworkTask" task from assembly "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\NuGet\NuGet.Build.Tasks.dll".
+1>Task "GetReferenceNearestTargetFrameworkTask"
+1>  (in) CurrentProjectTargetFramework '.NETFramework,Version=v4.6.1'
+1>  (in) FallbackTargetFrameworks ''
+1>  (in) AnnotatedProjectReferences '..\DBHelper\DBHelper.csproj'
+1>  (out) AssignedProjects '..\DBHelper\DBHelper.csproj'
+1>Done executing task "GetReferenceNearestTargetFrameworkTask".
+1>Done building target "_GetProjectReferenceTargetFrameworkProperties" in project "WebApp.csproj".
+1>Target "PrepareProjectReferences" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "ResolveProjectReferences" depends on it):
+1>Done building target "PrepareProjectReferences" in project "WebApp.csproj".
+1>Target "ResolveProjectReferences" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "ResolveReferences" depends on it):
+1>Task "MSBuild"
+1>  Global Properties:
+1>    Configuration=Debug
+1>    Platform=AnyCPU
+1>  Removing Properties for project "..\DBHelper\DBHelper.csproj":
+1>    TargetFramework
+1>Building with tools version "15.0".
+1>Target "ValidateMSBuildToolsVersion" skipped, due to false condition; ('$(BuildingProject)' == 'true') was evaluated as ('false' == 'true').
+1>Target "GetTargetPathWithTargetPlatformMoniker" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\DBHelper\DBHelper.csproj" (target "GetTargetPath" depends on it):
+1>Done building target "GetTargetPathWithTargetPlatformMoniker" in project "DBHelper.csproj".
+1>Target "GetTargetPath" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\DBHelper\DBHelper.csproj" (entry point):
+1>Done building target "GetTargetPath" in project "DBHelper.csproj".
+1>Done executing task "MSBuild".
+1>Task "MSBuild" skipped, due to false condition; ('%(_MSBuildProjectReferenceExistent.BuildReference)' == 'true' and '@(ProjectReferenceWithConfiguration)' != '' and ('$(BuildingInsideVisualStudio)' == 'true' or '$(BuildProjectReferences)' != 'true') and '$(VisualStudioVersion)' == '10.0' and '@(_MSBuildProjectReferenceExistent)' != '') was evaluated as ('true' == 'true' and '..\DBHelper\DBHelper.csproj' != '' and ('true' == 'true' or 'true' != 'true') and '15.0' == '10.0' and '..\DBHelper\DBHelper.csproj' != '').
+1>Task "MSBuild" skipped, due to false condition; ('%(_MSBuildProjectReferenceExistent.BuildReference)' == 'true' and '@(ProjectReferenceWithConfiguration)' != '' and '$(BuildingInsideVisualStudio)' != 'true' and '$(BuildProjectReferences)' == 'true' and '@(_MSBuildProjectReferenceExistent)' != '') was evaluated as ('true' == 'true' and '..\DBHelper\DBHelper.csproj' != '' and 'true' != 'true' and 'true' == 'true' and '..\DBHelper\DBHelper.csproj' != '').
+1>Task "MSBuild"
+1>  Global Properties:
+1>    Configuration=Debug
+1>    Platform=AnyCPU
+1>  Removing Properties for project "..\DBHelper\DBHelper.csproj":
+1>    TargetFramework
+1>Building with tools version "15.0".
+1>Target "ValidateMSBuildToolsVersion" skipped, due to false condition; ('$(BuildingProject)' == 'true') was evaluated as ('false' == 'true').
+1>Target "GetNativeManifest" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\DBHelper\DBHelper.csproj" (entry point):
+1>Done building target "GetNativeManifest" in project "DBHelper.csproj".
+1>Done executing task "MSBuild".
+1>Task "Warning" skipped, due to false condition; ('@(ProjectReferenceWithConfiguration)' != '' and '@(_MSBuildProjectReferenceNonexistent)' != '') was evaluated as ('..\DBHelper\DBHelper.csproj' != '' and '' != '').
+1>Done building target "ResolveProjectReferences" in project "WebApp.csproj".
+1>Target "FindInvalidProjectReferences" skipped, due to false condition; ('$(FindInvalidProjectReferences)' == 'true') was evaluated as ('' == 'true').
+1>Target "ResolveNativeReferences" skipped, due to false condition; ('@(NativeReference)'!='') was evaluated as (''!='').
+1>Target "ResolveProjectReferences" skipped. Previously built successfully.
+1>Target "FindInvalidProjectReferences" skipped, due to false condition; ('$(FindInvalidProjectReferences)' == 'true') was evaluated as ('' == 'true').
+1>Target "GetFrameworkPaths" skipped. Previously built successfully.
+1>Target "GetReferenceAssemblyPaths" skipped. Previously built successfully.
+1>Target "PrepareForBuild" skipped. Previously built successfully.
+1>Target "GetInstalledSDKLocations" skipped, due to false condition; ('@(SDKReference)' != '') was evaluated as ('' != '').
+1>Target "ResolveSDKReferences" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "ResolveAssemblyReferences" depends on it):
+1>Task "ResolveSDKReference" skipped, due to false condition; ('@(SDKReference)'!='') was evaluated as (''!='').
+1>Done building target "ResolveSDKReferences" in project "WebApp.csproj".
+1>Target "ResolveSDKReferences" skipped. Previously built successfully.
+1>Target "ExpandSDKReferences" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "ResolveAssemblyReferences" depends on it):
+1>Task "GetSDKReferenceFiles" skipped, due to false condition; ('@(ResolvedSDKReference)'!='') was evaluated as (''!='').
+1>Done building target "ExpandSDKReferences" in project "WebApp.csproj".
+1>Target "ResolveNuGetPackageAssets" skipped, due to false condition; ('$(ResolveNuGetPackages)' == 'true' and exists('$(ProjectLockFile)')) was evaluated as ('true' == 'true' and exists('obj\project.assets.json')).
+1>Target "FakesGenerateBeforeBuild" skipped, due to false condition; (@(Fakes) != '' AND $(BuildingProject)) was evaluated as ( != '' AND true).
+1>Target "ImplicitlyExpandNETStandardFacades" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\Microsoft\Microsoft.NET.Build.Extensions\Microsoft.NET.Build.Extensions.NETFramework.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "ResolveAssemblyReferences" depends on it):
+1>Using "GetDependsOnNETStandard" task from assembly "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\Microsoft\Microsoft.NET.Build.Extensions\\tools\net46\Microsoft.NET.Build.Extensions.Tasks.dll".
+1>Task "GetDependsOnNETStandard"
+1>Done executing task "GetDependsOnNETStandard".
+1>Task "NETBuildExtensionsError" skipped, due to false condition; ('$(DependsOnNETStandard)' == 'true' AND '$(NETStandardInbox)' != 'true' AND '$(_UsingOldSDK)' == 'true') was evaluated as ('False' == 'true' AND '' != 'true' AND '' == 'true').
+1>Done building target "ImplicitlyExpandNETStandardFacades" in project "WebApp.csproj".
+1>Target "GetReferenceAssemblyPaths" skipped. Previously built successfully.
+1>Target "_HandlePackageFileConflicts" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\Microsoft\Microsoft.NET.Build.Extensions\Microsoft.NET.Build.Extensions.ConflictResolution.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "ResolveAssemblyReferences" depends on it):
+1>Using "ResolvePackageFileConflicts" task from assembly "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\Microsoft\Microsoft.NET.Build.Extensions\\tools\net46\Microsoft.NET.Build.Extensions.Tasks.dll".
+1>Task "ResolvePackageFileConflicts"
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\Microsoft\Microsoft.NET.Build.Extensions\Microsoft.NET.Build.Extensions.ConflictResolution.targets(33,5): message NETSDK1041: Encountered conflict between 'Reference:System.Net.Http, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL' and 'Platform:System.Net.Http.dll'.  NETSDK1033: Choosing 'Reference:System.Net.Http, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL' because AssemblyVersion '4.1.1.2' is greater than '4.0.0.0'.
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\Microsoft\Microsoft.NET.Build.Extensions\Microsoft.NET.Build.Extensions.ConflictResolution.targets(33,5): message NETSDK1041: Encountered conflict between 'Platform:System.Net.Http.dll' and 'Reference:System.Net.Http, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL'.  NETSDK1033: Choosing 'Reference:System.Net.Http, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL' because AssemblyVersion '4.1.1.2' is greater than '4.0.0.0'.
+1>Done executing task "ResolvePackageFileConflicts".
+1>Done building target "_HandlePackageFileConflicts" in project "WebApp.csproj".
+1>Target "ResolveAssemblyReferences" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "ResolveReferences" depends on it):
+1>Using "ResolveAssemblyReference" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "ResolveAssemblyReference"
+1>  TargetFrameworkMoniker:
+1>      .NETFramework,Version=v4.6.1
+1>  TargetFrameworkMonikerDisplayName:
+1>      .NET Framework 4.6.1
+1>  TargetedRuntimeVersion:
+1>      v4.0.30319
+1>  Assemblies:
+1>      Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL
+1>          HintPath = '..\packages\Antlr3.Runtime.3.5.1\lib\net40-client\Antlr3.Runtime.dll'
+1>      Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>          HintPath = '..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll'
+1>      Microsoft.AI.DependencyCollector, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>          HintPath = '..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.8.1\lib\net45\Microsoft.AI.DependencyCollector.dll'
+1>      Microsoft.AI.PerfCounterCollector, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>          HintPath = '..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.8.1\lib\net45\Microsoft.AI.PerfCounterCollector.dll'
+1>      Microsoft.AI.ServerTelemetryChannel, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>          HintPath = '..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.8.1\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll'
+1>      Microsoft.AI.Web, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>          HintPath = '..\packages\Microsoft.ApplicationInsights.Web.2.8.1\lib\net45\Microsoft.AI.Web.dll'
+1>      Microsoft.AI.WindowsServer, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>          HintPath = '..\packages\Microsoft.ApplicationInsights.WindowsServer.2.8.1\lib\net45\Microsoft.AI.WindowsServer.dll'
+1>      Microsoft.ApplicationInsights, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>          HintPath = '..\packages\Microsoft.ApplicationInsights.2.8.1\lib\net46\Microsoft.ApplicationInsights.dll'
+1>      Microsoft.AspNet.TelemetryCorrelation, Version=1.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>          HintPath = '..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.5\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll'
+1>      Microsoft.CSharp
+1>      SendGrid, Version=9.10.0.0, Culture=neutral, PublicKeyToken=4f047e93159395ca, processorArchitecture=MSIL
+1>          HintPath = '..\packages\Sendgrid.9.10.0\lib\net452\SendGrid.dll'
+1>      System
+1>      System.Data
+1>      System.Diagnostics.DiagnosticSource, Version=4.0.3.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL
+1>          HintPath = '..\packages\System.Diagnostics.DiagnosticSource.4.5.1\lib\net46\System.Diagnostics.DiagnosticSource.dll'
+1>      System.Drawing
+1>      System.Net.Http, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL
+1>          HintPath = '..\packages\System.Net.Http.4.3.3\lib\net46\System.Net.Http.dll'
+1>      System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL
+1>          HintPath = '..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll'
+1>      System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL
+1>          HintPath = '..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll'
+1>      System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL
+1>          HintPath = '..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll'
+1>      System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL
+1>          HintPath = '..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll'
+1>      System.Web.DynamicData
+1>      System.Web.Entity
+1>      System.Web.ApplicationServices
+1>      System.ComponentModel.DataAnnotations
+1>      System.Data.DataSetExtensions
+1>      System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>          HintPath = '..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll'
+1>      System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>          HintPath = '..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll'
+1>      System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>          HintPath = '..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll'
+1>      System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>          HintPath = '..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll'
+1>      System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>          HintPath = '..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll'
+1>      System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>          HintPath = '..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll'
+1>      System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>          HintPath = '..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll'
+1>      System.Xml.Linq
+1>      System.Web
+1>      System.Web.Extensions
+1>      System.Web.Abstractions
+1>      System.Web.Routing
+1>      System.Xml
+1>      System.Configuration
+1>      System.Web.Services
+1>      System.EnterpriseServices
+1>      Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>          Private = 'True'
+1>          HintPath = '..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll'
+1>      System.Net.Http.WebRequest
+1>      WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>          HintPath = '..\packages\WebGrease.1.6.0\lib\WebGrease.dll'
+1>      Newtonsoft.Json
+1>          HintPath = '..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll'
+1>      System.Core
+1>  AssemblyFiles:
+1>      C:\Users\Me\Source\empty\DBHelper\bin\Debug\DBHelper.dll
+1>      C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\mscorlib.dll
+1>  CandidateAssemblyFiles:
+1>  TargetFrameworkDirectories:
+1>      C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\,C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\Facades\
+1>  InstalledAssemblyTables:
+1>  IgnoreInstalledAssemblyTable:
+1>      False
+1>  SearchPaths:
+1>      {CandidateAssemblyFiles}
+1>      {HintPathFromItem}
+1>      {TargetFrameworkDirectory}
+1>      {AssemblyFoldersFromConfig:C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\AssemblyFolders.config,v4.6.1}
+1>      {Registry:Software\Microsoft\.NETFramework,v4.6.1,AssemblyFoldersEx}
+1>      {AssemblyFolders}
+1>      {GAC}
+1>      {RawFileName}
+1>      bin\
+1>  AllowedAssemblyExtensions:
+1>      .winmd
+1>      .dll
+1>      .exe
+1>  AllowedRelatedFileExtensions:
+1>      .pdb
+1>      .xml
+1>      .pri
+1>      .dll.config
+1>      .exe.config
+1>  AppConfigFile:
+1>      Web.config
+1>  AutoUnify:
+1>      False
+1>  CopyLocalDependenciesWhenParentReferenceInGac:
+1>      True
+1>  FindDependencies:
+1>      True
+1>  TargetProcessorArchitecture:
+1>      msil
+1>  StateFile:
+1>      obj\Debug\WebApp.csprojAssemblyReference.cache
+1>  InstalledAssemblySubsetTables:
+1>  IgnoreInstalledAssemblySubsetTable:
+1>      False
+1>  TargetFrameworkSubsets:
+1>  FullTargetFrameworkSubsetNames:
+1>      Full
+1>  ProfileName:
+1>      
+1>  FullFrameworkFolders:
+1>      C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\
+1>  LatestTargetFrameworkDirectories:
+1>  ProfileTablesLocation:
+1>  Primary reference "DBHelper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null".
+1>      Resolved file path is "C:\Users\Me\Source\empty\DBHelper\bin\Debug\DBHelper.dll".
+1>      Reference found at search path location "C:\Users\Me\Source\empty\DBHelper\bin\Debug\DBHelper.dll".
+1>      Found related file "C:\Users\Me\Source\empty\DBHelper\bin\Debug\DBHelper.pdb".
+1>      Found related file "C:\Users\Me\Source\empty\DBHelper\bin\Debug\DBHelper.dll.config".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Unified primary reference "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089".
+1>      Using this version instead of original version "2.0.0.0" in "C:\Users\Me\Source\empty\packages\WebGrease.1.6.0\lib\WebGrease.dll" because there is a more recent version of this framework file.
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\mscorlib.dll".
+1>      Reference found at search path location "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\mscorlib.dll".
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Unified primary reference "Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f".
+1>      Using this version instead of original version "3.4.1.9004" in "C:\Users\Me\Source\empty\packages\WebGrease.1.6.0\lib\WebGrease.dll" because of a binding redirect entry in the file "Web.config".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\Antlr3.Runtime.3.5.1\lib\net40-client\Antlr3.Runtime.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      Found related file "C:\Users\Me\Source\empty\packages\Antlr3.Runtime.3.5.1\lib\net40-client\Antlr3.Runtime.xml".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "Microsoft.AI.DependencyCollector, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.DependencyCollector.2.8.1\lib\net45\Microsoft.AI.DependencyCollector.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      Found related file "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.DependencyCollector.2.8.1\lib\net45\Microsoft.AI.DependencyCollector.xml".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "Microsoft.AI.PerfCounterCollector, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.8.1\lib\net45\Microsoft.AI.PerfCounterCollector.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      Found related file "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.8.1\lib\net45\Microsoft.AI.PerfCounterCollector.xml".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "Microsoft.AI.ServerTelemetryChannel, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.8.1\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      Found related file "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.8.1\lib\net45\Microsoft.AI.ServerTelemetryChannel.xml".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "Microsoft.AI.Web, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.Web.2.8.1\lib\net45\Microsoft.AI.Web.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      Found related file "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.Web.2.8.1\lib\net45\Microsoft.AI.Web.xml".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "Microsoft.AI.WindowsServer, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.2.8.1\lib\net45\Microsoft.AI.WindowsServer.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      Found related file "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.2.8.1\lib\net45\Microsoft.AI.WindowsServer.xml".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "Microsoft.ApplicationInsights, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.2.8.1\lib\net46\Microsoft.ApplicationInsights.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      Found related file "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.2.8.1\lib\net46\Microsoft.ApplicationInsights.xml".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Unified primary reference "Microsoft.AspNet.TelemetryCorrelation, Version=1.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Using this version instead of original version "1.0.4.0" in "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.Web.2.8.1\lib\net45\Microsoft.AI.Web.dll" because of a binding redirect entry in the file "Web.config".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.5\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      Found related file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.5\lib\net45\Microsoft.AspNet.TelemetryCorrelation.xml".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "Microsoft.CSharp, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\Microsoft.CSharp.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\Microsoft.CSharp.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "SendGrid, Version=9.10.0.0, Culture=neutral, PublicKeyToken=4f047e93159395ca".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\Sendgrid.9.10.0\lib\net452\SendGrid.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      Found related file "C:\Users\Me\Source\empty\packages\Sendgrid.9.10.0\lib\net452\SendGrid.pdb".
+1>      Found related file "C:\Users\Me\Source\empty\packages\Sendgrid.9.10.0\lib\net452\SendGrid.xml".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Data.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Data.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Unified primary reference "System.Diagnostics.DiagnosticSource, Version=4.0.3.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51".
+1>      Using this version instead of original version "4.0.3.0" in "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.DependencyCollector.2.8.1\lib\net45\Microsoft.AI.DependencyCollector.dll" because of a binding redirect entry in the file "Web.config".
+1>      Using this version instead of original version "4.0.3.0" in "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.8.1\lib\net45\Microsoft.AI.PerfCounterCollector.dll" because of a binding redirect entry in the file "Web.config".
+1>      Using this version instead of original version "4.0.3.0" in "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.Web.2.8.1\lib\net45\Microsoft.AI.Web.dll" because of a binding redirect entry in the file "Web.config".
+1>      Using this version instead of original version "4.0.3.0" in "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.2.8.1\lib\net45\Microsoft.AI.WindowsServer.dll" because of a binding redirect entry in the file "Web.config".
+1>      Using this version instead of original version "4.0.3.0" in "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.2.8.1\lib\net46\Microsoft.ApplicationInsights.dll" because of a binding redirect entry in the file "Web.config".
+1>      Using this version instead of original version "4.0.3.0" in "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.5\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll" because of a binding redirect entry in the file "Web.config".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\System.Diagnostics.DiagnosticSource.4.5.1\lib\net46\System.Diagnostics.DiagnosticSource.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      Found related file "C:\Users\Me\Source\empty\packages\System.Diagnostics.DiagnosticSource.4.5.1\lib\net46\System.Diagnostics.DiagnosticSource.xml".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Drawing.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Drawing.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Unified primary reference "System.Net.Http, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>      Using this version instead of original version "4.0.0.0" in "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.DependencyCollector.2.8.1\lib\net45\Microsoft.AI.DependencyCollector.dll" because of a binding redirect entry in the file "Web.config".
+1>      Using this version instead of original version "4.0.0.0" in "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.2.8.1\lib\net45\Microsoft.AI.WindowsServer.dll" because of a binding redirect entry in the file "Web.config".
+1>      Using this version instead of original version "4.0.0.0" in "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.2.8.1\lib\net46\Microsoft.ApplicationInsights.dll" because of a binding redirect entry in the file "Web.config".
+1>      Using this version instead of original version "4.0.0.0" in "C:\Users\Me\Source\empty\packages\Sendgrid.9.10.0\lib\net452\SendGrid.dll" because of a binding redirect entry in the file "Web.config".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\System.Net.Http.4.3.3\lib\net46\System.Net.Http.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Web.DynamicData, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.DynamicData.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.DynamicData.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Web.Entity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Entity.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Entity.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Web.ApplicationServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.ApplicationServices.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.ApplicationServices.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.ComponentModel.DataAnnotations, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.ComponentModel.DataAnnotations.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.ComponentModel.DataAnnotations.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Data.DataSetExtensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Data.DataSetExtensions.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Data.DataSetExtensions.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      Found related file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.xml".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      Found related file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.xml".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      Found related file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.xml".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      Found related file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.xml".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      Found related file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.xml".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      Found related file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.xml".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      Found related file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.xml".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Xml.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Xml.Linq.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Xml.Linq.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Web.Extensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Extensions.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Extensions.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Web.Abstractions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Abstractions.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Abstractions.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Web.Routing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Routing.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Routing.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Xml.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Xml.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Configuration.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Configuration.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Web.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Services.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Services.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.EnterpriseServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.EnterpriseServices.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.EnterpriseServices.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Net.Http.WebRequest, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Net.Http.WebRequest.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Net.Http.WebRequest.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Unified primary reference "WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Using this version instead of original version "1.5.1.25624" in "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll" because of a binding redirect entry in the file "Web.config".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\WebGrease.1.6.0\lib\WebGrease.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Unified primary reference "Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed".
+1>      Using this version instead of original version "4.5.0.0" in "C:\Users\Me\Source\empty\packages\WebGrease.1.6.0\lib\WebGrease.dll" because of a binding redirect entry in the file "Web.config".
+1>      Resolved file path is "C:\Users\Me\Source\empty\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll".
+1>      Reference found at search path location "{HintPathFromItem}".
+1>      Found related file "C:\Users\Me\Source\empty\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.xml".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Primary reference "System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Core.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Core.winmd", but it didn't exist.
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Dependency "Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null".
+1>      Resolved file path is "C:\Users\Me\Source\empty\DBHelper\bin\Debug\Models.dll".
+1>      Reference found at search path location "C:\Users\Me\Source\empty\DBHelper\bin\Debug".
+1>          For SearchPath "C:\Users\Me\Source\empty\DBHelper\bin\Debug".
+1>          Considered "C:\Users\Me\Source\empty\DBHelper\bin\Debug\Models.winmd", but it didn't exist.
+1>      Required by "C:\Users\Me\Source\empty\DBHelper\bin\Debug\DBHelper.dll".
+1>      Found related file "C:\Users\Me\Source\empty\DBHelper\bin\Debug\Models.pdb".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Dependency "DevOne.Security.Cryptography.BCrypt, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null".
+1>      Resolved file path is "C:\Users\Me\Source\empty\DBHelper\bin\Debug\DevOne.Security.Cryptography.BCrypt.dll".
+1>      Reference found at search path location "C:\Users\Me\Source\empty\DBHelper\bin\Debug".
+1>          For SearchPath "C:\Users\Me\Source\empty\DBHelper\bin\Debug".
+1>          Considered "C:\Users\Me\Source\empty\DBHelper\bin\Debug\DevOne.Security.Cryptography.BCrypt.winmd", but it didn't exist.
+1>      Required by "C:\Users\Me\Source\empty\DBHelper\bin\Debug\DBHelper.dll".
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Dependency "System.Runtime.Caching, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Runtime.Caching.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.DependencyCollector.2.8.1\lib\net45".
+1>          Considered "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.DependencyCollector.2.8.1\lib\net45\System.Runtime.Caching.winmd", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.DependencyCollector.2.8.1\lib\net45\System.Runtime.Caching.dll", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.DependencyCollector.2.8.1\lib\net45\System.Runtime.Caching.exe", but it didn't exist.
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Runtime.Caching.winmd", but it didn't exist.
+1>      Required by "Microsoft.AI.DependencyCollector, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      Required by "Microsoft.AI.PerfCounterCollector, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      Required by "System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      Required by "System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Dependency "System.Runtime.Serialization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Runtime.Serialization.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.8.1\lib\net45".
+1>          Considered "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.8.1\lib\net45\System.Runtime.Serialization.winmd", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.8.1\lib\net45\System.Runtime.Serialization.dll", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.8.1\lib\net45\System.Runtime.Serialization.exe", but it didn't exist.
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Runtime.Serialization.winmd", but it didn't exist.
+1>      Required by "Microsoft.AI.PerfCounterCollector, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      Required by "Microsoft.AI.ServerTelemetryChannel, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      Required by "Microsoft.AI.WindowsServer, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      Required by "Newtonsoft.Json".
+1>      Required by "WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      Required by "System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Dependency "System.Management, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Management.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.2.8.1\lib\net45".
+1>          Considered "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.2.8.1\lib\net45\System.Management.winmd", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.2.8.1\lib\net45\System.Management.dll", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.2.8.1\lib\net45\System.Management.exe", but it didn't exist.
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Management.winmd", but it didn't exist.
+1>      Required by "Microsoft.AI.WindowsServer, Version=2.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Dependency "Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed".
+1>      Could not resolve this reference. Could not locate the assembly "Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed". Check to make sure the assembly exists on disk. If this reference is required by your code, you may get compilation errors.
+1>          For SearchPath "C:\Users\Me\Source\empty\packages\Sendgrid.9.10.0\lib\net452".
+1>          Considered "C:\Users\Me\Source\empty\packages\Sendgrid.9.10.0\lib\net452\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\Sendgrid.9.10.0\lib\net452\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\Sendgrid.9.10.0\lib\net452\Newtonsoft.Json.exe", but it didn't exist.
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\Newtonsoft.Json.exe", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\Facades\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\Facades\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\Facades\Newtonsoft.Json.exe", but it didn't exist.
+1>          For SearchPath "{AssemblyFoldersFromConfig:C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\AssemblyFolders.config,v4.6.1}".
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Newtonsoft.Json.exe", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\Extensions\Microsoft\SqlDb\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\Extensions\Microsoft\SqlDb\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\Extensions\Microsoft\SqlDb\Newtonsoft.Json.exe", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\PublicAssemblies\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\PublicAssemblies\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\PublicAssemblies\Newtonsoft.Json.exe", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\ReferenceAssemblies\v4.5\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\ReferenceAssemblies\v4.5\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\ReferenceAssemblies\v4.5\Newtonsoft.Json.exe", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VSSDK\VisualStudioIntegration\Common\Assemblies\v4.0\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VSSDK\VisualStudioIntegration\Common\Assemblies\v4.0\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VSSDK\VisualStudioIntegration\Common\Assemblies\v4.0\Newtonsoft.Json.exe", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\PublicAssemblies\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\PublicAssemblies\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\PublicAssemblies\Newtonsoft.Json.exe", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\ReferenceAssemblies\v4.5\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\ReferenceAssemblies\v4.5\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\ReferenceAssemblies\v4.5\Newtonsoft.Json.exe", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\ReferenceAssemblies\v4.0\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\ReferenceAssemblies\v4.0\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\ReferenceAssemblies\v4.0\Newtonsoft.Json.exe", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\ReferenceAssemblies\v4.0\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\ReferenceAssemblies\v4.0\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\ReferenceAssemblies\v4.0\Newtonsoft.Json.exe", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\ReferenceAssemblies\v2.0\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\ReferenceAssemblies\v2.0\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\ReferenceAssemblies\v2.0\Newtonsoft.Json.exe", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VSSDK\VisualStudioIntegration\Common\Assemblies\v2.0\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VSSDK\VisualStudioIntegration\Common\Assemblies\v2.0\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VSSDK\VisualStudioIntegration\Common\Assemblies\v2.0\Newtonsoft.Json.exe", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\ReferenceAssemblies\v2.0\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\ReferenceAssemblies\v2.0\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\ReferenceAssemblies\v2.0\Newtonsoft.Json.exe", but it didn't exist.
+1>          For SearchPath "{Registry:Software\Microsoft\.NETFramework,v4.6.1,AssemblyFoldersEx}".
+1>          Considered AssemblyFoldersEx locations.
+1>          Considered "C:\Program Files\Microsoft SDKs\Azure\.NET SDK\v2.9\bin\plugins\Diagnostics\Newtonsoft.Json.dll",
+1>  			but its name "Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed"
+1>  			didn't match the expected name "Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed".
+1>          For SearchPath "{AssemblyFolders}".
+1>          Considered "c:\Program Files (x86)\Microsoft.NET\ADOMD.NET\110\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "c:\Program Files (x86)\Microsoft.NET\ADOMD.NET\110\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "c:\Program Files (x86)\Microsoft.NET\ADOMD.NET\110\Newtonsoft.Json.exe", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft.NET\ADOMD.NET\140\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft.NET\ADOMD.NET\140\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft.NET\ADOMD.NET\140\Newtonsoft.Json.exe", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.0\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.0\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.0\Newtonsoft.Json.exe", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.5\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.5\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.5\Newtonsoft.Json.exe", but it didn't exist.
+1>          Considered "C:\Program Files\IIS\Microsoft Web Deploy V3\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Program Files\IIS\Microsoft Web Deploy V3\Newtonsoft.Json.dll",
+1>  			but its name "Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed"
+1>  			didn't match the expected name "Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed".
+1>          Considered "C:\Program Files\IIS\Microsoft Web Deploy V3\Newtonsoft.Json.exe", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft SQL Server\140\SDK\Assemblies\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft SQL Server\140\SDK\Assemblies\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "C:\Program Files (x86)\Microsoft SQL Server\140\SDK\Assemblies\Newtonsoft.Json.exe", but it didn't exist.
+1>          Considered "c:\Program Files (x86)\Microsoft SQL Server\110\SDK\Assemblies\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "c:\Program Files (x86)\Microsoft SQL Server\110\SDK\Assemblies\Newtonsoft.Json.dll", but it didn't exist.
+1>          Considered "c:\Program Files (x86)\Microsoft SQL Server\110\SDK\Assemblies\Newtonsoft.Json.exe", but it didn't exist.
+1>          For SearchPath "{GAC}".
+1>          Considered "Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed", which was not found in the GAC.
+1>          For SearchPath "bin\".
+1>          Considered "bin\Newtonsoft.Json.winmd", but it didn't exist.
+1>          Considered "bin\Newtonsoft.Json.dll",
+1>  			but its name "Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed"
+1>  			didn't match the expected name "Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed".
+1>          Considered "bin\Newtonsoft.Json.exe", but it didn't exist.
+1>      Required by "SendGrid, Version=9.10.0.0, Culture=neutral, PublicKeyToken=4f047e93159395ca, processorArchitecture=MSIL".
+1>      Required by "C:\Users\Me\Source\empty\DBHelper\bin\Debug\DBHelper.dll".
+1>  Dependency "System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.DataVisualization.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45".
+1>          Considered "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.DataVisualization.winmd", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.DataVisualization.dll", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.DataVisualization.exe", but it didn't exist.
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.DataVisualization.winmd", but it didn't exist.
+1>      Required by "System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Dependency "System.Data.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Data.Linq.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45".
+1>          Considered "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Data.Linq.winmd", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Data.Linq.dll", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Data.Linq.exe", but it didn't exist.
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Data.Linq.winmd", but it didn't exist.
+1>      Required by "System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      Required by "System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      Required by "System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      Required by "System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Dependency "System.Data.Entity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Data.Entity.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45".
+1>          Considered "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Data.Entity.winmd", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Data.Entity.dll", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Data.Entity.exe", but it didn't exist.
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Data.Entity.winmd", but it didn't exist.
+1>      Required by "System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Dependency "System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Windows.Forms.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "C:\Users\Me\Source\empty\packages\WebGrease.1.6.0\lib".
+1>          Considered "C:\Users\Me\Source\empty\packages\WebGrease.1.6.0\lib\System.Windows.Forms.winmd", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\WebGrease.1.6.0\lib\System.Windows.Forms.dll", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\WebGrease.1.6.0\lib\System.Windows.Forms.exe", but it didn't exist.
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Windows.Forms.winmd", but it didn't exist.
+1>      Required by "WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      Required by "System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Dependency "System.ComponentModel.Composition, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.ComponentModel.Composition.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "C:\Users\Me\Source\empty\packages\WebGrease.1.6.0\lib".
+1>          Considered "C:\Users\Me\Source\empty\packages\WebGrease.1.6.0\lib\System.ComponentModel.Composition.winmd", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\WebGrease.1.6.0\lib\System.ComponentModel.Composition.dll", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\WebGrease.1.6.0\lib\System.ComponentModel.Composition.exe", but it didn't exist.
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.ComponentModel.Composition.winmd", but it didn't exist.
+1>      Required by "WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      Required by "System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  Dependency "System.Numerics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089".
+1>      Resolved file path is "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Numerics.dll".
+1>      Reference found at search path location "{TargetFrameworkDirectory}".
+1>          For SearchPath "C:\Users\Me\Source\empty\packages\Newtonsoft.Json.6.0.4\lib\net45".
+1>          Considered "C:\Users\Me\Source\empty\packages\Newtonsoft.Json.6.0.4\lib\net45\System.Numerics.winmd", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\Newtonsoft.Json.6.0.4\lib\net45\System.Numerics.dll", but it didn't exist.
+1>          Considered "C:\Users\Me\Source\empty\packages\Newtonsoft.Json.6.0.4\lib\net45\System.Numerics.exe", but it didn't exist.
+1>          For SearchPath "{TargetFrameworkDirectory}".
+1>          Considered "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Numerics.winmd", but it didn't exist.
+1>      Required by "Newtonsoft.Json".
+1>      Required by "WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      Required by "System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL".
+1>      This reference is not "CopyLocal" because it's a prerequisite file.
+1>      The ImageRuntimeVersion for this reference is "v4.0.30319".
+1>  There was a conflict between "Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed" and "Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed".
+1>      "Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed" was chosen because it was primary and "Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed" was not.
+1>      References which depend on "Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed" [C:\Users\Me\Source\empty\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll].
+1>          C:\Users\Me\Source\empty\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll
+1>            Project file item includes which caused reference "C:\Users\Me\Source\empty\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll".
+1>              Newtonsoft.Json
+1>              WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>              System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>          C:\Users\Me\Source\empty\packages\WebGrease.1.6.0\lib\WebGrease.dll
+1>            Project file item includes which caused reference "C:\Users\Me\Source\empty\packages\WebGrease.1.6.0\lib\WebGrease.dll".
+1>              WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>              System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL
+1>      References which depend on "Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed" [].
+1>          C:\Users\Me\Source\empty\packages\Sendgrid.9.10.0\lib\net452\SendGrid.dll
+1>            Project file item includes which caused reference "C:\Users\Me\Source\empty\packages\Sendgrid.9.10.0\lib\net452\SendGrid.dll".
+1>              SendGrid, Version=9.10.0.0, Culture=neutral, PublicKeyToken=4f047e93159395ca, processorArchitecture=MSIL
+1>              C:\Users\Me\Source\empty\DBHelper\bin\Debug\DBHelper.dll
+1>C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets(2110,5): warning MSB3277: Found conflicts between different versions of "Newtonsoft.Json" that could not be resolved.  These reference conflicts are listed in the build log when log verbosity is set to detailed.
+1>  AssemblyFoldersEx location: "{Registry:Software\Microsoft\.NETFramework,v4.6.1,AssemblyFoldersEx}"
+1>          C:\Program Files (x86)\Reference Assemblies\Microsoft\MSBuild\v14.0
+1>          C:\Program Files (x86)\Microsoft Web Tools\ReferenceAssemblies\14.0\
+1>          C:\Program Files (x86)\Microsoft.NET\Primary Interop Assemblies\
+1>          C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\ReferenceAssemblies\v4.5\
+1>          C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\PublicAssemblies\
+1>          C:\Program Files (x86)\Microsoft.NET\Primary Interop Assemblies\
+1>          C:\Program Files (x86)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.5\Prototyping\Libraries\
+1>          C:\Program Files (x86)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.5\Libraries\
+1>          
+1>          
+1>          C:\Program Files\Microsoft SDKs\Azure\.NET SDK\v2.9\bin\plugins\Diagnostics\
+1>          C:\Program Files\Microsoft SDKs\Azure\.NET SDK\v2.9\ref\Caching\
+1>          C:\Program Files (x86)\Microsoft WCF Data Services\5.6.4\bin\.NETFramework\
+1>          C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\ReferenceAssemblies\v4.0\
+1>          
+1>          C:\Program Files (x86)\Microsoft SQL Server\140\DTS\Tasks
+1>          c:\Program Files (x86)\Microsoft SQL Server\110\DTS\Tasks
+1>          C:\Program Files (x86)\Microsoft SQL Server\140\DTS\PipelineComponents\
+1>          c:\Program Files (x86)\Microsoft SQL Server\110\DTS\PipelineComponents\
+1>          C:\Program Files (x86)\Microsoft SQL Server\140\DTS\ForEachEnumerators
+1>          c:\Program Files (x86)\Microsoft SQL Server\110\DTS\ForEachEnumerators
+1>          C:\Program Files (x86)\Microsoft SQL Server\140\DTS\Connections\
+1>          c:\Program Files (x86)\Microsoft SQL Server\110\DTS\Connections\
+1>          C:\Program Files (x86)\GtkSharp\2.12\lib\Mono.Posix
+1>          C:\Program Files (x86)\GtkSharp\2.12\lib\Mono.Cairo
+1>          C:\Program Files (x86)\GtkSharp\2.12\lib\gtk-sharp-2.0
+1>          C:\Program Files (x86)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.0\Prototyping\Libraries\
+1>          C:\Program Files (x86)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.0\Libraries\
+1>          C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\ReferenceAssemblies\v2.0\
+1>          C:\Program Files\Microsoft SDKs\Azure\.NET SDK\v2.9\ref
+1>          C:\Program Files (x86)\Common Files\Microsoft Shared\MSEnv\\PublicAssemblies
+1>          C:\Program Files (x86)\Microsoft Chart Controls\Assemblies
+1>          C:\Program Files\Microsoft SQL Server\130\DTS\Tasks
+1>          C:\Program Files\Microsoft SQL Server\130\DTS\PipelineComponents\
+1>          C:\Program Files\Microsoft SQL Server\130\DTS\ForEachEnumerators
+1>          C:\Program Files\Microsoft SQL Server\130\DTS\Connections\
+1>          C:\Program Files\Microsoft SDKs\Azure\.NET SDK\v2.9\ref
+1>Done executing task "ResolveAssemblyReference".
+1>Done building target "ResolveAssemblyReferences" in project "WebApp.csproj".
+1>Target "GenerateBindingRedirects" skipped, due to false condition; ('$(AutoGenerateBindingRedirects)' == 'true' and '$(GenerateBindingRedirectsOutputType)' == 'true') was evaluated as ('' == 'true' and '' == 'true').
+1>Target "_RemoveZipFileSuggestedRedirect" skipped, due to false condition; ('$(_TargetFrameworkVersionWithoutV)' >= '4.7.1' And '$(AllowZipFileRedirect)' != 'true') was evaluated as ('4.6.1' >= '4.7.1' And '' != 'true').
+1>Target "GenerateBindingRedirectsUpdateAppConfig" skipped, due to false condition; ('$(AutoGenerateBindingRedirects)' == 'true' and '$(GenerateBindingRedirectsOutputType)' == 'true' and Exists('$(_GenerateBindingRedirectsIntermediateAppConfig)')) was evaluated as ('' == 'true' and '' == 'true' and Exists('obj\Debug\WebApp.dll.config')).
+1>Target "ResolveComReferences" skipped, due to false condition; ('@(COMReference)'!='' or '@(COMFileReference)'!='') was evaluated as (''!='' or ''!='').
+1>Target "AfterResolveReferences" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "ResolveReferences" depends on it):
+1>Done building target "AfterResolveReferences" in project "WebApp.csproj".
+1>Target "GetReferenceAssemblyPaths" skipped. Previously built successfully.
+1>Target "ImplicitlyExpandDesignTimeFacades" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.NETFramework.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "ResolveReferences" depends on it):
+1>Task "Message" skipped, due to false condition; ('%(ReferencePath.ResolvedFrom)' == 'ImplicitlyExpandDesignTimeFacades') was evaluated as ('{HintPathFromItem}' == 'ImplicitlyExpandDesignTimeFacades').
+1>Task "Message" skipped, due to false condition; ('%(ReferencePath.ResolvedFrom)' == 'ImplicitlyExpandDesignTimeFacades') was evaluated as ('C:\Users\Me\Source\empty\DBHelper\bin\Debug\DBHelper.dll' == 'ImplicitlyExpandDesignTimeFacades').
+1>Task "Message" skipped, due to false condition; ('%(ReferencePath.ResolvedFrom)' == 'ImplicitlyExpandDesignTimeFacades') was evaluated as ('{TargetFrameworkDirectory}' == 'ImplicitlyExpandDesignTimeFacades').
+1>Task "Message" skipped, due to false condition; ('%(ReferencePath.ResolvedFrom)' == 'ImplicitlyExpandDesignTimeFacades') was evaluated as ('C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\mscorlib.dll' == 'ImplicitlyExpandDesignTimeFacades').
+1>Done building target "ImplicitlyExpandDesignTimeFacades" in project "WebApp.csproj".
+1>Target "ResolveTestReferences" skipped, due to false condition; ('@(Shadow)'!='') was evaluated as (''!='').
+1>Target "ResolveReferences" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CoreBuild" depends on it):
+1>Done building target "ResolveReferences" in project "WebApp.csproj".
+1>Target "ResolveNuGetPackageAssets" skipped, due to false condition; ('$(ResolveNuGetPackages)' == 'true' and exists('$(ProjectLockFile)')) was evaluated as ('true' == 'true' and exists('obj\project.assets.json')).
+1>Target "ValidationExtension" in file "C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\Microsoft.WorkflowBuildExtensions.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "PrepareResources" depends on it):
+1>Task "WorkflowBuildMessageTask" skipped, due to false condition; ('$(SkipWorkflowValidation)'!='' and '$(SkipWorkflowValidation)'!='true' and '$(SkipWorkflowValidation)'!='false') was evaluated as (''!='' and ''!='true' and ''!='false').
+1>Done building target "ValidationExtension" in project "WebApp.csproj".
+1>Target "ExpressionBuildExtension" in file "C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\Microsoft.WorkflowBuildExtensions.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "PrepareResources" depends on it):
+1>Task "WorkflowBuildMessageTask" skipped, due to false condition; ('$(DisableWorkflowCompiledExpressions)'!='' and '$(DisableWorkflowCompiledExpressions)'!='true' and '$(DisableWorkflowCompiledExpressions)'!='false') was evaluated as (''!='' and ''!='true' and ''!='false').
+1>Done building target "ExpressionBuildExtension" in project "WebApp.csproj".
+1>Target "XamlMarkupCompilePass1" skipped, due to false condition; ('@(XamlPage)' != '' or '@(XamlAppDef)' != '') was evaluated as ('' != '' or '' != '').
+1>Target "XamlMarkupCompileReadGeneratedFileList" skipped, due to false condition; ('@(XamlPage)' != '' or '@(XamlAppDef)' != '') was evaluated as ('' != '' or '' != '').
+1>Target "XamlMarkupCompileAddFilesGenerated" skipped, due to false condition; ('@(XamlPage)' != '' or '@(XamlAppDef)' != '') was evaluated as ('' != '' or '' != '').
+1>Target "XamlMarkupCompilePass2" skipped, due to false condition; ('$(XamlRequiresCompilationPass2)' == 'true' ) was evaluated as ('false' == 'true' ).
+1>Target "XamlMarkupCompileReadPass2Flag" skipped, due to false condition; ('@(XamlPage)' != '' or '@(XamlAppDef)' != '') was evaluated as ('' != '' or '' != '').
+1>Target "XamlMarkupCompileAddExtensionFilesGenerated" skipped, due to false condition; ('@(XamlPage)' != '' or '@(XamlAppDef)' != '') was evaluated as ('' != '' or '' != '').
+1>Target "AddDeferredValidationErrorsFileToFileWrites" skipped, due to false condition; (Exists('$(DeferredValidationErrorsFileName)')) was evaluated as (Exists('obj\Debug\\AC2C1ABA-CCF6-44D4-8127-588FD4D0A860-DeferredValidationErrors.xml')).
+1>Target "ReportValidationBuildExtensionErrors" skipped, due to false condition; ('$(SkipWorkflowValidation)' != 'true' and ('@(XamlPage)' != '' or '@(XamlAppDef)' != '')) was evaluated as ('' != 'true' and ('' != '' or '' != '')).
+1>Target "MarkupCompilePass1" skipped, due to false condition; ('@(Page)' != '' or '@(ApplicationDefinition)' != '' ) was evaluated as ('' != '' or '' != '' ).
+1>Target "AfterMarkupCompilePass1" in file "C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\Microsoft.WinFx.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "PrepareResources" depends on it):
+1>Done building target "AfterMarkupCompilePass1" in project "WebApp.csproj".
+1>Target "MarkupCompilePass2ForMainAssembly" skipped, due to false condition; ('$(_RequireMCPass2ForMainAssembly)' == 'true' ) was evaluated as ('false' == 'true' ).
+1>Target "FileClassification" in file "C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\Microsoft.WinFx.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "PrepareResources" depends on it):
+1>Task "FileClassifier" skipped, due to false condition; ('@(GeneratedBaml)' != '' or '@(Resource)' != '' or '@(Font)' != '') was evaluated as ('' != '' or '' != '' or '' != '').
+1>Task "Message" skipped, due to false condition; ('$(MSBuildTargetsVerbose)'=='true') was evaluated as (''=='true').
+1>Task "Message" skipped, due to false condition; ('$(MSBuildTargetsVerbose)'=='true') was evaluated as (''=='true').
+1>Done building target "FileClassification" in project "WebApp.csproj".
+1>Target "MainResourcesGeneration" skipped, due to false condition; ('@(MainEmbeddedFiles)' != '') was evaluated as ('' != '').
+1>Target "AssignWinFXEmbeddedResource" skipped, due to false condition; ('@(WinFXEmbeddedResource)' != '') was evaluated as ('' != '').
+1>Target "AssignTargetPaths" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "PrepareResourceNames" depends on it):
+1>Using "AssignTargetPath" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "AssignTargetPath"
+1>Done executing task "AssignTargetPath".
+1>Task "AssignTargetPath"
+1>Done executing task "AssignTargetPath".
+1>Task "AssignTargetPath"
+1>Done executing task "AssignTargetPath".
+1>Task "AssignTargetPath"
+1>Done executing task "AssignTargetPath".
+1>Task "AssignTargetPath" skipped, due to false condition; ('@(_DeploymentBaseManifestWithTargetPath)'=='' and '%(None.Extension)'=='.manifest') was evaluated as (''=='' and '.js'=='.manifest').
+1>Task "AssignTargetPath" skipped, due to false condition; ('@(_DeploymentBaseManifestWithTargetPath)'=='' and '%(None.Extension)'=='.manifest') was evaluated as (''=='' and '.config'=='.manifest').
+1>Done building target "AssignTargetPaths" in project "WebApp.csproj".
+1>Target "AssignTargetPaths" skipped. Previously built successfully.
+1>Target "SplitResourcesByCulture" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "PrepareResourceNames" depends on it):
+1>Task "Warning" skipped, due to false condition; ('@(ResxWithNoCulture)'!='') was evaluated as (''!='').
+1>Task "Warning" skipped, due to false condition; ('@(ResxWithCulture)'!='') was evaluated as (''!='').
+1>Task "Warning" skipped, due to false condition; ('@(NonResxWithCulture)'!='') was evaluated as (''!='').
+1>Task "Warning" skipped, due to false condition; ('@(NonResxWithNoCulture)'!='') was evaluated as (''!='').
+1>Using "AssignCulture" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "AssignCulture"
+1>Done executing task "AssignCulture".
+1>Done building target "SplitResourcesByCulture" in project "WebApp.csproj".
+1>Target "CreateManifestResourceNames" skipped, due to false condition; ('@(EmbeddedResource)' != '') was evaluated as ('' != '').
+1>Target "CreateCustomManifestResourceNames" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "PrepareResourceNames" depends on it):
+1>Done building target "CreateCustomManifestResourceNames" in project "WebApp.csproj".
+1>Target "PrepareResourceNames" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "PrepareResources" depends on it):
+1>Done building target "PrepareResourceNames" in project "WebApp.csproj".
+1>Target "ResolveAssemblyReferences" skipped. Previously built successfully.
+1>Target "SplitResourcesByCulture" skipped. Previously built successfully.
+1>Target "BeforeResGen" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "ResGen" depends on it):
+1>Done building target "BeforeResGen" in project "WebApp.csproj".
+1>Target "ResolveReferences" skipped. Previously built successfully.
+1>Target "FindReferenceAssembliesForReferences" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CoreResGen" depends on it):
+1>Done building target "FindReferenceAssembliesForReferences" in project "WebApp.csproj".
+1>Target "CoreResGen" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "ResGen" depends on it):
+1>Task "GenerateResource" skipped, due to false condition; ('%(EmbeddedResource.Type)' == 'Resx' and '%(EmbeddedResource.GenerateResource)' != 'false' and '$(GenerateResourceMSBuildRuntime)' != 'CLR2') was evaluated as ('' == 'Resx' and '' != 'false' and 'CurrentRuntime' != 'CLR2').
+1>Task "GenerateResource" skipped, due to false condition; ('%(EmbeddedResource.Type)' == 'Resx' and '%(EmbeddedResource.GenerateResource)' != 'false' and '$(GenerateResourceMSBuildRuntime)' == 'CLR2') was evaluated as ('' == 'Resx' and '' != 'false' and 'CurrentRuntime' == 'CLR2').
+1>Done building target "CoreResGen" in project "WebApp.csproj".
+1>Target "AfterResGen" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "ResGen" depends on it):
+1>Done building target "AfterResGen" in project "WebApp.csproj".
+1>Target "ResGen" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "PrepareResources" depends on it):
+1>Done building target "ResGen" in project "WebApp.csproj".
+1>Target "CompileLicxFiles" skipped, due to false condition; ('@(_LicxFile)'!='') was evaluated as (''!='').
+1>Target "PrepareResources" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CoreBuild" depends on it):
+1>Done building target "PrepareResources" in project "WebApp.csproj".
+1>Target "ResolveKeySource" skipped, due to false condition; ($(SignManifests) == 'true' or $(SignAssembly) == 'true') was evaluated as ( == 'true' or  == 'true').
+1>Target "ResolveReferences" skipped. Previously built successfully.
+1>Target "ResolveKeySource" skipped, due to false condition; ($(SignManifests) == 'true' or $(SignAssembly) == 'true') was evaluated as ( == 'true' or  == 'true').
+1>Target "ResolveComReferences" skipped, due to false condition; ('@(COMReference)'!='' or '@(COMFileReference)'!='') was evaluated as (''!='' or ''!='').
+1>Target "ResolveNativeReferences" skipped, due to false condition; ('@(NativeReference)'!='') was evaluated as (''!='').
+1>Target "_SetExternalWin32ManifestProperties" skipped, due to false condition; ('$(GenerateClickOnceManifests)'=='true' or '@(NativeReference)'!='' or '@(ResolvedIsolatedComModules)'!='') was evaluated as (''=='true' or ''!='' or ''!='').
+1>Target "_SetEmbeddedWin32ManifestProperties" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "SetWin32ManifestProperties" depends on it):
+1>Using "GetFrameworkPath" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "GetFrameworkPath"
+1>Done executing task "GetFrameworkPath".
+1>Done building target "_SetEmbeddedWin32ManifestProperties" in project "WebApp.csproj".
+1>Target "SetWin32ManifestProperties" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "Compile" depends on it):
+1>Done building target "SetWin32ManifestProperties" in project "WebApp.csproj".
+1>Target "FindReferenceAssembliesForReferences" skipped. Previously built successfully.
+1>Target "_GenerateCompileInputs" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "Compile" depends on it):
+1>Task "Warning" skipped, due to false condition; ('@(ManifestResourceWithNoCulture)'!='' and '%(ManifestResourceWithNoCulture.EmittedForCompatibilityOnly)'=='') was evaluated as (''!='' and ''=='').
+1>Task "Warning" skipped, due to false condition; ('@(ManifestNonResxWithNoCultureOnDisk)'!='' and '%(ManifestNonResxWithNoCultureOnDisk.EmittedForCompatibilityOnly)'=='') was evaluated as (''!='' and ''=='').
+1>Done building target "_GenerateCompileInputs" in project "WebApp.csproj".
+1>Target "PrepareForBuild" skipped. Previously built successfully.
+1>Target "GetReferenceAssemblyPaths" skipped. Previously built successfully.
+1>Target "_SetTargetFrameworkMonikerAttribute" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.CSharp.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "GenerateTargetFrameworkMonikerAttribute" depends on it):
+1>Done building target "_SetTargetFrameworkMonikerAttribute" in project "WebApp.csproj".
+1>Target "GenerateTargetFrameworkMonikerAttribute" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "BeforeCompile" depends on it):
+1>Skipping target "GenerateTargetFrameworkMonikerAttribute" because all output files are up-to-date with respect to the input files.
+1>Input files: C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.targets
+1>Output files: C:\Users\Me\AppData\Local\Temp\.NETFramework,Version=v4.6.1.AssemblyAttributes.cs
+1>Done building target "GenerateTargetFrameworkMonikerAttribute" in project "WebApp.csproj".
+1>Target "GenerateAdditionalSources" skipped, due to false condition; ('@(AssemblyAttributes)' != '' and '$(GenerateAdditionalSources)' == 'true') was evaluated as ('' != '' and '' == 'true').
+1>Target "BeforeCompile" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "Compile" depends on it):
+1>Done building target "BeforeCompile" in project "WebApp.csproj".
+1>Target "_TimeStampBeforeCompile" skipped, due to false condition; ('$(RunPostBuildEvent)'=='OnOutputUpdated' or ('$(RegisterForComInterop)'=='true' and '$(OutputType)'=='library')) was evaluated as (''=='OnOutputUpdated' or (''=='true' and 'Library'=='library')).
+1>Target "ResolveAssemblyReferences" skipped. Previously built successfully.
+1>Target "_GenerateCompileDependencyCache" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "Compile" depends on it):
+1>Using "Hash" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "Hash"
+1>Done executing task "Hash".
+1>Using "WriteLinesToFile" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "WriteLinesToFile"
+1>  MSB3493: Skipping write to file "obj\Debug\WebApp.csproj.CoreCompileInputs.cache" because content would not change.
+1>Done executing task "WriteLinesToFile".
+1>Done building target "_GenerateCompileDependencyCache" in project "WebApp.csproj".
+1>Target "GenerateCompiledExpressionsTempFile" in file "C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\Microsoft.WorkflowBuildExtensions.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CoreCompile" depends on it):
+1>Task "WriteLinesToFile" skipped, due to false condition; (!Exists('$(GenerateCompiledExpressionsTempFilePathForEditing)')) was evaluated as (!Exists('obj\Debug\\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs')).
+1>Task "WriteLinesToFile" skipped, due to false condition; (!Exists('$(GenerateCompiledExpressionsTempFilePathForValidation)')) was evaluated as (!Exists('obj\Debug\\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs')).
+1>Task "WriteLinesToFile" skipped, due to false condition; (!Exists('$(GenerateCompiledExpressionsTempFilePathForTypeInfer)')) was evaluated as (!Exists('obj\Debug\\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs')).
+1>Done building target "GenerateCompiledExpressionsTempFile" in project "WebApp.csproj".
+1>Target "DesignTimeXamlMarkupCompilation" in file "C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\Microsoft.Xaml.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CoreCompile" depends on it):
+1>Task "MakeDir" skipped, due to false condition; ('@(XamlAppDef)' != '') was evaluated as ('' != '').
+1>Task "CallTarget" skipped, due to false condition; ('$(BuildingProject)' != 'true' and '@(XamlAppDef)' != '') was evaluated as ('true' != 'true' and '' != '').
+1>Done building target "DesignTimeXamlMarkupCompilation" in project "WebApp.csproj".
+1>Target "CleanInProcessXamlGeneratedFiles" skipped, due to false condition; ('@(XamlAppDef)' != '' And '$(BuildingInsideVisualStudio)'!='true') was evaluated as ('' != '' And 'true'!='true').
+1>Target "DesignTimeMarkupCompilation" in file "C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\Microsoft.WinFx.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CoreCompile" depends on it):
+1>Task "CallTarget" skipped, due to false condition; ('$(BuildingProject)' != 'true') was evaluated as ('true' != 'true').
+1>Done building target "DesignTimeMarkupCompilation" in project "WebApp.csproj".
+1>Target "_ComputeNonExistentFileProperty" skipped, due to false condition; (('$(BuildingInsideVisualStudio)' == 'true') and ('$(BuildingOutOfProcess)' != 'true') and (('$(BuildingProject)' == 'false') or ('$(UseHostCompilerIfAvailable)' == 'true'))) was evaluated as (('true' == 'true') and ('true' != 'true') and (('true' == 'false') or ('true' == 'true'))).
+1>Target "ResolveCodeAnalysisRuleSet" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.CSharp.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CoreCompile" depends on it):
+1>Using "ResolveCodeAnalysisRuleSet" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "ResolveCodeAnalysisRuleSet"
+1>Done executing task "ResolveCodeAnalysisRuleSet".
+1>Done building target "ResolveCodeAnalysisRuleSet" in project "WebApp.csproj".
+1>Target "ShimReferencePathsWhenCommonTargetsDoesNotUnderstandReferenceAssemblies" skipped, due to false condition; ('@(ReferencePathWithRefAssemblies)' == '') was evaluated as ('C:\Users\Me\Source\empty\packages\Antlr3.Runtime.3.5.1\lib\net40-client\Antlr3.Runtime.dll;C:\Users\Me\Source\empty\DBHelper\bin\Debug\DBHelper.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.DependencyCollector.2.8.1\lib\net45\Microsoft.AI.DependencyCollector.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.8.1\lib\net45\Microsoft.AI.PerfCounterCollector.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.8.1\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.Web.2.8.1\lib\net45\Microsoft.AI.Web.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.2.8.1\lib\net45\Microsoft.AI.WindowsServer.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.2.8.1\lib\net46\Microsoft.ApplicationInsights.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.5\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\Microsoft.CSharp.dll;C:\Users\Me\Source\empty\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\mscorlib.dll;C:\Users\Me\Source\empty\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll;C:\Users\Me\Source\empty\packages\Sendgrid.9.10.0\lib\net452\SendGrid.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.ComponentModel.DataAnnotations.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Configuration.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Core.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Data.DataSetExtensions.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Data.dll;C:\Users\Me\Source\empty\packages\System.Diagnostics.DiagnosticSource.4.5.1\lib\net46\System.Diagnostics.DiagnosticSource.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Drawing.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.EnterpriseServices.dll;C:\Users\Me\Source\empty\packages\System.Net.Http.4.3.3\lib\net46\System.Net.Http.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Net.Http.WebRequest.dll;C:\Users\Me\Source\empty\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll;C:\Users\Me\Source\empty\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll;C:\Users\Me\Source\empty\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll;C:\Users\Me\Source\empty\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Abstractions.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.ApplicationServices.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.DynamicData.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Entity.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Extensions.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Routing.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Services.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Xml.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Xml.Linq.dll;C:\Users\Me\Source\empty\packages\WebGrease.1.6.0\lib\WebGrease.dll' == '').
+1>Target "_BeforeVBCSCoreCompile" in file "C:\Users\Me\Source\empty\packages\Microsoft.Net.Compilers.2.10.0\tools\Microsoft.Managed.Core.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CoreCompile" depends on it):
+1>Done building target "_BeforeVBCSCoreCompile" in project "WebApp.csproj".
+1>Target "ShimReferencePathsWhenCommonTargetsDoesNotUnderstandReferenceAssemblies" skipped, due to false condition; ('@(ReferencePathWithRefAssemblies)' == '') was evaluated as ('C:\Users\Me\Source\empty\packages\Antlr3.Runtime.3.5.1\lib\net40-client\Antlr3.Runtime.dll;C:\Users\Me\Source\empty\DBHelper\bin\Debug\DBHelper.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.DependencyCollector.2.8.1\lib\net45\Microsoft.AI.DependencyCollector.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.8.1\lib\net45\Microsoft.AI.PerfCounterCollector.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.8.1\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.Web.2.8.1\lib\net45\Microsoft.AI.Web.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.2.8.1\lib\net45\Microsoft.AI.WindowsServer.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.2.8.1\lib\net46\Microsoft.ApplicationInsights.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.5\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\Microsoft.CSharp.dll;C:\Users\Me\Source\empty\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\mscorlib.dll;C:\Users\Me\Source\empty\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll;C:\Users\Me\Source\empty\packages\Sendgrid.9.10.0\lib\net452\SendGrid.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.ComponentModel.DataAnnotations.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Configuration.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Core.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Data.DataSetExtensions.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Data.dll;C:\Users\Me\Source\empty\packages\System.Diagnostics.DiagnosticSource.4.5.1\lib\net46\System.Diagnostics.DiagnosticSource.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Drawing.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.EnterpriseServices.dll;C:\Users\Me\Source\empty\packages\System.Net.Http.4.3.3\lib\net46\System.Net.Http.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Net.Http.WebRequest.dll;C:\Users\Me\Source\empty\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll;C:\Users\Me\Source\empty\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll;C:\Users\Me\Source\empty\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll;C:\Users\Me\Source\empty\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Abstractions.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.ApplicationServices.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.DynamicData.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Entity.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Extensions.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Routing.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Services.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Xml.dll;C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Xml.Linq.dll;C:\Users\Me\Source\empty\packages\WebGrease.1.6.0\lib\WebGrease.dll' == '').
+1>Target "_SetPathMapFromSourceRoots" skipped, due to false condition; ('$(DeterministicSourcePaths)' == 'true') was evaluated as ('' == 'true').
+1>Target "PreXsdCodeGen" in file "C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\Microsoft.ServiceModel.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CoreCompile" depends on it):
+1>Using "CallTarget" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "CallTarget"
+1>Target "CleanXsdCodeGen" in file "C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\Microsoft.ServiceModel.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "PreXsdCodeGen" depends on it):
+1>Using "Delete" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "Delete"
+1>Done executing task "Delete".
+1>Done building target "CleanXsdCodeGen" in project "WebApp.csproj".
+1>Done executing task "CallTarget".
+1>Done building target "PreXsdCodeGen" in project "WebApp.csproj".
+1>Target "XsdCodeGen" skipped, due to false condition; ( '$(XsdCodeGenPreCondition)' == 'True' ) was evaluated as ( 'False' == 'True' ).
+1>Target "CoreCompile" in file "C:\Users\Me\Source\empty\packages\Microsoft.Net.Compilers.2.10.0\tools\Microsoft.CSharp.Core.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "Compile" depends on it):
+1>Skipping target "CoreCompile" because all output files are up-to-date with respect to the input files.
+1>Input files: App_Start\BundleConfig.cs;App_Start\FilterConfig.cs;App_Start\RouteConfig.cs;Controllers\AccountController.cs;Controllers\HomeController.cs;Global.asax.cs;Models\AccountViewModels\ForgotPasswordViewModel.cs;Models\AccountViewModels\LoginViewModel.cs;Models\AccountViewModels\RegistrationViewModel.cs;Models\AccountViewModels\ResetPasswordViewModel.cs;Properties\AssemblyInfo.cs;C:\Users\Me\AppData\Local\Temp\.NETFramework,Version=v4.6.1.AssemblyAttributes.cs;obj\Debug\\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs;obj\Debug\\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs;obj\Debug\\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs;C:\Users\Me\Source\empty\packages\Antlr3.Runtime.3.5.1\lib\net40-client\Antlr3.Runtime.dll;C:\Users\Me\Source\empty\DBHelper\bin\Debug\DBHelper.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.DependencyCollector.2.8.1\lib\net45\Microsoft.AI.DependencyCollector.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.8.1\lib\net45\Microsoft.AI.PerfCounterCollector.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.8.1\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.Web.2.8.1\lib\net45\Microsoft.AI.Web.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.2.8.1\lib\net45\Microsoft.AI.WindowsServer.dll;C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.2.8.1\lib\net46\Microsoft.ApplicationInsights.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.5\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\Microsoft.CSharp.dll;C:\Users\Me\Source\empty\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\mscorlib.dll;C:\Users\Me\Source\empty\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll;C:\Users\Me\Source\empty\packages\Sendgrid.9.10.0\lib\net452\SendGrid.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.ComponentModel.DataAnnotations.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Configuration.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Core.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Data.DataSetExtensions.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Data.dll;C:\Users\Me\Source\empty\packages\System.Diagnostics.DiagnosticSource.4.5.1\lib\net46\System.Diagnostics.DiagnosticSource.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Drawing.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.EnterpriseServices.dll;C:\Users\Me\Source\empty\packages\System.Net.Http.4.3.3\lib\net46\System.Net.Http.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Net.Http.WebRequest.dll;C:\Users\Me\Source\empty\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll;C:\Users\Me\Source\empty\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll;C:\Users\Me\Source\empty\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll;C:\Users\Me\Source\empty\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Abstractions.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.ApplicationServices.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.DynamicData.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Entity.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Extensions.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Routing.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Web.Services.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll;C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Xml.dll;C:\Program Files %28x86%29\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Xml.Linq.dll;C:\Users\Me\Source\empty\packages\WebGrease.1.6.0\lib\WebGrease.dll;obj\Debug\WebApp.csproj.CoreCompileInputs.cache;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.CSharp.CurrentVersion.targets;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\Microsoft\VisualStudio\Managed\Microsoft.Managed.DesignTime.targets;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\Microsoft\VisualStudio\Managed\Microsoft.CSharp.DesignTime.targets;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.NETFramework.CurrentVersion.props;C:\Users\Me\Source\empty\WebApp\WebApp.csproj;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets;C:\Users\Me\Source\empty\WebApp\WebApp.csproj.user;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.NETFramework.CurrentVersion.targets;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Xaml.targets;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\NuGet\NuGet.targets;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Microsoft.Common.targets\ImportAfter\Microsoft.NET.Build.Extensions.targets;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\Microsoft\Microsoft.NET.Build.Extensions\Microsoft.NET.Build.Extensions.targets;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\Microsoft\Microsoft.NET.Build.Extensions\Microsoft.NET.Build.Extensions.NETFramework.targets;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\Microsoft\Microsoft.NET.Build.Extensions\Microsoft.NET.Build.Extensions.ConflictResolution.targets;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\Microsoft\Microsoft.NET.Build.Extensions\Microsoft.NET.DefaultPackageConflictOverrides.targets;C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\Microsoft\NuGet\15.0\Microsoft.NuGet.targets;C:\Program Files %28x86%29\Microsoft Visual Studio\2017\Enterprise\Team Tools\Static Analysis Tools\\Rule Sets\MinimumRecommendedRules.ruleset
+1>Output files: obj\Debug\WebApp.dll;obj\Debug\WebApp.pdb
+1>Done building target "CoreCompile" in project "WebApp.csproj".
+1>Target "_TimeStampAfterCompile" skipped, due to false condition; ('$(RunPostBuildEvent)'=='OnOutputUpdated' or ('$(RegisterForComInterop)'=='true' and '$(OutputType)'=='library')) was evaluated as (''=='OnOutputUpdated' or (''=='true' and 'Library'=='library')).
+1>Target "AfterCompile" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "Compile" depends on it):
+1>Done building target "AfterCompile" in project "WebApp.csproj".
+1>Target "PrepareResourcesForSatelliteAssemblies" skipped, due to false condition; ('$(UICulture)' != '') was evaluated as ('' != '').
+1>Target "MergeLocalizationDirectives" skipped, due to false condition; ('@(GeneratedLocalizationFiles)' !='') was evaluated as ('' !='').
+1>Target "AfterCompileWinFX" in file "C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\Microsoft.WinFx.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "_AfterCompileWinFXInternal" depends on it):
+1>Done building target "AfterCompileWinFX" in project "WebApp.csproj".
+1>Target "_AfterCompileWinFXInternal" in file "C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\Microsoft.WinFx.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "Compile" depends on it):
+1>Done building target "_AfterCompileWinFXInternal" in project "WebApp.csproj".
+1>Target "Compile" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CoreBuild" depends on it):
+1>Done building target "Compile" in project "WebApp.csproj".
+1>Target "DeferredValidation" skipped, due to false condition; ('$(SkipWorkflowValidation)' != 'true' and ('@(XamlPage)' != '' or '@(XamlAppDef)' != '')) was evaluated as ('' != 'true' and ('' != '' or '' != '')).
+1>Target "ExportWindowsMDFile" skipped, due to false condition; ('$(ExportWinMDFile)' == 'true') was evaluated as ('' == 'true').
+1>Target "UnmanagedUnregistration" skipped, due to false condition; ((('$(_AssemblyTimestampBeforeCompile)' != '$(_AssemblyTimestampAfterCompile)' or '$(RegisterForComInterop)' != 'true' or '$(OutputType)' != 'library') or
+1>                    ('$(_AssemblyTimestampBeforeCompile)' == '')) and
+1>                   Exists('@(_UnmanagedRegistrationCache)')) was evaluated as ((('' != '' or '' != 'true' or 'Library' != 'library') or
+1>                    ('' == '')) and
+1>                   Exists('obj\WebApp.csproj.UnmanagedRegistration.cache')).
+1>Target "GenerateSerializationAssemblies" skipped, due to false condition; ('$(_SGenGenerateSerializationAssembliesConfig)' == 'On' or ('@(WebReferenceUrl)'!='' and '$(_SGenGenerateSerializationAssembliesConfig)' == 'Auto')) was evaluated as ('Off' == 'On' or (''!='' and 'Off' == 'Auto')).
+1>Target "_GenerateSatelliteAssemblyInputs" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CreateSatelliteAssemblies" depends on it):
+1>Task "Warning" skipped, due to false condition; ('@(ManifestResourceWithCulture)'!='' and '%(ManifestResourceWithCulture.EmittedForCompatibilityOnly)'=='') was evaluated as (''!='' and ''=='').
+1>Task "Warning" skipped, due to false condition; ('@(ManifestNonResxWithCultureOnDisk)'!='' and '%(ManifestNonResxWithCultureOnDisk.EmittedForCompatibilityOnly)'=='') was evaluated as (''!='' and ''=='').
+1>Done building target "_GenerateSatelliteAssemblyInputs" in project "WebApp.csproj".
+1>Target "ComputeIntermediateSatelliteAssemblies" skipped, due to false condition; (@(EmbeddedResource->'%(WithCulture)') != '') was evaluated as ( != '').
+1>Target "GenerateSatelliteAssemblies" skipped, due to false condition; ('@(_SatelliteAssemblyResourceInputs)' != '' and '$(GenerateSatelliteAssembliesForCore)' != 'true') was evaluated as ('' != '' and '' != 'true').
+1>Target "CreateSatelliteAssemblies" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CoreBuild" depends on it):
+1>Done building target "CreateSatelliteAssemblies" in project "WebApp.csproj".
+1>Target "GenerateManifests" skipped, due to false condition; ('$(GenerateClickOnceManifests)'=='true' or '@(NativeReference)'!='' or '@(ResolvedIsolatedComModules)'!='' or '$(GenerateAppxManifest)' == 'true') was evaluated as (''=='true' or ''!='' or ''!='' or '' == 'true').
+1>Target "GetTargetPathWithTargetPlatformMoniker" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "GetTargetPath" depends on it):
+1>Done building target "GetTargetPathWithTargetPlatformMoniker" in project "WebApp.csproj".
+1>Target "GetTargetPath" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CoreBuild" depends on it):
+1>Done building target "GetTargetPath" in project "WebApp.csproj".
+1>Target "ComputeIntermediateSatelliteAssemblies" skipped, due to false condition; (@(EmbeddedResource->'%(WithCulture)') != '') was evaluated as ( != '').
+1>Target "_CopyFilesMarkedCopyLocal" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CopyFilesToOutputDirectory" depends on it):
+1>Using "Copy" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "Copy"
+1>  Did not copy from file "C:\Users\Me\Source\empty\DBHelper\bin\Debug\DBHelper.dll" to file "bin\DBHelper.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Antlr3.Runtime.3.5.1\lib\net40-client\Antlr3.Runtime.dll" to file "bin\Antlr3.Runtime.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.DependencyCollector.2.8.1\lib\net45\Microsoft.AI.DependencyCollector.dll" to file "bin\Microsoft.AI.DependencyCollector.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll" to file "bin\Microsoft.AI.Agent.Intercept.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.8.1\lib\net45\Microsoft.AI.PerfCounterCollector.dll" to file "bin\Microsoft.AI.PerfCounterCollector.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.8.1\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll" to file "bin\Microsoft.AI.ServerTelemetryChannel.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.Web.2.8.1\lib\net45\Microsoft.AI.Web.dll" to file "bin\Microsoft.AI.Web.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.2.8.1\lib\net45\Microsoft.AI.WindowsServer.dll" to file "bin\Microsoft.AI.WindowsServer.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.5\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll" to file "bin\Microsoft.AspNet.TelemetryCorrelation.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.2.8.1\lib\net46\Microsoft.ApplicationInsights.dll" to file "bin\Microsoft.ApplicationInsights.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll" to file "bin\Microsoft.Web.Infrastructure.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll" to file "bin\Newtonsoft.Json.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Sendgrid.9.10.0\lib\net452\SendGrid.dll" to file "bin\SendGrid.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\System.Diagnostics.DiagnosticSource.4.5.1\lib\net46\System.Diagnostics.DiagnosticSource.dll" to file "bin\System.Diagnostics.DiagnosticSource.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\System.Net.Http.4.3.3\lib\net46\System.Net.Http.dll" to file "bin\System.Net.Http.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll" to file "bin\System.Security.Cryptography.Algorithms.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll" to file "bin\System.Security.Cryptography.Encoding.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll" to file "bin\System.Security.Cryptography.Primitives.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll" to file "bin\System.Security.Cryptography.X509Certificates.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll" to file "bin\System.Web.Helpers.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll" to file "bin\System.Web.Mvc.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll" to file "bin\System.Web.Optimization.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll" to file "bin\System.Web.Razor.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll" to file "bin\System.Web.WebPages.Deployment.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll" to file "bin\System.Web.WebPages.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll" to file "bin\System.Web.WebPages.Razor.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\WebGrease.1.6.0\lib\WebGrease.dll" to file "bin\WebGrease.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\DBHelper\bin\Debug\Models.dll" to file "bin\Models.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\DBHelper\bin\Debug\DevOne.Security.Cryptography.BCrypt.dll" to file "bin\DevOne.Security.Cryptography.BCrypt.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\DBHelper\bin\Debug\DBHelper.pdb" to file "bin\DBHelper.pdb" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\DBHelper\bin\Debug\DBHelper.dll.config" to file "bin\DBHelper.dll.config" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Antlr3.Runtime.3.5.1\lib\net40-client\Antlr3.Runtime.xml" to file "bin\Antlr3.Runtime.xml" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.DependencyCollector.2.8.1\lib\net45\Microsoft.AI.DependencyCollector.xml" to file "bin\Microsoft.AI.DependencyCollector.xml" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.8.1\lib\net45\Microsoft.AI.PerfCounterCollector.xml" to file "bin\Microsoft.AI.PerfCounterCollector.xml" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.8.1\lib\net45\Microsoft.AI.ServerTelemetryChannel.xml" to file "bin\Microsoft.AI.ServerTelemetryChannel.xml" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.Web.2.8.1\lib\net45\Microsoft.AI.Web.xml" to file "bin\Microsoft.AI.Web.xml" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.WindowsServer.2.8.1\lib\net45\Microsoft.AI.WindowsServer.xml" to file "bin\Microsoft.AI.WindowsServer.xml" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.ApplicationInsights.2.8.1\lib\net46\Microsoft.ApplicationInsights.xml" to file "bin\Microsoft.ApplicationInsights.xml" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Sendgrid.9.10.0\lib\net452\SendGrid.xml" to file "bin\SendGrid.xml" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.5\lib\net45\Microsoft.AspNet.TelemetryCorrelation.xml" to file "bin\Microsoft.AspNet.TelemetryCorrelation.xml" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Sendgrid.9.10.0\lib\net452\SendGrid.pdb" to file "bin\SendGrid.pdb" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\System.Diagnostics.DiagnosticSource.4.5.1\lib\net46\System.Diagnostics.DiagnosticSource.xml" to file "bin\System.Diagnostics.DiagnosticSource.xml" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.xml" to file "bin\System.Web.Optimization.xml" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.xml" to file "bin\System.Web.Helpers.xml" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.xml" to file "bin\System.Web.Mvc.xml" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.xml" to file "bin\System.Web.Razor.xml" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.xml" to file "bin\System.Web.WebPages.xml" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.xml" to file "bin\System.Web.WebPages.Deployment.xml" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.xml" to file "bin\System.Web.WebPages.Razor.xml" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.xml" to file "bin\Newtonsoft.Json.xml" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>  Did not copy from file "C:\Users\Me\Source\empty\DBHelper\bin\Debug\Models.pdb" to file "bin\Models.pdb" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>Done executing task "Copy".
+1>Using "Touch" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "Touch"
+1>  Touching "C:\Users\Me\Source\empty\WebApp\obj\Debug\WebApp.csproj.CopyComplete".
+1>Done executing task "Touch".
+1>Done building target "_CopyFilesMarkedCopyLocal" in project "WebApp.csproj".
+1>Target "AssignTargetPaths" skipped. Previously built successfully.
+1>Target "_SplitProjectReferencesByFileExistence" skipped. Previously built successfully.
+1>Target "_GetProjectReferenceTargetFrameworkProperties" skipped. Previously built successfully.
+1>Target "GetCopyToOutputDirectoryXamlAppDefs" in file "C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\Microsoft.Xaml.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "GetCopyToOutputDirectoryItems" depends on it):
+1>Task "AssignTargetPath"
+1>Done executing task "AssignTargetPath".
+1>Done building target "GetCopyToOutputDirectoryXamlAppDefs" in project "WebApp.csproj".
+1>Target "GetCopyToOutputDirectoryItems" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "_CopySourceItemsToOutputDirectory" depends on it):
+1>Task "MSBuild"
+1>  Global Properties:
+1>    Configuration=Debug
+1>    Platform=AnyCPU
+1>  Removing Properties for project "..\DBHelper\DBHelper.csproj":
+1>    TargetFramework
+1>Building with tools version "15.0".
+1>Target "ValidateMSBuildToolsVersion" skipped, due to false condition; ('$(BuildingProject)' == 'true') was evaluated as ('false' == 'true').
+1>Target "AssignTargetPaths" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\DBHelper\DBHelper.csproj" (target "GetCopyToOutputDirectoryItems" depends on it):
+1>Task "AssignTargetPath"
+1>Done executing task "AssignTargetPath".
+1>Task "AssignTargetPath"
+1>Done executing task "AssignTargetPath".
+1>Task "AssignTargetPath"
+1>Done executing task "AssignTargetPath".
+1>Task "AssignTargetPath"
+1>Done executing task "AssignTargetPath".
+1>Task "AssignTargetPath" skipped, due to false condition; ('@(_DeploymentBaseManifestWithTargetPath)'=='' and '%(None.Extension)'=='.manifest') was evaluated as (''=='' and '.config'=='.manifest').
+1>Done building target "AssignTargetPaths" in project "DBHelper.csproj".
+1>Target "_SplitProjectReferencesByFileExistence" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\DBHelper\DBHelper.csproj" (target "GetCopyToOutputDirectoryItems" depends on it):
+1>Task "ResolveNonMSBuildProjectOutput" skipped, due to false condition; ('$(BuildingInsideVisualStudio)'=='true' and '@(ProjectReferenceWithConfiguration)'!='') was evaluated as ('true'=='true' and ''!='').
+1>Done building target "_SplitProjectReferencesByFileExistence" in project "DBHelper.csproj".
+1>Target "_GetProjectReferenceTargetFrameworkProperties" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\DBHelper\DBHelper.csproj" (target "GetCopyToOutputDirectoryItems" depends on it):
+1>Task "MSBuild"
+1>Done executing task "MSBuild".
+1>Task "GetReferenceNearestTargetFrameworkTask" skipped, due to false condition; ('@(_ProjectReferenceTargetFrameworkPossibilities->Count())' != '0' and '$(ReferringTargetFrameworkForProjectReferences)' != '') was evaluated as ('0' != '0' and '.NETFramework,Version=v4.6.1' != '').
+1>Done building target "_GetProjectReferenceTargetFrameworkProperties" in project "DBHelper.csproj".
+1>Target "GetCopyToOutputDirectoryXamlAppDefs" in file "C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\Microsoft.Xaml.targets" from project "C:\Users\Me\Source\empty\DBHelper\DBHelper.csproj" (target "GetCopyToOutputDirectoryItems" depends on it):
+1>Task "AssignTargetPath"
+1>Done executing task "AssignTargetPath".
+1>Done building target "GetCopyToOutputDirectoryXamlAppDefs" in project "DBHelper.csproj".
+1>Target "GetCopyToOutputDirectoryItems" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\DBHelper\DBHelper.csproj" (entry point):
+1>Task "MSBuild" skipped, due to false condition; ('@(_MSBuildProjectReferenceExistent)' != '' and '$(_GetChildProjectCopyToOutputDirectoryItems)' == 'true' and '%(_MSBuildProjectReferenceExistent.Private)' != 'false' and '$(UseCommonOutputDirectory)' != 'true') was evaluated as ('' != '' and 'true' == 'true' and '' != 'false' and 'false' != 'true').
+1>Task "AssignTargetPath"
+1>Done executing task "AssignTargetPath".
+1>Done building target "GetCopyToOutputDirectoryItems" in project "DBHelper.csproj".
+1>Done executing task "MSBuild".
+1>Task "AssignTargetPath"
+1>Done executing task "AssignTargetPath".
+1>Done building target "GetCopyToOutputDirectoryItems" in project "WebApp.csproj".
+1>Target "_CopyOutOfDateSourceItemsToOutputDirectory" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "_CopySourceItemsToOutputDirectory" depends on it):
+1>Skipping target "_CopyOutOfDateSourceItemsToOutputDirectory" because all output files are up-to-date with respect to the input files.
+1>Input files: C:\Users\Me\Source\empty\WebApp\ApplicationInsights.config
+1>Output files: bin\ApplicationInsights.config
+1>Done building target "_CopyOutOfDateSourceItemsToOutputDirectory" in project "WebApp.csproj".
+1>Target "_CopyOutOfDateSourceItemsToOutputDirectoryAlways" skipped, due to false condition; ( '@(_SourceItemsToCopyToOutputDirectoryAlways)' != '' ) was evaluated as ( '' != '' ).
+1>Target "_CopySourceItemsToOutputDirectory" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CopyFilesToOutputDirectory" depends on it):
+1>Done building target "_CopySourceItemsToOutputDirectory" in project "WebApp.csproj".
+1>Target "_CopyAppConfigFile" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CopyFilesToOutputDirectory" depends on it):
+1>Skipping target "_CopyAppConfigFile" because all output files are up-to-date with respect to the input files.
+1>Input files: Web.config
+1>Output files: bin\WebApp.dll.config
+1>Done building target "_CopyAppConfigFile" in project "WebApp.csproj".
+1>Target "_CopyManifestFiles" skipped, due to false condition; ( '$(_DeploymentCopyApplicationManifest)'=='true' or '$(GenerateClickOnceManifests)'=='true' ) was evaluated as ( ''=='true' or ''=='true' ).
+1>Target "_CheckForCompileOutputs" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CopyFilesToOutputDirectory" depends on it):
+1>Done building target "_CheckForCompileOutputs" in project "WebApp.csproj".
+1>Target "_SGenCheckForOutputs" skipped, due to false condition; ('$(_SGenGenerateSerializationAssembliesConfig)' == 'On' or ('@(WebReferenceUrl)'!='' and '$(_SGenGenerateSerializationAssembliesConfig)' == 'Auto')) was evaluated as ('Off' == 'On' or (''!='' and 'Off' == 'Auto')).
+1>Target "CopyFilesToOutputDirectory" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "PrepareForRun" depends on it):
+1>Task "Copy"
+1>  Did not copy from file "obj\Debug\WebApp.dll" to file "bin\WebApp.dll" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>Done executing task "Copy".
+1>Task "CopyRefAssembly" skipped, due to false condition; ('$(ProduceReferenceAssembly)' == 'true' and '$(CopyBuildOutputToOutputDirectory)' == 'true' and '$(SkipCopyBuildProduct)' != 'true') was evaluated as ('false' == 'true' and 'true' == 'true' and '' != 'true').
+1>Task "Message"
+1>  WebApp -> C:\Users\Me\Source\empty\WebApp\bin\WebApp.dll
+1>Done executing task "Message".
+1>Task "Copy" skipped, due to false condition; ('@(AddModules)' != '') was evaluated as ('' != '').
+1>Task "Copy" skipped, due to false condition; ('$(_SGenDllCreated)'=='true') was evaluated as ('false'=='true').
+1>Task "Copy"
+1>  Did not copy from file "obj\Debug\WebApp.pdb" to file "bin\WebApp.pdb" because the "SkipUnchangedFiles" parameter was set to "true" in the project and the files' sizes and timestamps match.
+1>Done executing task "Copy".
+1>Task "Copy" skipped, due to false condition; ('$(_DocumentationFileProduced)'=='true') was evaluated as ('false'=='true').
+1>Task "Copy" skipped, due to false condition; ('@(IntermediateSatelliteAssembliesWithTargetPath)' != '') was evaluated as ('' != '').
+1>Task "Copy" skipped, due to false condition; ('@(ReferenceComWrappersToCopyLocal)' != '' or '@(ResolvedIsolatedComModules)' != '' or '@(_DeploymentLooseManifestFile)' != '' or '@(NativeReferenceFile)' != '' ) was evaluated as ('' != '' or '' != '' or '' != '' or '' != '' ).
+1>Task "Copy" skipped, due to false condition; ('$(SkipCopyWinMDArtifact)' != 'true' and '@(WinMDExpArtifacts)' != '') was evaluated as ('' != 'true' and '' != '').
+1>Task "Message" skipped, due to false condition; ('$(SkipCopyWinMDArtifact)' != 'true' and '$(_WindowsMetadataOutputPath)' != '') was evaluated as ('' != 'true' and '' != '').
+1>Done building target "CopyFilesToOutputDirectory" in project "WebApp.csproj".
+1>Target "RunCodeAnalysis" skipped, due to false condition; ('$(RunCodeAnalysisOnThisProject)'=='true') was evaluated as (''=='true').
+1>Target "CopySilverlightApplications" skipped, due to false condition; ('$(BuildingInsideVisualStudio)' != 'true') was evaluated as ('true' != 'true').
+1>Target "_CopyBinDeployableAssemblies" skipped, due to false condition; (Exists('$(MSBuildProjectDirectory)\_bin_deployableAssemblies')) was evaluated as (Exists('C:\Users\Me\Source\empty\WebApp\_bin_deployableAssemblies')).
+1>Target "_CopyWebApplication" skipped, due to false condition; (!$(Disable_CopyWebApplication) And !$(WebProjectOutputDirInsideProject)) was evaluated as (!False And !True).
+1>Target "_BuiltWebOutputGroupOutput" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "PrepareForRun" depends on it):
+1>Using "CreateItem" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "CreateItem"
+1>Done executing task "CreateItem".
+1>Task "CreateItem" skipped, due to false condition; ('$(OutDir)' != '$(OutputPath)') was evaluated as ('bin\' != 'bin\').
+1>Done building target "_BuiltWebOutputGroupOutput" in project "WebApp.csproj".
+1>Target "PrepareForRun" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CoreBuild" depends on it):
+1>Done building target "PrepareForRun" in project "WebApp.csproj".
+1>Target "UnmanagedRegistration" skipped, due to false condition; ('$(RegisterForComInterop)'=='true' and '$(OutputType)'=='library') was evaluated as (''=='true' and 'Library'=='library').
+1>Target "_CheckForCompileOutputs" skipped. Previously built successfully.
+1>Target "_SGenCheckForOutputs" skipped, due to false condition; ('$(_SGenGenerateSerializationAssembliesConfig)' == 'On' or ('@(WebReferenceUrl)'!='' and '$(_SGenGenerateSerializationAssembliesConfig)' == 'Auto')) was evaluated as ('Off' == 'On' or (''!='' and 'Off' == 'Auto')).
+1>Target "_CleanGetCurrentAndPriorFileWrites" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "IncrementalClean" depends on it):
+1>Using "ReadLinesFromFile" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "ReadLinesFromFile"
+1>Done executing task "ReadLinesFromFile".
+1>Using "ConvertToAbsolutePath" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "ConvertToAbsolutePath"
+1>Done executing task "ConvertToAbsolutePath".
+1>Using "FindUnderPath" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "FindUnderPath"
+1>  Comparison path is "C:\Users\Me\Source\empty\WebApp".
+1>Done executing task "FindUnderPath".
+1>Task "FindUnderPath"
+1>  Comparison path is "bin\".
+1>Done executing task "FindUnderPath".
+1>Task "FindUnderPath"
+1>  Comparison path is "obj\Debug\".
+1>Done executing task "FindUnderPath".
+1>Using "RemoveDuplicates" task from assembly "Microsoft.Build.Tasks.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a".
+1>Task "RemoveDuplicates"
+1>Done executing task "RemoveDuplicates".
+1>Done building target "_CleanGetCurrentAndPriorFileWrites" in project "WebApp.csproj".
+1>Target "IncrementalClean" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "CoreBuild" depends on it):
+1>Task "FindUnderPath"
+1>  Comparison path is "bin\".
+1>Done executing task "FindUnderPath".
+1>Task "FindUnderPath"
+1>  Comparison path is "obj\Debug\".
+1>Done executing task "FindUnderPath".
+1>Task "Delete"
+1>Done executing task "Delete".
+1>Task "RemoveDuplicates"
+1>Done executing task "RemoveDuplicates".
+1>Task "WriteLinesToFile" skipped, due to false condition; ('@(_CleanUnfilteredPriorFileWrites)'!='@(_CleanUniqueRemainingFileWritesAfterIncrementalClean)') was evaluated as ('C:\Users\Me\Source\empty\WebApp\bin\ApplicationInsights.config;C:\Users\Me\Source\empty\WebApp\bin\WebApp.dll.config;C:\Users\Me\Source\empty\WebApp\bin\WebApp.dll;C:\Users\Me\Source\empty\WebApp\bin\WebApp.pdb;C:\Users\Me\Source\empty\WebApp\bin\Antlr3.Runtime.dll;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.Agent.Intercept.dll;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.DependencyCollector.dll;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.PerfCounterCollector.dll;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.ServerTelemetryChannel.dll;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.Web.dll;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.WindowsServer.dll;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.ApplicationInsights.dll;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AspNet.TelemetryCorrelation.dll;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.Web.Infrastructure.dll;C:\Users\Me\Source\empty\WebApp\bin\Newtonsoft.Json.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Diagnostics.DiagnosticSource.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Web.Helpers.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Web.Mvc.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Web.Optimization.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Web.Razor.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Web.WebPages.Deployment.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Web.WebPages.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Web.WebPages.Razor.dll;C:\Users\Me\Source\empty\WebApp\bin\WebGrease.dll;C:\Users\Me\Source\empty\WebApp\bin\Antlr3.Runtime.xml;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.DependencyCollector.xml;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.PerfCounterCollector.xml;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.ServerTelemetryChannel.xml;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.Web.xml;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.WindowsServer.xml;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.ApplicationInsights.xml;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AspNet.TelemetryCorrelation.xml;C:\Users\Me\Source\empty\WebApp\bin\System.Diagnostics.DiagnosticSource.xml;C:\Users\Me\Source\empty\WebApp\bin\System.Web.Helpers.xml;C:\Users\Me\Source\empty\WebApp\bin\System.Web.Mvc.xml;C:\Users\Me\Source\empty\WebApp\bin\System.Web.Optimization.xml;C:\Users\Me\Source\empty\WebApp\bin\System.Web.Razor.xml;C:\Users\Me\Source\empty\WebApp\bin\System.Web.WebPages.xml;C:\Users\Me\Source\empty\WebApp\bin\System.Web.WebPages.Deployment.xml;C:\Users\Me\Source\empty\WebApp\bin\System.Web.WebPages.Razor.xml;C:\Users\Me\Source\empty\WebApp\bin\Newtonsoft.Json.xml;C:\Users\Me\Source\empty\WebApp\obj\Debug\WebApp.csprojAssemblyReference.cache;C:\Users\Me\Source\empty\WebApp\obj\Debug\WebApp.csproj.CoreCompileInputs.cache;C:\Users\Me\Source\empty\WebApp\obj\Debug\WebApp.csproj.CopyComplete;C:\Users\Me\Source\empty\WebApp\obj\Debug\WebApp.dll;C:\Users\Me\Source\empty\WebApp\obj\Debug\WebApp.pdb;C:\Users\Me\Source\empty\WebApp\bin\SendGrid.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Net.Http.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Security.Cryptography.Algorithms.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Security.Cryptography.Encoding.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Security.Cryptography.Primitives.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Security.Cryptography.X509Certificates.dll;C:\Users\Me\Source\empty\WebApp\bin\SendGrid.pdb;C:\Users\Me\Source\empty\WebApp\bin\SendGrid.xml;C:\Users\Me\Source\empty\WebApp\bin\DBHelper.dll;C:\Users\Me\Source\empty\WebApp\bin\Models.dll;C:\Users\Me\Source\empty\WebApp\bin\DevOne.Security.Cryptography.BCrypt.dll;C:\Users\Me\Source\empty\WebApp\bin\DBHelper.pdb;C:\Users\Me\Source\empty\WebApp\bin\Models.pdb;C:\Users\Me\Source\empty\WebApp\bin\DBHelper.dll.config'!='C:\Users\Me\Source\empty\WebApp\bin\ApplicationInsights.config;C:\Users\Me\Source\empty\WebApp\bin\WebApp.dll.config;C:\Users\Me\Source\empty\WebApp\bin\WebApp.dll;C:\Users\Me\Source\empty\WebApp\bin\WebApp.pdb;C:\Users\Me\Source\empty\WebApp\bin\Antlr3.Runtime.dll;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.Agent.Intercept.dll;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.DependencyCollector.dll;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.PerfCounterCollector.dll;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.ServerTelemetryChannel.dll;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.Web.dll;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.WindowsServer.dll;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.ApplicationInsights.dll;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AspNet.TelemetryCorrelation.dll;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.Web.Infrastructure.dll;C:\Users\Me\Source\empty\WebApp\bin\Newtonsoft.Json.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Diagnostics.DiagnosticSource.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Web.Helpers.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Web.Mvc.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Web.Optimization.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Web.Razor.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Web.WebPages.Deployment.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Web.WebPages.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Web.WebPages.Razor.dll;C:\Users\Me\Source\empty\WebApp\bin\WebGrease.dll;C:\Users\Me\Source\empty\WebApp\bin\Antlr3.Runtime.xml;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.DependencyCollector.xml;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.PerfCounterCollector.xml;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.ServerTelemetryChannel.xml;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.Web.xml;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AI.WindowsServer.xml;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.ApplicationInsights.xml;C:\Users\Me\Source\empty\WebApp\bin\Microsoft.AspNet.TelemetryCorrelation.xml;C:\Users\Me\Source\empty\WebApp\bin\System.Diagnostics.DiagnosticSource.xml;C:\Users\Me\Source\empty\WebApp\bin\System.Web.Helpers.xml;C:\Users\Me\Source\empty\WebApp\bin\System.Web.Mvc.xml;C:\Users\Me\Source\empty\WebApp\bin\System.Web.Optimization.xml;C:\Users\Me\Source\empty\WebApp\bin\System.Web.Razor.xml;C:\Users\Me\Source\empty\WebApp\bin\System.Web.WebPages.xml;C:\Users\Me\Source\empty\WebApp\bin\System.Web.WebPages.Deployment.xml;C:\Users\Me\Source\empty\WebApp\bin\System.Web.WebPages.Razor.xml;C:\Users\Me\Source\empty\WebApp\bin\Newtonsoft.Json.xml;C:\Users\Me\Source\empty\WebApp\obj\Debug\WebApp.csprojAssemblyReference.cache;C:\Users\Me\Source\empty\WebApp\obj\Debug\WebApp.csproj.CoreCompileInputs.cache;C:\Users\Me\Source\empty\WebApp\obj\Debug\WebApp.csproj.CopyComplete;C:\Users\Me\Source\empty\WebApp\obj\Debug\WebApp.dll;C:\Users\Me\Source\empty\WebApp\obj\Debug\WebApp.pdb;C:\Users\Me\Source\empty\WebApp\bin\SendGrid.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Net.Http.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Security.Cryptography.Algorithms.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Security.Cryptography.Encoding.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Security.Cryptography.Primitives.dll;C:\Users\Me\Source\empty\WebApp\bin\System.Security.Cryptography.X509Certificates.dll;C:\Users\Me\Source\empty\WebApp\bin\SendGrid.pdb;C:\Users\Me\Source\empty\WebApp\bin\SendGrid.xml;C:\Users\Me\Source\empty\WebApp\bin\DBHelper.dll;C:\Users\Me\Source\empty\WebApp\bin\Models.dll;C:\Users\Me\Source\empty\WebApp\bin\DevOne.Security.Cryptography.BCrypt.dll;C:\Users\Me\Source\empty\WebApp\bin\DBHelper.pdb;C:\Users\Me\Source\empty\WebApp\bin\Models.pdb;C:\Users\Me\Source\empty\WebApp\bin\DBHelper.dll.config').
+1>Done building target "IncrementalClean" in project "WebApp.csproj".
+1>Target "PostBuildEvent" skipped, due to false condition; ('$(PostBuildEvent)' != '' and ('$(RunPostBuildEvent)' != 'OnOutputUpdated' or '$(_AssemblyTimestampBeforeCompile)' != '$(_AssemblyTimestampAfterCompile)')) was evaluated as ('' != '' and ('' != 'OnOutputUpdated' or '' != '')).
+1>Target "CoreBuild" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "Build" depends on it):
+1>Done building target "CoreBuild" in project "WebApp.csproj".
+1>Target "AfterBuild" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (target "Build" depends on it):
+1>Done building target "AfterBuild" in project "WebApp.csproj".
+1>Target "MvcBuildViews" skipped, due to false condition; ('$(MvcBuildViews)'=='true') was evaluated as ('false'=='true').
+1>Target "CleanupForBuildMvcViews" skipped, due to false condition; ( '$(_EnableCleanOnBuildForMvcViews)'=='true' and '$(MVCBuildViews)'=='true' ) was evaluated as ( 'true'=='true' and 'false'=='true' ).
+1>Target "_CheckForInvalidConfigurationAndPlatform" skipped. Previously built successfully.
+1>Target "_CheckForInvalidConfigurationAndPlatform" skipped. Previously built successfully.
+1>Target "Build" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (entry point):
+1>Done building target "Build" in project "WebApp.csproj".
+1>Target "PrepareForBuild" skipped. Previously built successfully.
+1>Target "BuiltProjectOutputGroup" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (entry point):
+1>Done building target "BuiltProjectOutputGroup" in project "WebApp.csproj".
+1>Target "BuildOnlySettings" skipped. Previously built successfully.
+1>Target "PrepareForBuild" skipped. Previously built successfully.
+1>Target "AssignTargetPaths" skipped. Previously built successfully.
+1>Target "ResolveReferences" skipped. Previously built successfully.
+1>Target "BuiltProjectOutputGroupDependencies" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (entry point):
+1>Done building target "BuiltProjectOutputGroupDependencies" in project "WebApp.csproj".
+1>Target "DebugSymbolsProjectOutputGroup" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (entry point):
+1>Done building target "DebugSymbolsProjectOutputGroup" in project "WebApp.csproj".
+1>Target "BuildOnlySettings" skipped. Previously built successfully.
+1>Target "PrepareForBuild" skipped. Previously built successfully.
+1>Target "AssignTargetPaths" skipped. Previously built successfully.
+1>Target "ResolveReferences" skipped. Previously built successfully.
+1>Target "DebugSymbolsProjectOutputGroupDependencies" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (entry point):
+1>Done building target "DebugSymbolsProjectOutputGroupDependencies" in project "WebApp.csproj".
+1>Target "DocumentationProjectOutputGroup" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (entry point):
+1>Done building target "DocumentationProjectOutputGroup" in project "WebApp.csproj".
+1>Target "DocumentationProjectOutputGroupDependencies" skipped, due to false condition; ('$(DocumentationFile)'!='') was evaluated as (''!='').
+1>Target "PrepareResourceNames" skipped. Previously built successfully.
+1>Target "SatelliteDllsProjectOutputGroup" in file "C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\Microsoft.WinFx.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (entry point):
+1>Task "CreateItem" skipped, due to false condition; ('@(ResxWithCulture)' != '') was evaluated as ('' != '').
+1>Task "CreateItem" skipped, due to false condition; ('$(UICulture)' != '') was evaluated as ('' != '').
+1>Task "CreateItem" skipped, due to false condition; ('@(NonResxWithCulture)' != '') was evaluated as ('' != '').
+1>Task "CreateItem"
+1>Done executing task "CreateItem".
+1>Task "CreateItem"
+1>Done executing task "CreateItem".
+1>Done building target "SatelliteDllsProjectOutputGroup" in project "WebApp.csproj".
+1>Target "BuildOnlySettings" skipped. Previously built successfully.
+1>Target "PrepareForBuild" skipped. Previously built successfully.
+1>Target "AssignTargetPaths" skipped. Previously built successfully.
+1>Target "ResolveReferences" skipped. Previously built successfully.
+1>Target "SatelliteDllsProjectOutputGroupDependencies" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (entry point):
+1>Done building target "SatelliteDllsProjectOutputGroupDependencies" in project "WebApp.csproj".
+1>Target "SGenFilesOutputGroup" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (entry point):
+1>Done building target "SGenFilesOutputGroup" in project "WebApp.csproj".
+1>Target "BuildOnlySettings" skipped. Previously built successfully.
+1>Target "PrepareForBuild" skipped. Previously built successfully.
+1>Target "AssignTargetPaths" skipped. Previously built successfully.
+1>Target "ResolveReferences" skipped. Previously built successfully.
+1>Target "SGenFilesOutputGroupDependencies" in file "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets" from project "C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (entry point):
+1>Done building target "SGenFilesOutputGroupDependencies" in project "WebApp.csproj".
+1>
+1>Build succeeded.
+1>
+1>"C:\Users\Me\Source\empty\WebApp\WebApp.csproj" (Build;BuiltProjectOutputGroup;BuiltProjectOutputGroupDependencies;DebugSymbolsProjectOutputGroup;DebugSymbolsProjectOutputGroupDependencies;DocumentationProjectOutputGroup;DocumentationProjectOutputGroupDependencies;SatelliteDllsProjectOutputGroup;SatelliteDllsProjectOutputGroupDependencies;SGenFilesOutputGroup;SGenFilesOutputGroupDependencies target) (1) ->
+1>(ResolveAssemblyReferences target) -> 
+1>  C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\Microsoft.Common.CurrentVersion.targets(2110,5): warning MSB3277: Found conflicts between different versions of "Newtonsoft.Json" that could not be resolved.  These reference conflicts are listed in the build log when log verbosity is set to detailed.
+1>
+1>    1 Warning(s)
+1>    0 Error(s)
+1>
+1>Time Elapsed 00:00:00.61
+========== Build: 1 succeeded, 0 failed, 2 up-to-date, 0 skipped ==========
