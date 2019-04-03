@@ -119,7 +119,7 @@ namespace DBHelper
 
         // Queries the SQL database for a single user and all its data,
         // returns a filled User object
-        public User FindUserByEmail(string email)
+        public User FindUser(string email)
         {
             var queryString = $"SELECT * FROM Users WHERE Email = '{email}';";
 
@@ -142,7 +142,7 @@ namespace DBHelper
             return users;
         }
 
-        public User FindUserById(int id)
+        public User FindUser(int id)
         {
             var query = $"SELECT * FROM Users WHERE UserID = {id};";
             var result = RunReader(query);
@@ -215,7 +215,7 @@ namespace DBHelper
         {
             // Do not create the user if a user with the same email
             // already exists.
-            if (FindUserByEmail(email) != null) return false;
+            if (FindUser(email) != null) return false;
 
             // Never store the password directly, always use its hash.
             var passwordHash = Crypto.HashPassword(password);
@@ -234,7 +234,7 @@ namespace DBHelper
         // Deletes a user (tuple) from the database
         public bool DeleteUser(string email)
         {
-            var id = FindUserByEmail(email)?.Id;
+            var id = FindUser(email)?.Id;
             if (id == null) return false;
 
             var tokenQuery = $"DELETE FROM Tokens WHERE UserID = {id};";
@@ -251,7 +251,7 @@ namespace DBHelper
         
         public bool UpdateUser(User update)
         {
-            if (FindUserById(update.Id) == null) return false;
+            if (FindUser(update.Id) == null) return false;
 
             var query = "UPDATE Users SET " +
                         $"FirstName = '{update.FirstName}', " +
@@ -291,21 +291,39 @@ namespace DBHelper
             return list;
         }
 
-        public Species FindSpeciesByLatinName(string latinName)
+        public Species FindSpecies(string commonName = null, string latinName = null)
         {
-            var query = $"SELECT * FROM Species WHERE LatinName = '{latinName}';";
+            if(commonName != null)
+            {
+                var query = $"SELECT * FROM Species WHERE CommonName = '{commonName}';";
 
-            var reader = RunReader(query);
+                var reader = RunReader(query);
 
-            if (!reader.HasRows) return null;
-            reader.Read();
+                if (!reader.HasRows) return null;
 
-            var species = BuildSpeciesFromDataReader(reader);
+                reader.Read();
+                var species = BuildSpeciesFromDataReader(reader);
 
-            return species;
+                return species;
+            }
+            if (latinName != null)
+            {
+                var query = $"SELECT * FROM Species WHERE LatinName = '{latinName}';";
+
+                var reader = RunReader(query);
+
+                if (!reader.HasRows) return null;
+                reader.Read();
+
+                var species = BuildSpeciesFromDataReader(reader);
+
+                return species;
+            }
+            //something went wrong, return null
+            return null;
         }
 
-        public Species FindSpeciesByCommonName(string commonName)
+        public Species FindSpecies(string commonName)
         {
             var query = $"SELECT * FROM Species WHERE CommonName = '{commonName}';";
 
@@ -319,7 +337,7 @@ namespace DBHelper
             return species;
         }
 
-        public Species FindSpeciesById(int id)
+        public Species FindSpecies(int id)
         {
             var query = $"SELECT * FROM Species WHERE SpeciesID = {id};";
 
@@ -335,7 +353,7 @@ namespace DBHelper
 
         public bool UpdateSpecies(Species update)
         {
-            if (FindSpeciesById(update.Id) == null) return false;
+            if (FindSpecies(update.Id) == null) return false;
 
             var query = "UPDATE Species SET " +
                         $"LatinName = '{update.LatinName}', " +
@@ -398,7 +416,7 @@ namespace DBHelper
             var plants = new List<Plant>();
 
             while (plantIds.Read())
-                plants.Add(FindPlantById(plantIds.GetInt32(0)));
+                plants.Add(FindPlant(plantIds.GetInt32(0)));
 
             return plants;
         }
@@ -429,7 +447,7 @@ namespace DBHelper
             return list;
         }
 
-        public Plant FindPlantById(int id)
+        public Plant FindPlant(int id)
         {
             var query = $"SELECT * FROM Plants WHERE PlantID = {id};";
 
@@ -471,7 +489,7 @@ namespace DBHelper
         public bool AuthenticateUser(string email, string password)
         {
             // get the user's hash for comparison
-            var userHash = FindUserByEmail(email)?.Hash;
+            var userHash = FindUser(email)?.Hash;
             // validate the given password
             return Crypto.ValidatePassword(password, userHash);
         }
@@ -484,7 +502,7 @@ namespace DBHelper
                 return null;
 
             // if valid, get the user's id
-            var userId = FindUserByEmail(email)?.Id;
+            var userId = FindUser(email)?.Id;
             if (userId == null) throw new DataException("Unable to find user");
             // use the id to get the valid token
             return GetUserToken(Convert.ToInt32(userId));
@@ -493,7 +511,7 @@ namespace DBHelper
         public bool ResetPassword(string email, string newPassword)
         {
             // find the user and get their ID
-            var id = FindUserByEmail(email)?.Id;
+            var id = FindUser(email)?.Id;
             // if no user (and no ID) was found, return false
             if (id == null) throw new DataException("Unable to find user");
 
@@ -507,7 +525,7 @@ namespace DBHelper
         private string GetUserToken(int id)
         {
             // verify that a corresponding user exists
-            var user = FindUserById(id);
+            var user = FindUser(id);
             if (user == null) throw new DataException("Unable to find user");
 
             // make sure there are zero (0) or one (1) tokens for any user,
