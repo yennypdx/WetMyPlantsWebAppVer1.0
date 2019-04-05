@@ -181,6 +181,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AccountViewModels\ChangePasswordViewModel.cs" />
     <Compile Include="Models\AccountViewModels\DeleteUserViewModel.cs" />
     <Compile Include="Models\AccountViewModels\ForgotPasswordViewModel.cs" />
     <Compile Include="Models\AccountViewModels\LoginViewModel.cs" />
@@ -247,6 +248,7 @@
     <Content Include="Views\Shared\NavbarPartial.cshtml" />
     <Content Include="Views\Account\MyAccount.cshtml" />
     <Content Include="Views\Account\DeleteUser.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -176,6 +176,34 @@ namespace WebApp.Controllers
                 return RedirectToAction("DeleteUser", "Account", new { email = model.Email });
             }
         }
+
+        public ActionResult ChangePassword(string email)
+        {
+            var user = (User)Session["User"];
+            var model = new ChangePasswordViewModel
+            {
+                Email = user.Email
+            };
+            return View(model);
+        }
+
+        public ActionResult ConfirmPasswordChange(ChangePasswordViewModel model)
+        {
+            if (_db.AuthenticateUser(model.Email, model.Password))
+            {
+                _db.ResetPassword(model.Email, model.NewPassword);
+
+                // Output a message for successful password change
+
+                return RedirectToAction("MyAccount", "Account");
+            }
+            else
+            {
+                // Incorrect password -- return to ConfirmPasswordChange page with error message
+                TempData["Error"] = "Incorrect Password";
+                return RedirectToAction("ChangePassword", "Account", model.Email);
+            }
+        }
      
     }
 }
