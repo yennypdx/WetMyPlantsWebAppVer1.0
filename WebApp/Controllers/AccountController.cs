@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿
+using System.Web.Mvc;
 using Models;
 using WebApp.Models.AccountViewModels;
 using WebApp.Models.HomeViewModels;
@@ -62,6 +63,7 @@ namespace WebApp.Controllers
             var user = _db.FindUserByEmail(uModel.Email);
             //Session["User"] = _db.FindUserByEmail(uModel.Email);
             Session["User"] = user;
+            Session["Email"] = user.Email;
 
             return RedirectToAction("Index", "Home", user);
         }
@@ -80,6 +82,15 @@ namespace WebApp.Controllers
 
                 // set the session 
                 Session["User"] = user;
+                Session["Email"] = user.Email;
+
+                // Create a ViewModel to pass the user to the view
+                var userViewModel = new RegistrationViewModel
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email
+                };
 
                 // store token as a cookie here
                 return RedirectToAction("Index", "Home", user);
@@ -96,5 +107,32 @@ namespace WebApp.Controllers
             _db.UpdateUser(user);
             return RedirectToAction("MyAccount", "Account", user);
         }
+
+        public ActionResult DeleteUser(string email)
+        {
+            var user = _db.FindUserByEmail(email);
+            var userViewModel = new DeleteUserViewModel
+            {
+                Email = email
+            };
+            
+            return View(userViewModel);
+        }
+
+        public ActionResult ConfirmDeletion(DeleteUserViewModel model)
+        {
+            if (_db.AuthenticateUser(model.Email, model.Password))
+            {
+                _db.DeleteUser(model.Email);
+                Session.Clear();
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                TempData["Error"] = "Incorrect Password";
+                return RedirectToAction("DeleteUser", "Account", new { email = model.Email });
+            }
+        }
+     
     }
 }
