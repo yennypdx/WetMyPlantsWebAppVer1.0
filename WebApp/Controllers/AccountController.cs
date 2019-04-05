@@ -35,8 +35,19 @@ namespace WebApp.Controllers
 
         public ActionResult MyAccount()
         {
-            var user = Session["User"];
-            return View(user);
+            var user = (User)Session["User"];
+
+            // Convert user to ViewModel to pass to the View
+            var userViewModel = new MyAccountViewModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Phone = user.Phone,
+                Email = user.Email,
+                Id = user.Id
+            };
+
+            return View(userViewModel);
         }
 
         //POST: Account/RegisterUser
@@ -100,12 +111,33 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateUser(User user)
+        public ActionResult UpdateUser(MyAccountViewModel model)
         {
+            // Convert model to User to update database and session
+            var user = new User
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                Id = model.Id,
+                Phone = model.Phone
+            };
+
             // update the session
             Session["User"] = user;
             _db.UpdateUser(user);
-            return RedirectToAction("MyAccount", "Account", user);
+
+            // Convert user to a ViewModel to be passed to the view
+            var userViewModel = new MyAccountViewModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Id = user.Id,
+                Phone = user.Phone
+            };
+
+            return RedirectToAction("MyAccount", "Account", model);
         }
 
         public ActionResult DeleteUser(string email)
@@ -121,14 +153,19 @@ namespace WebApp.Controllers
 
         public ActionResult ConfirmDeletion(DeleteUserViewModel model)
         {
+            // Check that the user entered the correct password
             if (_db.AuthenticateUser(model.Email, model.Password))
             {
+                // Delete the user
                 _db.DeleteUser(model.Email);
+
+                // Clear the session
                 Session.Clear();
                 return RedirectToAction("Login", "Account");
             }
             else
             {
+                // Incorrect password -- return to delete user page with error message
                 TempData["Error"] = "Incorrect Password";
                 return RedirectToAction("DeleteUser", "Account", new { email = model.Email });
             }
