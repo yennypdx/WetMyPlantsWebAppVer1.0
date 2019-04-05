@@ -50,6 +50,12 @@ namespace WebApp.Controllers
             return View(userViewModel);
         }
 
+        public ActionResult Logout()
+        {
+            Session.Abandon();
+            return RedirectToAction("Login", "Account");
+        }
+
         //POST: Account/RegisterUser
         [HttpPost]
         public ActionResult RegisterUser(RegistrationViewModel uModel)
@@ -159,8 +165,8 @@ namespace WebApp.Controllers
                 // Delete the user
                 _db.DeleteUser(model.Email);
 
-                // Clear the session
-                Session.Clear();
+                // Abandon the session to log the deleted user out
+                Session.Abandon();
                 return RedirectToAction("Login", "Account");
             }
             else
