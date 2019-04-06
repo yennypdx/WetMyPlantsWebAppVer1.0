@@ -73,8 +73,8 @@ namespace DbHelper.Test
             _db.CreateNewPlant(idOne, plantOneAlias, plantOneCurrentWater, plantOneCurrentLight);
             _db.CreateNewPlant(idTwo, plantTwoAlias, plantTwoCurrentWater, plantTwoCurrentLight);
 
-            _db.RegisterPlantToUser(_db.FindPlantsByNickname(plantOneAlias)[0], _db.FindUserByEmail(email));
-            _db.RegisterPlantToUser(_db.FindPlantsByNickname(plantTwoAlias)[0], _db.FindUserByEmail(email));
+            _db.RegisterPlantToUser(_db.FindPlantsByNickname(plantOneAlias)[0], _db.FindUser(email));
+            _db.RegisterPlantToUser(_db.FindPlantsByNickname(plantTwoAlias)[0], _db.FindUser(email));
         }
 
         [TestCleanup]
@@ -124,7 +124,7 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperFindUserByEmailTest()
         {
-            var user = _db.FindUserByEmail(email);
+            var user = _db.FindUser(email);
 
             Assert.IsNotNull(user);
         }
@@ -132,7 +132,7 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperFindUserByEmailTestFail()
         {
-            var result = _db.FindUserByEmail("other@email.com");
+            var result = _db.FindUser("other@email.com");
 
             Assert.IsNull(result);
         }
@@ -140,60 +140,60 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperFindUserByIdTest()
         {
-            var id = _db.FindUserByEmail(email).Id;
-            var user = _db.FindUserById(id);
+            var id = _db.FindUser(email).Id;
+            var user = _db.FindUser(id);
 
             Assert.IsNotNull(user);
-            Assert.AreEqual(_db.FindUserByEmail(email).Id, user.Id);
+            Assert.AreEqual(_db.FindUser(email).Id, user.Id);
         }
 
         [TestMethod]
         public void DbHelperUpdateUserEmailTest()
         {
             const string newEmail = "new@email.test";
-            var user = _db.FindUserByEmail(email);
+            var user = _db.FindUser(email);
             user.Email = newEmail;
             var result = _db.UpdateUser(user);
 
             Assert.IsTrue(result);
-            Assert.AreEqual(newEmail, _db.FindUserById(user.Id).Email);
+            Assert.AreEqual(newEmail, _db.FindUser(user.Id).Email);
         }
 
         [TestMethod]
         public void DbHelperUpdateUserFirstNameTest()
         {
             const string newFirstName = "NewFirstName";
-            var user = _db.FindUserByEmail(email);
+            var user = _db.FindUser(email);
             user.FirstName = newFirstName;
             var result = _db.UpdateUser(user);
 
             Assert.IsTrue(result);
 
-            Assert.AreEqual(newFirstName, _db.FindUserById(user.Id).FirstName);
+            Assert.AreEqual(newFirstName, _db.FindUser(user.Id).FirstName);
         }
 
         [TestMethod]
         public void DbHelperUpdateUserLastNameTest()
         {
             const string newLastName = "NewLastName";
-            var user = _db.FindUserByEmail(email);
+            var user = _db.FindUser(email);
             user.LastName = newLastName;
             var result = _db.UpdateUser(user);
 
             Assert.IsTrue(result);
-            Assert.AreEqual(newLastName, _db.FindUserById(user.Id).LastName);
+            Assert.AreEqual(newLastName, _db.FindUser(user.Id).LastName);
         }
 
         [TestMethod]
         public void DbHelperUpdateUserPhoneNumberTest()
         {
             const string newPhone = "1112223333";
-            var user = _db.FindUserByEmail(email);
+            var user = _db.FindUser(email);
             user.Phone = newPhone;
             var result = _db.UpdateUser(user);
 
             Assert.IsTrue(result);
-            Assert.AreEqual(newPhone, _db.FindUserById(user.Id).Phone);
+            Assert.AreEqual(newPhone, _db.FindUser(user.Id).Phone);
         }
 
         [TestMethod]
@@ -244,7 +244,7 @@ namespace DbHelper.Test
             var originalToken = _db.LoginAndGetToken(email, password);
 
             var db = new SqlConnection(_connectionString);
-            var userId = _db.FindUserByEmail(email).Id;
+            var userId = _db.FindUser(email).Id;
             db.Open();
             for (var i = 0; i < 10; i++)
             {
@@ -279,7 +279,7 @@ namespace DbHelper.Test
             // to adequately test an expired token, we must connect to the database and manually set a token's expiration date
             // for this test, I have chosen to set TODAY as the expiration date.
             var db = new SqlConnection(_connectionString); // manually connect to the test database
-            var userId = _db.FindUserByEmail(email)?.Id; // find the test user's ID
+            var userId = _db.FindUser(email)?.Id; // find the test user's ID
 
             var today = DateTime.Today; // get today's date
             var query = $"UPDATE Tokens SET Expiry = '{today.ToString("G")}' WHERE UserID = {userId};"; // set the user's token's expiration date to today
@@ -322,7 +322,7 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperGetPlantSpeciesByLatinNameTest()
         {
-            var result = _db.FindSpeciesByLatinName(speciesOneLatinName);
+            var result = _db.FindSpecies(latinName: speciesOneLatinName);
 
             Assert.AreEqual(speciesOneCommonName, result.CommonName);
         }
@@ -330,7 +330,7 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperGetPlantSpeciesByCommonNameTest()
         {
-            var result = _db.FindSpeciesByCommonName(speciesOneCommonName);
+            var result = _db.FindSpecies(commonName: speciesOneCommonName);
 
             Assert.AreEqual(speciesOneLatinName, result.LatinName);
         }
@@ -338,9 +338,9 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperGetPlantSpeciesByIdTest()
         {
-            var id = _db.FindSpeciesByLatinName(speciesOneLatinName).Id; // get the id
+            var id = _db.FindSpecies(latinName: speciesOneLatinName).Id; // get the id
 
-            var result = _db.FindSpeciesById(id); // use the id to find the plant
+            var result = _db.FindSpecies(id); // use the id to find the plant
 
             Assert.AreEqual(speciesOneLatinName, result.LatinName); // compare plant data
         }
@@ -348,11 +348,11 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperUpdateSpeciesLatinNameTest()
         {
-            var species = _db.FindSpeciesByCommonName(speciesOneCommonName);
+            var species = _db.FindSpecies(commonName: speciesOneCommonName);
             species.LatinName = "New latin name";
             _db.UpdateSpecies(species); // update with a new latin name
 
-            var result = _db.FindSpeciesById(species.Id).LatinName; // get the species' latin name from the database
+            var result = _db.FindSpecies(species.Id).LatinName; // get the species' latin name from the database
 
             Assert.AreEqual("New latin name", result); // the species should have the new latin name
         }
@@ -360,11 +360,11 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperUpdateSpeciesCommonNameTest()
         {
-            var species = _db.FindSpeciesByCommonName(speciesOneCommonName); // get the id
+            var species = _db.FindSpecies(commonName: speciesOneCommonName); // get the id
             species.CommonName = "New common name";
             _db.UpdateSpecies(species); // update with a new common name
 
-            var result = _db.FindSpeciesById(species.Id).CommonName; // get the species' common name using its id
+            var result = _db.FindSpecies(species.Id).CommonName; // get the species' common name using its id
 
             Assert.AreEqual("New common name", result); // the species should have the new common name
         }
@@ -372,11 +372,11 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperUpdateSpeciesWaterMaxTest()
         {
-            var species = _db.FindSpeciesByCommonName(speciesOneCommonName);
+            var species = _db.FindSpecies(commonName: speciesOneCommonName);
             species.WaterMax = 10.00;
             _db.UpdateSpecies(species);
 
-            var result = _db.FindSpeciesById(species.Id).WaterMax;
+            var result = _db.FindSpecies(species.Id).WaterMax;
 
             Assert.AreEqual(10.00, result);
         }
@@ -384,11 +384,11 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperUpdateSpeciesWaterMinTest()
         {
-            var species = _db.FindSpeciesByCommonName(speciesOneCommonName);
+            var species = _db.FindSpecies(commonName: speciesOneCommonName);
             species.WaterMin = -1.00;
             _db.UpdateSpecies(species);
 
-            var result = _db.FindSpeciesById(species.Id).WaterMin;
+            var result = _db.FindSpecies(species.Id).WaterMin;
 
             Assert.AreEqual(-1.00, result);
         }
@@ -396,11 +396,11 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperUpdateSpeciesLightMaxTest()
         {
-            var species = _db.FindSpeciesByLatinName(speciesOneLatinName);
+            var species = _db.FindSpecies(latinName: speciesOneLatinName);
             species.LightMax = 10.00;
             _db.UpdateSpecies(species);
 
-            var result = _db.FindSpeciesById(species.Id).LightMax;
+            var result = _db.FindSpecies(species.Id).LightMax;
 
             Assert.AreEqual(10.00, result);
         }
@@ -408,11 +408,11 @@ namespace DbHelper.Test
         [TestMethod]
         public void DbHelperUpdateSpeciesLightMinTest()
         {
-            var species = _db.FindSpeciesByLatinName(speciesOneLatinName);
+            var species = _db.FindSpecies(latinName: speciesOneLatinName);
             species.LightMin = -1.00;
             _db.UpdateSpecies(species);
 
-            var result = _db.FindSpeciesById(species.Id).LightMin;
+            var result = _db.FindSpecies(species.Id).LightMin;
 
             Assert.AreEqual(-1.00, result);
         }
@@ -430,10 +430,10 @@ namespace DbHelper.Test
             _db.CreateNewSpecies(testSpeciesCommonName, testSpeciesLatinName, testSpeciesWaterMax, testSpeciesWaterMin,
                 testSpeciesLightMax, testSpeciesLightMin);
 
-            var id = _db.FindSpeciesByLatinName(testSpeciesLatinName).Id; // get the id
+            var id = _db.FindSpecies(latinName: testSpeciesLatinName).Id; // get the id
             _db.DeleteSpecies(id); // delete the species from the database
 
-            var result = _db.FindSpeciesById(id); // ensure the species is really gone
+            var result = _db.FindSpecies(id); // ensure the species is really gone
 
             Assert.IsNull(result);
         }
@@ -484,7 +484,7 @@ namespace DbHelper.Test
         public void DbHelperGetPlantByIdTest()
         {
             var id = _db.FindPlantsByNickname(plantOneAlias)[0].Id; // get the id of a specific plant
-            var result = _db.FindPlantById(id); // use the id to get the plant from the database
+            var result = _db.FindPlant(id); // use the id to get the plant from the database
 
             Assert.AreEqual(id, result.Id); // ensure they are the same plant based on the id
         }
@@ -499,7 +499,7 @@ namespace DbHelper.Test
 
             _db.UpdatePlant(plant);
 
-            var result = _db.FindPlantById(plant.Id);
+            var result = _db.FindPlant(plant.Id);
 
             Assert.AreEqual(result.SpeciesId, plants[1].SpeciesId);
         }
@@ -511,7 +511,7 @@ namespace DbHelper.Test
             plant.Nickname = "New nickname";
             _db.UpdatePlant(plant); // update with a new nickname
 
-            var result = _db.FindPlantById(plant.Id).Nickname; // get the plant from the database using the new nickname
+            var result = _db.FindPlant(plant.Id).Nickname; // get the plant from the database using the new nickname
 
             Assert.AreEqual("New nickname", result); // the plant should have the new nickname
         }
@@ -523,7 +523,7 @@ namespace DbHelper.Test
             plant.CurrentWater = -1.00;
             _db.UpdatePlant(plant); // update the with a new water level
 
-            var result = _db.FindPlantById(plant.Id).CurrentWater; // get the plant's water level from the database
+            var result = _db.FindPlant(plant.Id).CurrentWater; // get the plant's water level from the database
 
             Assert.AreEqual(-1.00, result);
         }
@@ -535,7 +535,7 @@ namespace DbHelper.Test
             plant.CurrentLight = -1.00;
             _db.UpdatePlant(plant); // update with a new light level
 
-            var result = _db.FindPlantById(plant.Id).CurrentLight; // get the plant's light level from the database
+            var result = _db.FindPlant(plant.Id).CurrentLight; // get the plant's light level from the database
 
             Assert.AreEqual(-1.00, result);
         }
@@ -546,7 +546,7 @@ namespace DbHelper.Test
             var id = _db.FindPlantsByNickname(plantOneAlias)[0].Id; // get the id
             _db.DeletePlant(id); // delete the plant
 
-            var result = _db.FindPlantById(id); // ensure the plant is gone
+            var result = _db.FindPlant(id); // ensure the plant is gone
 
             Assert.IsNull(result);
         }
