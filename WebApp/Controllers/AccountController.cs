@@ -117,6 +117,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public ActionResult RegisterUser(RegistrationViewModel uModel)
         {
+            // CreateNewUser will be refactored to return the ID of the newly created user
             var result = _db.CreateNewUser(
                 uModel.FirstName,
                 uModel.LastName,
