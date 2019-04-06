@@ -11,5 +11,6 @@ namespace WebApp.Models.AccountViewModels
         [Required]
         [EmailAddress]
         public string Email { get; set; }
+
     }
 }

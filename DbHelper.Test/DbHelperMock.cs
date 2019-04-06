@@ -63,7 +63,7 @@ namespace DbHelper.Test
                     return true;
                 });
 
-            _m.Setup(d => d.FindUserByEmail(It.IsAny<string>()))
+            _m.Setup(d => d.FindUser(It.IsAny<string>()))
                 .Returns((string email) => { return userDb.FirstOrDefault(u => u.Email.Equals(email)); });
         }
     }

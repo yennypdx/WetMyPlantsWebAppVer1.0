@@ -1,6 +1,10 @@
 ﻿using System.Web.Mvc;
 using Models;
 using WebApp.Models.AccountViewModels;
+using System.Threading.Tasks;
+using SendGrid;
+using SendGrid.Helpers.Mail;
+using System.Net.Http;
 using WebApp.Models.HomeViewModels;
 
 namespace WebApp.Controllers
@@ -21,10 +25,63 @@ namespace WebApp.Controllers
         {
             return View();
         }
-
+        
         public ActionResult ForgotPassword()
         {
             return View();
+        }
+
+        public ActionResult ResetPassword()
+        {
+            return View();
+        }
+        [HttpGet]
+        public ActionResult ForgotUserPassword(ForgotPasswordViewModel uModel)
+        {
+             var result = _db.FindUser(uModel.Email);
+            
+            if (result.Email != null && result.Email == uModel.Email)
+            {
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = result.Id, code = GetHashCode() }, protocol: Request.Url.Scheme);
+                SendPasswordResetEmail(uModel.Email, callbackUrl).Wait();
+                return View("Login");
+            }
+            else
+            {
+                //return Content("<script language= 'javascript' type='text/javascript'>alert ('User not Fonud '); </script>");
+                return View("ForgotPassword");
+            }
+            
+        }
+
+        static public async Task SendPasswordResetEmail(string email, string urlString)
+        {
+            string apiKey = "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";//System.Environment.GetEnvironmentVariable("SENDGRID_APIKEY");
+            var client = new SendGridClient(apiKey);            
+            var msg = new SendGridMessage()
+            {
+                From = new EmailAddress("resetpassword@wetmyplants.com", "WetMyPlants Team"),
+                Subject = "Reset Password",
+                PlainTextContent = "Please click on this link to reset your password: " + "http://wetmyplants.azurewebsites.net/Account/ResetPassword",
+                HtmlContent = "<strong>Please click on this link to reset your password: </strong><a href=\"" + urlString + "\" > wetmyplants.azurewebsites.net/Account/ResetPassword</a>"
+            };
+            msg.AddTo(new EmailAddress(email, "user"));
+            var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
+        }
+
+        [HttpPost]
+        public ActionResult ResetUserPassword(ResetPasswordViewModel uModel)
+        {
+            //string url = Request.Url.AbsolutePath;
+            //string[] UrlParts = url.Split('/');
+            //int id = System.Int32.Parse(url);
+            // int id = (int)RouteData.Values["userId"];
+            if(uModel.Password == uModel.ConfirmPassword)
+            {
+                _db.ResetPassword(uModel.Email, uModel.Password);
+            }
+            
+            return View("Login");
         }
 
         public ActionResult Register()
@@ -60,7 +117,7 @@ namespace WebApp.Controllers
             ViewBag.Token = token;
 
             // set the session
-            var user = _db.FindUserByEmail(uModel.Email);
+            var user = _db.FindUser(uModel.Email);
             //Session["User"] = _db.FindUserByEmail(uModel.Email);
             Session["User"] = user;
 
@@ -75,7 +132,7 @@ namespace WebApp.Controllers
 
             if (token != null)
             {
-                var user = _db.FindUserByEmail(model.Email);
+                var user = _db.FindUser(model.Email);
                 ViewBag.User = user;
                 ViewBag.Token = token;
 

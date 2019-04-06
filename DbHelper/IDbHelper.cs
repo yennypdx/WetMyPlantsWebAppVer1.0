@@ -8,7 +8,8 @@ namespace DBHelper
     {
         bool CreateNewUser(string firstName, string lastName, string phone, string email, string password);
         List<User> GetAllUsers();
-        User FindUserByEmail(string email);
+        User FindUser(string email);
+        User FindUser(int id);
         bool AuthenticateUser(string email, string password);
         string LoginAndGetToken(string email, string password);
         bool DeleteUser(string email);
@@ -19,9 +20,8 @@ namespace DBHelper
             double lightMin);
 
         List<Species> GetAllSpecies();
-        Species FindSpeciesByLatinName(string latinName);
-        Species FindSpeciesByCommonName(string commonName);
-        Species FindSpeciesById(int id);
+        Species FindSpecies(string commonName, string latinName);
+        Species FindSpecies(int id);
         bool UpdateSpecies(Species update);
         bool DeleteSpecies(int id);
 
@@ -30,7 +30,7 @@ namespace DBHelper
         List<Plant> GetAllPlants();
         List<Plant> GetPlantsForUser(int id);
         List<Plant> FindPlantsByNickname(string nickname);
-        Plant FindPlantById(int id);
+        Plant FindPlant(int id);
         bool UpdatePlant(Plant update);
         bool DeletePlant(int id);
     }
