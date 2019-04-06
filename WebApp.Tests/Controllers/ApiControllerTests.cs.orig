@@ -72,14 +72,14 @@ namespace WebApp.Tests.Controllers
             Assert.AreEqual("hello world!", msg);
         }
 
-        //[TestMethod]
-        //public void ApiTestGetAllUsers()
-        //{
-        //    var userList = _api.GetAllUsers().Data as List<User>;
+        [TestMethod]
+        public void ApiTestGetAllUsers()
+        {
+            var userList = _api.GetAllUsers().Data as List<User>;
 
-        //    Assert.IsNotNull(userList);
-        //    Assert.AreNotEqual(0, userList.Count);
-        //}
+            Assert.IsNotNull(userList);
+            Assert.AreNotEqual(0, userList.Count);
+        }
 
         [TestMethod]
         public void ApiTestLoginFailInvalidModel()
@@ -111,31 +111,32 @@ namespace WebApp.Tests.Controllers
             Assert.AreEqual("Invalid login", Json.Decode(result?.StatusDescription)["content"]);
         }
 
-        //[TestMethod]
-        //public void ApiTestLoginSuccessRetrievesToken()
-        //{
-        //    var model = new LoginViewModel
-        //    {
-        //        Email = "test@test.test",
-        //        Password = "password",
-        //        RememberMe = false
-        //    };
-        //    ValidateModel(model);
+        [TestMethod]
+        public void ApiTestLoginSuccessRetrievesToken()
+        {
+            var model = new LoginViewModel
+            {
+                Email = "test@test.test",
+                Password = "password",
+                RememberMe = false
+            };
+            ValidateModel(model);
 
-        //    var result = _api.Login(model) as HttpStatusCodeResult;
+            var result = _api.Login(model) as HttpStatusCodeResult;
             
-        //    Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), result?.StatusCode);
-        //    Assert.IsNotNull(Json.Decode(result?.StatusDescription)["content"]);
-        //}
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), result?.StatusCode);
+            Assert.IsNotNull(Json.Decode(result?.StatusDescription)["content"]);
+        }
 
-        //[TestMethod]
-        //public void ApiTestRegisterFailUserAlreadyExists()
-        //{
-        //    var result = _api.RegisterUser(_registrationViewModel) as HttpStatusCodeResult;
+<<<<<<< HEAD
+        [TestMethod]
+        public void ApiTestRegisterFailUserAlreadyExists()
+        {
+            var result = _api.RegisterUser(_registrationViewModel) as HttpStatusCodeResult;
 
-        //    Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result?.StatusCode);
-        //    Assert.AreEqual("Unable to register user", Json.Decode(result?.StatusDescription)["content"]);
-        //}
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result?.StatusCode);
+            Assert.AreEqual("Unable to register user", Json.Decode(result?.StatusDescription)["content"]);
+        }
 
         [TestMethod]
         public void ApiTestRegisterUserFailInvalidModel()
@@ -148,6 +149,47 @@ namespace WebApp.Tests.Controllers
             Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result?.StatusCode);
             Assert.AreEqual("Invalid registration model", Json.Decode(result?.StatusDescription)["content"]);
         }
+
+        [TestMethod]
+        public void ApiTestRegistrationSuccess()
+        {
+            var newUser = new RegistrationViewModel
+            {
+                Email = "new@user.test",
+                Password = "password",
+                //ConfirmPassword = "password",
+                FirstName = "New",
+                LastName = "User",
+                Phone = "1234567890"
+            };
+            ValidateModel(newUser);
+
+            var result = _api.RegisterUser(newUser) as HttpStatusCodeResult;
+
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), result?.StatusCode);
+            Assert.IsNotNull(Json.Decode(result?.StatusDescription)["id"]);
+        }
+=======
+        //[TestMethod]
+        //public void ApiTestRegisterFailUserAlreadyExists()
+        //{
+        //    var result = _api.RegisterUser(_registrationViewModel) as HttpStatusCodeResult;
+
+        //    Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result?.StatusCode);
+        //    Assert.AreEqual("Unable to register user", Json.Decode(result?.StatusDescription)["content"]);
+        //}
+
+        //[TestMethod]
+        //public void ApiTestRegisterUserFailInvalidModel()
+        //{
+        //    var model = new RegistrationViewModel();
+        //    ValidateModel(model);
+
+        //    var result = _api.RegisterUser(model) as HttpStatusCodeResult;
+
+        //    Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result?.StatusCode);
+        //    Assert.AreEqual("Invalid registration model", Json.Decode(result?.StatusDescription)["content"]);
+        //}
 
         //[TestMethod]
         //public void ApiTestRegistrationSuccess()
@@ -168,15 +210,16 @@ namespace WebApp.Tests.Controllers
         //    Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), result?.StatusCode);
         //    Assert.IsNotNull(Json.Decode(result?.StatusDescription)["id"]);
         //}
+>>>>>>> 96f96da465df9e1f8f213e4ff58bb3d6718b6e51
 
-        //[TestMethod]
-        //public void ApiTestDeleteUserSuccess()
-        //{
-        //    var id = ((List<User>)_api.GetAllUsers().Data)[0].Id;
-        //    var deleteResult = _api.DeleteUser(id) as HttpStatusCodeResult;
+        [TestMethod]
+        public void ApiTestDeleteUserSuccess()
+        {
+            var id = ((List<User>)_api.GetAllUsers().Data)[0].Id;
+            var deleteResult = _api.DeleteUser(id) as HttpStatusCodeResult;
 
-        //    Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), deleteResult?.StatusCode);
-        //    Assert.AreEqual("User deleted", Json.Decode(deleteResult?.StatusDescription)["content"]);
-        //}
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), deleteResult?.StatusCode);
+            Assert.AreEqual("User deleted", Json.Decode(deleteResult?.StatusDescription)["content"]);
+        }
     }
 }
