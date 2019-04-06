@@ -193,7 +193,7 @@ namespace WebApp.Controllers
             {
                 _db.ResetPassword(model.Email, model.NewPassword);
 
-                // Output a message for successful password change
+                // TODO: Output a message for successful password change
 
                 return RedirectToAction("MyAccount", "Account");
             }
@@ -203,7 +203,7 @@ namespace WebApp.Controllers
                 TempData["Error"] = "Incorrect Password";
                 return RedirectToAction("ChangePassword", "Account", model.Email);
             }
-        }
+        }m
      
     }
 }
