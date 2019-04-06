@@ -41,14 +41,18 @@ namespace WebApp.Controllers
         [HttpPost, Route("user/register")]
         public ActionResult RegisterUser(RegistrationViewModel model)
         {
+            var token = "";
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
             if (!ModelState.IsValid) return BadRequest("Invalid registration model");
 
-            if (!_db.CreateNewUser(model.FirstName, model.LastName, model.Phone, model.Email, model.Password))
-                return BadRequest("Unable to register user");
+            if (_db.CreateNewUser(model.FirstName, model.LastName, model.Phone, model.Email, model.Password)) {
+                token = _db.LoginAndGetToken(model.Email, model.Password);
+            }
+            else {
+                return BadRequest("User already exist.");
+            }
 
-            var id = _db.GetAllUsers().Where(u => u.Email.Equals(model.Email)).ToArray()[0].Id;
-
-            return Ok(Json($"{{ id : '{id}' }}"));
+            return token != null ? Json(new { content = token }) : BadRequest("Registration failed");
         }
 
         // POST: api/login
@@ -61,7 +65,7 @@ namespace WebApp.Controllers
 
             var token = _db.LoginAndGetToken(model.Email, model.Password);
 
-            return token != null ? Ok(token) : BadRequest("Invalid login");
+            return token != null ? Json(new {content=token}) : BadRequest("Invalid login");
         }
 
         // DELETE: api/user/delete/id
