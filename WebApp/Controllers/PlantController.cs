@@ -27,7 +27,7 @@ namespace WebApp.Controllers
 
             // next, get the plant and make sure it belongs to the logged in user;
             // if not, redirect them back to their dashboard
-            var plant = _db.FindPlantById(id);
+            var plant = _db.FindPlant(id);
             if (!user.Plants.Contains(plant.Id)) return RedirectToAction("Index", "Home");
 
             // if everything is good, then get the list of species and stick in the ViewBag
