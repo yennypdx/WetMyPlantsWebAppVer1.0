@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿
+using System.Web.Mvc;
 using Models;
 using WebApp.Models.AccountViewModels;
 using System.Threading.Tasks;
@@ -91,8 +92,25 @@ namespace WebApp.Controllers
 
         public ActionResult MyAccount()
         {
-            var user = Session["User"];
-            return View(user);
+            var user = (User)Session["User"];
+
+            // Convert user to ViewModel to pass to the View
+            var userViewModel = new MyAccountViewModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Phone = user.Phone,
+                Email = user.Email,
+                Id = user.Id
+            };
+
+            return View(userViewModel);
+        }
+
+        public ActionResult Logout()
+        {
+            Session.Abandon();
+            return RedirectToAction("Login", "Account");
         }
 
         //POST: Account/RegisterUser
@@ -119,6 +137,7 @@ namespace WebApp.Controllers
             var user = _db.FindUser(uModel.Email);
             //Session["User"] = _db.FindUserByEmail(uModel.Email);
             Session["User"] = user;
+            Session["Email"] = user.Email;
 
             return RedirectToAction("Index", "Home", user);
         }
@@ -137,6 +156,15 @@ namespace WebApp.Controllers
 
                 // set the session 
                 Session["User"] = user;
+                Session["Email"] = user.Email;
+
+                // Create a ViewModel to pass the user to the view
+                var userViewModel = new RegistrationViewModel
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email
+                };
 
                 // store token as a cookie here
                 return RedirectToAction("Index", "Home", user);
@@ -146,12 +174,93 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateUser(User user)
+        public ActionResult UpdateUser(MyAccountViewModel model)
         {
+            // Convert model to User to update database and session
+            var user = new User
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                Id = model.Id,
+                Phone = model.Phone
+            };
+
             // update the session
             Session["User"] = user;
             _db.UpdateUser(user);
-            return RedirectToAction("MyAccount", "Account", user);
+
+            // Convert user to a ViewModel to be passed to the view
+            var userViewModel = new MyAccountViewModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Id = user.Id,
+                Phone = user.Phone
+            };
+
+            return RedirectToAction("MyAccount", "Account", model);
         }
+
+        public ActionResult DeleteUser(string email)
+        {
+            var user = _db.FindUser(email);
+            var userViewModel = new DeleteUserViewModel
+            {
+                Email = email
+            };
+            
+            return View(userViewModel);
+        }
+
+        public ActionResult ConfirmDeletion(DeleteUserViewModel model)
+        {
+            // Check that the user entered the correct password
+            if (_db.AuthenticateUser(model.Email, model.Password))
+            {
+                // Delete the user
+                _db.DeleteUser(model.Email);
+
+                // Abandon the session to log the deleted user out
+                Session.Abandon();
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                // Incorrect password -- return to delete user page with error message
+                TempData["Error"] = "Incorrect Password";
+                return RedirectToAction("DeleteUser", "Account", new { email = model.Email });
+            }
+        }
+
+        public ActionResult ChangePassword(string email)
+        {
+            var user = (User)Session["User"];
+            var model = new ChangePasswordViewModel
+            {
+                Email = user.Email
+            };
+            return View(model);
+        }
+
+        public ActionResult ConfirmPasswordChange(ChangePasswordViewModel model)
+        {
+            if (_db.AuthenticateUser(model.Email, model.Password))
+            {
+                _db.ResetPassword(model.Email, model.NewPassword);
+
+                // TODO: Output a message for successful password change
+
+                return RedirectToAction("MyAccount", "Account");
+            }
+            else
+            {
+                // Incorrect password -- return to ConfirmPasswordChange page with error message
+                TempData["Error"] = "Incorrect Password";
+                return RedirectToAction("ChangePassword", "Account", model.Email);
+            }
+        }
+     
     }
 }
