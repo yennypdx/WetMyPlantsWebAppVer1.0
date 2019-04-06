@@ -205,7 +205,7 @@ namespace WebApp.Controllers
 
         public ActionResult DeleteUser(string email)
         {
-            var user = _db.FindUserByEmail(email);
+            var user = _db.FindUser(email);
             var userViewModel = new DeleteUserViewModel
             {
                 Email = email
@@ -260,7 +260,7 @@ namespace WebApp.Controllers
                 TempData["Error"] = "Incorrect Password";
                 return RedirectToAction("ChangePassword", "Account", model.Email);
             }
-        }m
+        }
      
     }
 }
