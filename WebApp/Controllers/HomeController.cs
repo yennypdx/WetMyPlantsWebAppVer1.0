@@ -19,12 +19,13 @@ namespace WebApp.Controllers
         public ActionResult Index() // we shouldn't pass the user object in here or it displays user data in the URL
         {
             var user = Session["User"] as User; // instead, pull the user object out of the Session variable
+
             if (user == null)
                 return RedirectToAction("Login", "Account");
 
             var plants = _db.GetPlantsForUser(user.Id);
-            foreach (var p in plants)
-                user.Plants.Add(p.Id);
+            //foreach (var p in plants)
+                //user.Plants.Add(p.Id);
 
             var model = new DashboardViewModel {User = user, Plants = plants ?? new List<Plant>()};
 
