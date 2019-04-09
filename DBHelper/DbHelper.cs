@@ -508,6 +508,11 @@ namespace DBHelper
             return GetUserToken(Convert.ToInt32(userId));
         }
 
+        public bool ValidateUserToken(int userId, string token)
+        {
+            return GetUserToken(userId) == token;
+        }
+
         public bool ResetPassword(string email, string newPassword)
         {
             // find the user and get their ID
@@ -551,7 +556,7 @@ namespace DBHelper
 
             // if the token has expired, generate a new one
             // otherwise return the valid token
-            return ToDateTime(expiry) > DateTime.Today 
+            return ToDateTime(expiry) < DateTime.Today 
                 ? GenerateNewTokenForUser(id) 
                 : token;
         }

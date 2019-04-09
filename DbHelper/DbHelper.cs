@@ -510,7 +510,7 @@ namespace DBHelper
 
         public bool ValidateUserToken(int userId, string token)
         {
-            throw new NotImplementedException();
+            return GetUserToken(userId) == token;
         }
 
         public bool ResetPassword(string email, string newPassword)
@@ -556,7 +556,7 @@ namespace DBHelper
 
             // if the token has expired, generate a new one
             // otherwise return the valid token
-            return ToDateTime(expiry) > DateTime.Today 
+            return ToDateTime(expiry) < DateTime.Today 
                 ? GenerateNewTokenForUser(id) 
                 : token;
         }
