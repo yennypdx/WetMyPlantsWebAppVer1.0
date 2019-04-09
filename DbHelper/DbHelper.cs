@@ -508,6 +508,11 @@ namespace DBHelper
             return GetUserToken(Convert.ToInt32(userId));
         }
 
+        public bool ValidateUserToken(int userId, string token)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool ResetPassword(string email, string newPassword)
         {
             // find the user and get their ID

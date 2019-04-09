@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Net.Http;
+using WebApp.Auth;
 using WebApp.Models.HomeViewModels;
 
 namespace WebApp.Controllers
@@ -90,6 +91,7 @@ namespace WebApp.Controllers
             return View();
         }
 
+        [@Authorize]
         public ActionResult MyAccount()
         {
             var user = (User)Session["User"];
@@ -151,13 +153,15 @@ namespace WebApp.Controllers
 
             if (token != null)
             {
+                Session["Token"] = token;
+
                 var user = _db.FindUser(model.Email);
-                ViewBag.User = user;
-                ViewBag.Token = token;
+                //ViewBag.User = user;
+                //ViewBag.Token = token;
 
                 // set the session 
                 Session["User"] = user;
-                Session["Email"] = user.Email;
+                //Session["Email"] = user.Email;
 
                 // Create a ViewModel to pass the user to the view
                 var userViewModel = new RegistrationViewModel
