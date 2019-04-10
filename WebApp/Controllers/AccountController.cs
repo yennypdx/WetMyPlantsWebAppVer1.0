@@ -96,7 +96,7 @@ namespace WebApp.Controllers
             return View();
         }
 
-        [AuthorizeUser] // Use our new "AuthorizeUser" filter to ensure the user is logged in (token and user exist in Session)
+        [AuthorizeUser]
         public ActionResult MyAccount()
         {
             var user = (User)Session["User"];
@@ -228,6 +228,7 @@ namespace WebApp.Controllers
             }
         }
 
+        [AuthorizeUser]
         public ActionResult ChangePassword(string email)
         {
             var user = (User)Session["User"];

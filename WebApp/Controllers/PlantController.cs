@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using DBHelper;
 using Models;
+using WebApp.Auth;
 
 namespace WebApp.Controllers
 {
@@ -17,7 +18,7 @@ namespace WebApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet, Route("edit/{id?}")]
+        [AuthorizeUser, HttpGet, Route("edit/{id?}")]
         public ActionResult Edit(int id = 0)
         {
             if (id == 0) return RedirectToAction("Index", "Home");
@@ -38,7 +39,7 @@ namespace WebApp.Controllers
             return View(plant);
         }
 
-        [HttpGet, Route("update")]
+        [AuthorizeUser, HttpGet, Route("update")]
         public ActionResult UpdatePlant(Plant plant)
         {
             if (!ModelState.IsValid) return RedirectToAction("Index", "Home");
