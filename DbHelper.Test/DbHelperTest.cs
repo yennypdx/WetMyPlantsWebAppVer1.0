@@ -282,6 +282,7 @@ namespace DbHelper.Test
             var userId = _db.FindUser(email)?.Id; // find the test user's ID
 
             var today = DateTime.Today; // get today's date
+
             var query = $"UPDATE Tokens SET Expiry = '{today.ToString("G")}' WHERE UserID = {userId};"; // set the user's token's expiration date to today
 
             // execute the sql query
