@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -32,7 +32,7 @@ namespace WebApp.Tests.Controllers
         }
 
         /*************************************************************************************************/
-
+        /*
         private readonly RegistrationViewModel _registrationViewModel;
         private readonly ApiController _api;
 
@@ -180,3 +180,4 @@ namespace WebApp.Tests.Controllers
         }
     }
 }
+*/
