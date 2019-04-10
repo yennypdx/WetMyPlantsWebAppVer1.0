@@ -12,6 +12,9 @@ namespace DBHelper
         User FindUser(int id);
         bool AuthenticateUser(string email, string password);
         string LoginAndGetToken(string email, string password);
+        void SetResetCode(int userId, string resetCode);
+        bool ValidateResetCode(int userId, string resetCode);
+        void DeleteResetCode(int userId);
         bool ValidateUserToken(int userId, string token);
         bool DeleteUser(string email);
         bool ResetPassword(string email, string newPassword);

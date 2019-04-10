@@ -19,7 +19,7 @@ namespace WebApp.Auth
     // In each of these context objects we have access to the Session variable through filterContext.HttpContext.Session
 
 
-    public class Authorize : ActionFilterAttribute, IActionFilter
+    public class AuthorizeUser : ActionFilterAttribute, IActionFilter
     {
         void IActionFilter.OnActionExecuting(ActionExecutingContext filterContext) // before the action is executed
         {

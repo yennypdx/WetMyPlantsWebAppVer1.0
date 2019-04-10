@@ -263,6 +263,30 @@ namespace DBHelper
             return RunNonQuery(query);
         }
 
+        public void SetResetCode(int id, string resetCode)
+        {
+            if (FindUser(id) != null)
+            {
+                var query = $"INSERT INTO ResetCodes (UserId, Code) VALUES ({id}, '{resetCode}')";
+
+                RunNonQuery(query);
+            }
+        }
+
+        public bool ValidateResetCode(int userId, string resetCode)
+        {
+            var query = $"SELECT UserId FROM ResetCodes WHERE Code = '{resetCode}'";
+            var id = RunScalar(query);
+
+            return userId.ToString().Equals(id);
+        }
+
+        public void DeleteResetCode(int userId)
+        {
+            var query = $"DELETE FROM ResetCodes WHERE UserId = {userId}";
+            RunNonQuery(query);
+        }
+
         public int CreateNewSpecies(string commonName, string latinName, double waterMax = 0, double waterMin = 0, double lightMax = 0,
             double lightMin = 0)
         {
