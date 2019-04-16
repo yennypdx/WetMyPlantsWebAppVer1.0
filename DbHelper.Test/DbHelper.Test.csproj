@@ -100,11 +100,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CryptoTest.cs" />
-    <Compile Include="DbHelperMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AccessHelperTest.cs" />
     <Compile Include="DbHelperTest.cs" />
-    <Compile Include="DbHelperMockTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
