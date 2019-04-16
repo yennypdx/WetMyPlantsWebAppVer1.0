@@ -11,6 +11,7 @@ using Models;
 using Moq;
 using WebApp.Controllers;
 using WebApp.Models.AccountViewModels;
+using Crypto = DbHelper.Crypto;
 using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 
 namespace WebApp.Tests.Controllers
@@ -50,16 +51,37 @@ namespace WebApp.Tests.Controllers
 
         public ApiControllerTests()
         {
-            //_api = new ApiController(new DBHelper.DbHelper(AccessHelper.GetTestDbConnectionString()));
-            _registrationViewModel = new RegistrationViewModel
+            _testUser = new User
             {
-                Email = "test@test.test",
-                Password = "password",
-                ConfirmPassword = "password",
+                Id = 1,
                 FirstName = "Test",
-                LastName = "User",
-                Phone = "1234567890"
+                LastName = "Test",
+                Email = "test@email.com",
+                Password = "password",
+                Hash = Crypto.HashPassword(DateTime.Today.ToLongDateString()),
+                Phone = "1234567890",
+                Plants = new List<int>()
             };
+            _testSpecies = new Species
+            {
+                Id = 1,
+                CommonName = "Test",
+                LatinName = "Test",
+                LightMax = 100,
+                LightMin = 0,
+                WaterMax = 100,
+                WaterMin = 0
+            };
+            _testPlant = new Plant
+            {
+                Id = 1,
+                Nickname = "Test",
+                CurrentLight = 50,
+                CurrentWater = 50,
+                SpeciesId = _testSpecies.Id
+            };
+            _dbMock = new Mock<IDbHelper>();
+            //_api = new ApiController(new DBHelper.DbHelper(AccessHelper.GetTestDbConnectionString()));
         }
 
         [TestInitialize]
