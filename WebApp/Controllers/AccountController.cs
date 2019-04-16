@@ -201,7 +201,7 @@ namespace WebApp.Controllers
         public ActionResult DeleteUser()
         {
             // The AuthorizeUser attribute will verify the user is valid, no need to check
-            return View(new DeleteUserViewModel
+            return View("DeleteUser", new DeleteUserViewModel
             {
                 Email = (Session["User"] as User)?.Email
             });

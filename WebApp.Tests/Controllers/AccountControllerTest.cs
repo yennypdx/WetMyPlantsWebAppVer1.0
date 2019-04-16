@@ -115,13 +115,16 @@ namespace WebApp.Tests.Controllers
 
                     if (!Crypto.ValidatePassword(password, user.Hash)) return null;
 
-                    var token = _tokenDictionary[user.Id];
-
-                    if(token != null)
-                        return token;
-
-                    token = Crypto.HashPassword(DateTime.Today.ToLongDateString());
-                    _tokenDictionary[user.Id] = token;
+                    string token;
+                    if (_tokenDictionary.ContainsKey(user.Id))
+                    {
+                        token = _tokenDictionary[user.Id];
+                    }
+                    else
+                    {
+                        token = Crypto.HashPassword(DateTime.Today.ToLongDateString());
+                        _tokenDictionary[user.Id] = token;
+                    }
 
                     return token;
                 });
@@ -353,6 +356,152 @@ namespace WebApp.Tests.Controllers
             Assert.IsNotNull(result, "Result was null");
             Assert.IsTrue(result.RouteValues.ContainsKey("action"), "Result does not contain a redirect to an action");
             Assert.AreEqual("Login", result.RouteValues["action"], "Result did not redirect to Login");
+        }
+
+        [TestMethod]
+        public void AccountController_RegisterNewUserSuccess()
+        {
+            var newUser = new RegistrationViewModel
+            {
+                Email = "new@test.user",
+                Password = "password",
+                ConfirmPassword = "password",
+                FirstName = "Test",
+                LastName = "Test",
+                Phone = "1234567890"
+            };
+
+            var result = _accountController.RegisterUser(newUser) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result, "Result was null");
+            Assert.IsTrue(_userList.Exists(u => u.Email.Equals(newUser.Email)), "User does not exist in list");
+            Assert.IsTrue(result.RouteValues.ContainsKey("action"), "Does not return to an action");
+            Assert.AreEqual("Index", result.RouteValues["action"], "Did not redirect to Index");
+        }
+
+        [TestMethod]
+        public void AccountController_RegisterUser_UserAlreadyExists()
+        {
+            var model = new RegistrationViewModel
+            {
+                Email = _testUser.Email,
+                Password = "password",
+                ConfirmPassword = "password",
+                FirstName = "Test",
+                LastName = "Test",
+                Phone = "1234567890"
+            };
+
+            var result = _accountController.RegisterUser(model) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result, "Result is null");
+            Assert.IsTrue(result.RouteValues.ContainsKey("action"), "Does not redirect to an action");
+            Assert.AreEqual("Register", result.RouteValues["action"], "Did not redirect to Register");
+        }
+
+        [TestMethod]
+        public void AccountController_LoginUserSuccess()
+        {
+            var model = new LoginViewModel
+            {
+                Email = _testUser.Email,
+                Password = _testUser.Password,
+                RememberMe = false
+            };
+
+            var result = _accountController.LoginUser(model) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result, "Result is null");
+            Assert.IsTrue(result.RouteValues.ContainsKey("action"), "Did not redirect to an action");
+            Assert.AreEqual("Index", result.RouteValues["action"], "Did not redirect to Index");
+        }
+
+        [TestMethod]
+        public void AccountController_LoginUserInvalidPassword()
+        {
+            var model = new LoginViewModel
+            {
+                Email = _testUser.Email,
+                Password = "wrongPassword",
+                RememberMe = false
+            };
+
+            var result = _accountController.LoginUser(model) as ViewResult;
+
+            Assert.IsNotNull(result, "Result is null");
+            Assert.AreEqual("Login", result.ViewName, "Did not return the Login view");
+        }
+
+        [TestMethod]
+        public void AccountController_LoginUserInvalidEmail()
+        {
+            var model = new LoginViewModel
+            {
+                Email = "wrong@email.fail",
+                Password = _testUser.Password,
+                RememberMe = false
+            };
+
+            var result = _accountController.LoginUser(model) as ViewResult;
+
+            Assert.IsNotNull(result, "Result was null");
+            Assert.AreEqual("Login", result.ViewName, "Did not return the Login view");
+        }
+
+        [TestMethod]
+        public void AccountController_UpdateUserSuccess()
+        {
+            var model = new MyAccountViewModel
+            {
+                Id = _testUser.Id,
+                Email = "new@test.email",
+                FirstName = "Update",
+                LastName = "Update",
+                Phone = "0009998888"
+            };
+
+            var result = _accountController.UpdateUser(model) as RedirectToRouteResult;
+            var update = _userList.FirstOrDefault(u => u.Id.Equals(_testUser.Id));
+
+            Assert.IsNotNull(update, "Updated user not found");
+            Assert.IsNotNull(result, "Result is null");
+            Assert.IsTrue(result.RouteValues.ContainsKey("action"), "Result did not contain redirect to an action");
+            Assert.AreEqual("MyAccount", result.RouteValues["action"], "Did not redirect to MyAccount");
+            Assert.IsTrue(model.Id.Equals(update.Id) && model.Email.Equals(update.Email)
+                          && model.FirstName.Equals(update.FirstName)
+                          && model.LastName.Equals(update.LastName)
+                          && model.Phone.Equals(update.Phone), "User wasn't updated correctly");
+        }
+
+        [TestMethod]
+        public void AccountController_UpdateUserInvalidId()
+        {
+            var model = new MyAccountViewModel
+            {
+                Id = 100,
+                Email = "new@test.emal",
+                FirstName = "Update",
+                LastName = "Update",
+                Phone = "0987654321"
+            };
+
+            var result = _accountController.UpdateUser(model) as RedirectToRouteResult;
+            var update = _userList.FirstOrDefault(u => u.Id.Equals(model.Id));
+
+            Assert.IsNull(update, "Invalid user added to the database");
+            Assert.IsNotNull(result, "Result is null");
+            Assert.IsTrue(result.RouteValues.ContainsKey("action"), "Result does not contain redirect to action");
+            Assert.AreEqual("MyAccount", result.RouteValues["action"], "Result did not redirect to MyAccount");
+        }
+
+        [TestMethod]
+        public void AccountController_DeleteUserLoadView()
+        {
+            var result = _accountController.DeleteUser() as ViewResult;
+
+            Assert.IsNotNull(result, "Result is null");
+            Assert.AreEqual("DeleteUser", result.ViewName, "Did not load DeleteUser view");
+            Assert.IsNotNull(result.Model);
         }
     }
 }
