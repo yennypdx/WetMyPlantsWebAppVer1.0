@@ -236,7 +236,7 @@ namespace WebApp.Controllers
             {
                 Email = user.Email
             };
-            return View(model);
+            return View("ChangePassword", model);
         }
         [AuthorizeUser, HttpPost]
         public ActionResult ConfirmPasswordChange(ChangePasswordViewModel model)

@@ -503,5 +503,88 @@ namespace WebApp.Tests.Controllers
             Assert.AreEqual("DeleteUser", result.ViewName, "Did not load DeleteUser view");
             Assert.IsNotNull(result.Model);
         }
+
+        [TestMethod]
+        public void AccountController_ConfirmDeletion_Success()
+        {
+            var model = new DeleteUserViewModel
+            {
+                Email = _testUser.Email,
+                Password = _testUser.Password
+            };
+
+            var result = _accountController.ConfirmDeletion(model) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result, "Result is null");
+            Assert.IsTrue(result.RouteValues.ContainsKey("action"), "Does not contain a redirect to an action");
+            Assert.AreEqual("Login", result.RouteValues["action"], "Did not redirect to Login");
+            Assert.IsFalse(_userList.Exists(u => u.Email.Equals(_testUser.Email)), "User list still contains user");
+        }
+
+        [TestMethod]
+        public void AccountController_ConfirmDeletion_UnauthenticatedUser()
+        {
+            var model = new DeleteUserViewModel
+            {
+                Email = _testUser.Email,
+                Password = "wrongPassword"
+            };
+
+            var result = _accountController.ConfirmDeletion(model) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result, "Result is null");
+            Assert.IsTrue(result.RouteValues.ContainsKey("action"), "Does not redirect to an action");
+            Assert.AreEqual("DeleteUser", result.RouteValues["action"], "Did not redirect to DeleteUser");
+        }
+
+        [TestMethod]
+        public void AccountController_ChangePassword_ViewLoad()
+        {
+            var result = _accountController.ChangePassword(_testUser.Email) as ViewResult;
+
+            Assert.IsNotNull(result, "Result is null");
+            Assert.AreEqual("ChangePassword", result.ViewName, "Did not return ChangePassword view");
+            Assert.IsNotNull(result.Model, "Model is null");
+
+            var model = (ChangePasswordViewModel)result.Model;
+
+            Assert.AreEqual(_testUser.Email, model.Email, "View model email does not match user");
+        }
+
+        [TestMethod]
+        public void AccountController_ConfirmPasswordChange_AuthorizedSuccess()
+        {
+            var model = new ChangePasswordViewModel
+            {
+                Email = _testUser.Email,
+                Password = _testUser.Password,
+                NewPassword = "NewPassword"
+            };
+
+            var result = _accountController.ConfirmPasswordChange(model) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result, "Result is null");
+            Assert.IsTrue(result.RouteValues.ContainsKey("action"), "Result does not redirect to an action");
+            Assert.AreEqual("MyAccount", result.RouteValues["action"], "Did not redirect to MyAccount");
+            Assert.IsTrue(Crypto.ValidatePassword("NewPassword", _userList.FirstOrDefault(u => u.Email.Equals(_testUser.Email))?.Hash), "Password did not update");
+        }
+
+        [TestMethod]
+        public void AccountController_ConfirmPasswordChange_UnauthenticatedUser()
+        {
+            var model = new ChangePasswordViewModel
+            {
+                Email = _testUser.Email,
+                Password = "wrongPassword",
+                NewPassword = "NewPassword"
+            };
+
+            var result = _accountController.ConfirmPasswordChange(model) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.RouteValues.ContainsKey("action"), "Does not redirect to an action");
+            Assert.AreEqual("ChangePassword", result.RouteValues["action"], "Did not redirect to ChangePassword");
+            Assert.IsTrue(Crypto.ValidatePassword(_testUser.Password, _userList.FirstOrDefault(u => u.Email.Equals(_testUser.Email))?.Hash), "Password changed");
+        }
     }
 }
