@@ -50,6 +50,7 @@ namespace WebApp.Tests.Controllers
 
         public ApiControllerTests()
         {
+            // Set up test objects
             _testUser = new User
             {
                 Id = 1,
@@ -80,6 +81,7 @@ namespace WebApp.Tests.Controllers
                 SpeciesId = _testSpecies.Id
             };
 
+            // Initialize lists and dictionaries
             _userList = new List<User>();
             _plantList = new List<Plant>();
             _speciesList = new List<Species>();
@@ -87,25 +89,79 @@ namespace WebApp.Tests.Controllers
             _userPlantTable = new Dictionary<int, int>();
             _resetCodeTable = new Dictionary<int, string>();
 
-            _tokenTable.Add(_testUser.Id, Crypto.HashPassword(DateTime.Today.ToLongDateString()));
-            _userPlantTable.Add(_testUser.Id, _testPlant.Id);
-
+            // Database Moq Setup
             _dbMock = new Mock<IDbHelper>();
-            //_api = new ApiController(new DBHelper.DbHelper(AccessHelper.GetTestDbConnectionString()));
+
+            // bool CreateNewUser(string firstName, string lastName, string phone, string email, string password)
+            _dbMock.Setup(db => db.CreateNewUser(
+                    It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns((string firstName, string lastName, string phone, string email, string password) =>
+                {
+                    if (_userList.Exists(u => u.Email.Equals(email)))
+                        return false;
+
+                    var user = new User
+                    {
+                        Id = _userList.Count + 1,
+                        FirstName = firstName,
+                        LastName = lastName,
+                        Email = email,
+                        Password = password,
+                        Hash = Crypto.HashPassword(password),
+                        Phone = phone,
+                        Plants = new List<int>()
+                    };
+
+                    _userList.Add(user);
+                    return true;
+                });
+
+            _dbMock.Setup(db => db.LoginAndGetToken(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns((string email, string password) =>
+                {
+                    var user = _userList.FirstOrDefault(u => u.Email.Equals(email));
+
+                    return user != null
+                        ? Crypto.ValidatePassword(password, user.Hash)
+                            ? _tokenTable[user.Id]
+                            : null
+                        : null;
+                });
+
+            _dbMock.Setup(db => db.FindUser(It.IsAny<string>()))
+                .Returns((string email) => { return _userList.FirstOrDefault(u => u.Email.Equals(email)); });
+            _dbMock.Setup(db => db.FindUser(It.IsAny<int>()))
+                .Returns((int id) => { return _userList.FirstOrDefault(u => u.Id.Equals(id)); });
+
+            _dbMock.Setup(db => db.DeleteUser(It.IsAny<string>()))
+                .Returns((string email) =>
+                {
+                    var user = _userList.FirstOrDefault(u => u.Email.Equals(email));
+
+                    return user != null && _userList.Remove(user);
+                });
         }
 
         [TestInitialize]
         public void Init()
         {
-            _api.RegisterUser(_registrationViewModel);
-        }
+            //_api.RegisterUser(_registrationViewModel);
+            _userList.Clear();
+            _userList.Add(_testUser);
 
-        [TestCleanup]
-        public void Dispose()
-        {
-            var data = _api.GetAllUsers();
-            var list = (List<User>) data.Data;
-            list.ForEach(u => _api.DeleteUser(u.Id));
+            _plantList.Clear();
+            _plantList.Add(_testPlant);
+
+            _speciesList.Clear();
+            _speciesList.Add(_testSpecies);
+
+            _tokenTable.Clear();
+            _tokenTable.Add(_testUser.Id, Crypto.HashPassword(DateTime.Today.ToLongDateString()));
+
+            _resetCodeTable.Clear();
+
+            _userPlantTable.Clear();
+            _userPlantTable.Add(_testUser.Id, _testPlant.Id);
         }
 
         [TestMethod]
@@ -116,6 +172,7 @@ namespace WebApp.Tests.Controllers
             Assert.AreEqual("hello world!", msg);
         }
 
+        /*
         [TestMethod]
         public void ApiTestGetAllUsers()
         {
@@ -124,6 +181,7 @@ namespace WebApp.Tests.Controllers
             Assert.IsNotNull(userList);
             Assert.AreNotEqual(0, userList.Count);
         }
+        */
 
         [TestMethod]
         public void ApiTestLoginFailInvalidModel()
