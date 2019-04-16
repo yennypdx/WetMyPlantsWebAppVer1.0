@@ -147,7 +147,6 @@ namespace WebApp.Tests.Controllers
         [TestInitialize]
         public void Init()
         {
-            //_api.RegisterUser(_registrationViewModel);
             _userList.Clear();
             _userList.Add(_testUser);
 
