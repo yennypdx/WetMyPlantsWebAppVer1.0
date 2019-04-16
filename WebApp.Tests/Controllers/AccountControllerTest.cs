@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using DbHelper;
 using DBHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,6 +20,11 @@ namespace WebApp.Tests.Controllers
     {
         // Is this okay? Constructor takes a database
         //private readonly DBHelper.IDbHelper db = new DBHelper.DbHelper();
+        private HttpContextBase _context;
+        private HttpRequestBase _request;
+        private Mock<HttpContextBase> _mockContext;
+        private Mock<HttpRequestBase> _mockRequest;
+        private ControllerContext _controllerContext;
         private readonly Mock<IDbHelper> _db;
         private readonly AccountController _accountController;
         private readonly Dictionary<int, string> _resetCodeDictionary;
@@ -30,6 +38,15 @@ namespace WebApp.Tests.Controllers
             _resetCodeDictionary = new Dictionary<int, string>();
             _tokenDictionary = new Dictionary<int, string>();
             _userList = new List<User>();
+
+            _mockContext = new Mock<HttpContextBase>();
+            _mockRequest = new Mock<HttpRequestBase>();
+            _mockContext.Setup(x => x.Request).Returns(_mockRequest.Object);
+            _mockRequest.SetupGet(c => c.Url).Returns(new Uri("https://wetmyplants.azurewebsites.net"));
+            var requestContext = new RequestContext();
+            requestContext.HttpContext = _mockContext.Object;
+            requestContext.RouteData = new RouteData();
+            UrlHelper helper = new UrlHelper(requestContext);
 
             _testUser = new User
             {
@@ -146,6 +163,10 @@ namespace WebApp.Tests.Controllers
                 });
 
             _accountController = new AccountController(_db.Object);
+            _accountController.Url = helper;
+            // Setup the context (HttpContext and HttpResult objects)
+            _controllerContext = new ControllerContext(_mockContext.Object, new RouteData(), _accountController);
+            _accountController.ControllerContext = _controllerContext;
         }
 
         [TestInitialize]
@@ -205,6 +226,64 @@ namespace WebApp.Tests.Controllers
             var model = result.Model as ResetPasswordViewModel;
             Assert.IsNotNull(model);
             Assert.AreEqual(_testUser.Email, model.Email);
+        }
+
+        [TestMethod]
+        public void AccountController_ResetPasswordInvalidCodeFail()
+        {
+            var code = "TestResetCode1234567890";
+            var wrongCode = "0987654321edoCteseRtseT";
+
+            _resetCodeDictionary[_testUser.Id] = code;
+
+            var result = _accountController.ResetPassword(_testUser.Id, wrongCode) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result, "Result was not null");
+            Assert.IsTrue(result.RouteValues.ContainsKey("action"), "Result does not contain action redirect");
+            Assert.AreEqual("Login", result.RouteValues["action"], "Result did not redirect to Login");
+        }
+
+        [TestMethod]
+        public void AccountController_ResetPasswordDeletesResetCode()
+        {
+            var code = "TestResetCode1234567890";
+            _resetCodeDictionary.Add(_testUser.Id, code);
+
+            _accountController.ResetPassword(_testUser.Id, code);
+
+            Assert.IsFalse(_resetCodeDictionary.ContainsKey(_testUser.Id));
+        }
+
+        [TestMethod]
+        public void AccountController_ForgotUserPasswordInvalidUser()
+        {
+            var model = new ForgotPasswordViewModel
+            {
+                Email = "nonexistant@email.com"
+            };
+
+            var result = _accountController.ForgotUserPassword(model) as RedirectResult;
+
+            Assert.IsNotNull(result, "Result is null");
+            Assert.AreEqual("ForgotPassword", result.Url, "Result does not redirect to ForgotPassword");
+        }
+
+        [TestMethod]
+        public void AccountController_ForgotUserPasswordSetsResetCode()
+        {
+
+            var prevCodes = _resetCodeDictionary.ToList();
+            var model = new ForgotPasswordViewModel
+            {
+                Email = _testUser.Email
+            };
+
+            _accountController.ForgotUserPassword(model);
+
+            var curCodes = _resetCodeDictionary.ToList();
+
+            Assert.AreNotEqual(prevCodes, curCodes, "Codes are the same");
+            Assert.AreEqual(prevCodes.Count + 1, curCodes.Count, "One new code was not added");
         }
     }
 }
