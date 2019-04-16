@@ -38,15 +38,8 @@ namespace WebApp.Tests.Controllers
             _resetCodeDictionary = new Dictionary<int, string>();
             _tokenDictionary = new Dictionary<int, string>();
             _userList = new List<User>();
-
             _mockContext = new Mock<HttpContextBase>();
             _mockRequest = new Mock<HttpRequestBase>();
-            _mockContext.Setup(x => x.Request).Returns(_mockRequest.Object);
-            _mockRequest.SetupGet(c => c.Url).Returns(new Uri("https://wetmyplants.azurewebsites.net"));
-            var requestContext = new RequestContext();
-            requestContext.HttpContext = _mockContext.Object;
-            requestContext.RouteData = new RouteData();
-            UrlHelper helper = new UrlHelper(requestContext);
 
             _testUser = new User
             {
@@ -162,11 +155,22 @@ namespace WebApp.Tests.Controllers
                     return true;
                 });
 
+            _tokenDictionary.Add(_testUser.Id, Crypto.HashPassword(DateTime.Today.ToLongDateString()));
+
+            // Set up the controller context for using server variables
             _accountController = new AccountController(_db.Object);
-            _accountController.Url = helper;
-            // Setup the context (HttpContext and HttpResult objects)
+            var requestContext = new RequestContext {HttpContext = _mockContext.Object, RouteData = new RouteData()};
+            var helper = new UrlHelper(requestContext);
+
             _controllerContext = new ControllerContext(_mockContext.Object, new RouteData(), _accountController);
+            _accountController.Url = helper;
             _accountController.ControllerContext = _controllerContext;
+
+            _mockContext.Setup(x => x.Request).Returns(_mockRequest.Object);
+            _mockContext.SetupGet(c => c.Session["User"]).Returns(_testUser);
+            _mockContext.SetupGet(c => c.Session["Token"]).Returns(_tokenDictionary[_testUser.Id]);
+
+            _mockRequest.SetupGet(c => c.Url).Returns(new Uri("https://wetmyplants.azurewebsites.net"));
         }
 
         [TestInitialize]
@@ -178,6 +182,7 @@ namespace WebApp.Tests.Controllers
             _resetCodeDictionary.Clear();
 
             _tokenDictionary.Clear();
+            _tokenDictionary.Add(_testUser.Id, Crypto.HashPassword(DateTime.Today.ToLongDateString()));
         }
 
         [TestMethod]
@@ -284,6 +289,70 @@ namespace WebApp.Tests.Controllers
 
             Assert.AreNotEqual(prevCodes, curCodes, "Codes are the same");
             Assert.AreEqual(prevCodes.Count + 1, curCodes.Count, "One new code was not added");
+        }
+
+        [TestMethod]
+        public void AccountController_ResetUserPasswordSuccess()
+        {
+            var newPassword = "newPassword";
+            var model = new ResetPasswordViewModel
+            {
+                Email = _testUser.Email,
+                Password = newPassword,
+                ConfirmPassword = newPassword
+            };
+
+            var result = _accountController.ResetUserPassword(model) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result, "Result is null");
+            Assert.IsTrue(result.RouteValues.ContainsKey("action"), "Result does not contain a redirect to an action");
+            Assert.AreEqual("Login", result.RouteValues["action"], "Result did not redirect to Login");
+            Assert.IsTrue(_db.Object.AuthenticateUser(_testUser.Email, newPassword), "Unable to authenticate with the new password");
+        }
+
+        [TestMethod]
+        public void AccountController_ResetUserPasswordInvalidConfirm()
+        {
+            var newPassword = "newPassword";
+            var model = new ResetPasswordViewModel
+            {
+                Email = _testUser.Email,
+                Password = newPassword,
+                ConfirmPassword = "notNewPassword"
+            };
+
+            var result = _accountController.ResetUserPassword(model) as RedirectToRouteResult;
+
+            Assert.IsNotNull(result, "Result is null");
+            Assert.IsTrue(result.RouteValues.ContainsKey("action"), "Result does not contain a redirect to an action");
+            Assert.AreEqual("Login", result.RouteValues["action"], "Result did not redirect to Login");
+            Assert.IsFalse(_db.Object.AuthenticateUser(_testUser.Email, newPassword), "Password was changed with a non-matching ConfirmPassword");
+        }
+
+        [TestMethod]
+        public void AccountController_MyAccountAuthorized_ReturnsCorrectModelTest()
+        {
+            var result = _accountController.MyAccount() as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Model);
+
+            var model = result.Model as MyAccountViewModel;
+
+            Assert.IsNotNull(model);
+            Assert.AreEqual(_testUser.Id, model.Id);
+        }
+
+        [TestMethod]
+        public void AccountController_LogoutTest()
+        {
+            _mockContext.Setup(c => c.Session.Abandon()); // Catch the call, do nothing
+
+            var result = _accountController.Logout() as RedirectToRouteResult;
+
+            Assert.IsNotNull(result, "Result was null");
+            Assert.IsTrue(result.RouteValues.ContainsKey("action"), "Result does not contain a redirect to an action");
+            Assert.AreEqual("Login", result.RouteValues["action"], "Result did not redirect to Login");
         }
     }
 }
