@@ -1,4 +1,4 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using DBHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
+using Moq;
 using WebApp.Controllers;
 using WebApp.Models.AccountViewModels;
 using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
@@ -32,13 +33,24 @@ namespace WebApp.Tests.Controllers
         }
 
         /*************************************************************************************************/
-        /*
+
         private readonly RegistrationViewModel _registrationViewModel;
         private readonly ApiController _api;
+        private readonly Mock<IDbHelper> _dbMock;
+        private List<User> _userList;
+        private List<Plant> _plantList;
+        private List<Species> _speciesList;
+        private Dictionary<int, string> _tokenTable;
+        private Dictionary<int, int> _userPlantTable;
+        private Dictionary<int, string> _resetCodeTable;
+
+        private User _testUser;
+        private Plant _testPlant;
+        private Species _testSpecies;
 
         public ApiControllerTests()
         {
-            _api = new ApiController(new DBHelper.DbHelper(AccessHelper.GetTestDbConnectionString()));
+            //_api = new ApiController(new DBHelper.DbHelper(AccessHelper.GetTestDbConnectionString()));
             _registrationViewModel = new RegistrationViewModel
             {
                 Email = "test@test.test",
@@ -180,4 +192,3 @@ namespace WebApp.Tests.Controllers
         }
     }
 }
-*/
