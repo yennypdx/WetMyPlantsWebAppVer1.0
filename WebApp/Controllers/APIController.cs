@@ -46,9 +46,12 @@ namespace WebApp.Controllers
             if (!_db.CreateNewUser(model.FirstName, model.LastName, model.Phone, model.Email, model.Password))
                 return BadRequest("Unable to register user");
 
-            var id = _db.GetAllUsers().Where(u => u.Email.Equals(model.Email)).ToArray()[0].Id;
+            //var id = _db.GetAllUsers().Where(u => u.Email.Equals(model.Email)).ToArray()[0].Id;
+            var user = _db.FindUser(model.Email);
 
-            return Ok(Json($"{{ id : '{id}' }}"));
+            return user != null
+                ? Ok(Json($"{{ id : '{user.Id}' }}"))
+                : null;
         }
 
         // POST: api/login
@@ -69,8 +72,9 @@ namespace WebApp.Controllers
         [HttpDelete, Route("user/delete/{id}")]
         public ActionResult DeleteUser(int id)
         {
-            var users = _db.GetAllUsers();
-            var user = users?.FirstOrDefault(u => u.Id.Equals(id));
+            //var users = _db.GetAllUsers();
+            //var user = users?.FirstOrDefault(u => u.Id.Equals(id));
+            var user = _db.FindUser(id);
             if (user == null) return BadRequest("Could not find user " + id);
 
             var result = _db.DeleteUser(user.Email);
@@ -78,6 +82,7 @@ namespace WebApp.Controllers
             return result ? Ok("User deleted") : BadRequest("Error deleting user " + id);
         }
 
+        /*
         // GET: api/users/all
         // INSECURE!!! GET requests at this URI will return a JSON object containing all User objects in the database
         [HttpGet, Route("users/all")]
@@ -85,5 +90,6 @@ namespace WebApp.Controllers
         {
             return Json(_db.GetAllUsers(), JsonRequestBehavior.AllowGet);
         }
+        */
     }
 }
