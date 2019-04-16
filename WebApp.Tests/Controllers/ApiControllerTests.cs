@@ -35,7 +35,6 @@ namespace WebApp.Tests.Controllers
 
         /*************************************************************************************************/
 
-        private readonly RegistrationViewModel _registrationViewModel;
         private readonly ApiController _api;
         private readonly Mock<IDbHelper> _dbMock;
         private List<User> _userList;
@@ -80,6 +79,17 @@ namespace WebApp.Tests.Controllers
                 CurrentWater = 50,
                 SpeciesId = _testSpecies.Id
             };
+
+            _userList = new List<User>();
+            _plantList = new List<Plant>();
+            _speciesList = new List<Species>();
+            _tokenTable = new Dictionary<int, string>();
+            _userPlantTable = new Dictionary<int, int>();
+            _resetCodeTable = new Dictionary<int, string>();
+
+            _tokenTable.Add(_testUser.Id, Crypto.HashPassword(DateTime.Today.ToLongDateString()));
+            _userPlantTable.Add(_testUser.Id, _testPlant.Id);
+
             _dbMock = new Mock<IDbHelper>();
             //_api = new ApiController(new DBHelper.DbHelper(AccessHelper.GetTestDbConnectionString()));
         }
