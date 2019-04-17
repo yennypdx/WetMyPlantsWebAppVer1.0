@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -20,11 +19,7 @@ namespace WebApp.Tests.Controllers
     {
         // Is this okay? Constructor takes a database
         //private readonly DBHelper.IDbHelper db = new DBHelper.DbHelper();
-        private HttpContextBase _context;
-        private HttpRequestBase _request;
-        private Mock<HttpContextBase> _mockContext;
-        private Mock<HttpRequestBase> _mockRequest;
-        private ControllerContext _controllerContext;
+        private readonly Mock<HttpContextBase> _mockContext;
         private readonly Mock<IDbHelper> _db;
         private readonly AccountController _accountController;
         private readonly Dictionary<int, string> _resetCodeDictionary;
@@ -32,14 +27,13 @@ namespace WebApp.Tests.Controllers
         private readonly List<User> _userList;
         private readonly User _testUser;
 
-
         public AccountControllerTest()
         {
             _resetCodeDictionary = new Dictionary<int, string>();
             _tokenDictionary = new Dictionary<int, string>();
             _userList = new List<User>();
             _mockContext = new Mock<HttpContextBase>();
-            _mockRequest = new Mock<HttpRequestBase>();
+            var mockRequest = new Mock<HttpRequestBase>();
 
             _testUser = new User
             {
@@ -165,15 +159,15 @@ namespace WebApp.Tests.Controllers
             var requestContext = new RequestContext {HttpContext = _mockContext.Object, RouteData = new RouteData()};
             var helper = new UrlHelper(requestContext);
 
-            _controllerContext = new ControllerContext(_mockContext.Object, new RouteData(), _accountController);
+            var controllerContext = new ControllerContext(_mockContext.Object, new RouteData(), _accountController);
             _accountController.Url = helper;
-            _accountController.ControllerContext = _controllerContext;
+            _accountController.ControllerContext = controllerContext;
 
-            _mockContext.Setup(x => x.Request).Returns(_mockRequest.Object);
+            _mockContext.Setup(x => x.Request).Returns(mockRequest.Object);
             _mockContext.SetupGet(c => c.Session["User"]).Returns(_testUser);
             _mockContext.SetupGet(c => c.Session["Token"]).Returns(_tokenDictionary[_testUser.Id]);
 
-            _mockRequest.SetupGet(c => c.Url).Returns(new Uri("https://wetmyplants.azurewebsites.net"));
+            mockRequest.SetupGet(c => c.Url).Returns(new Uri("https://wetmyplants.azurewebsites.net"));
         }
 
         [TestInitialize]

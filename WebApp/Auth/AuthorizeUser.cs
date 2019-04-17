@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using DBHelper;
-using Microsoft.ApplicationInsights.Web;
 using Models;
+using WebApp.Controllers;
 
 namespace WebApp.Auth
 {
@@ -30,7 +27,10 @@ namespace WebApp.Auth
 
             if (token != null && userId != -1) // If both the token and userId are valid, proceed to verify
             {
-                var db = new DBHelper.DbHelper();
+                //var db = new DBHelper.DbHelper();
+                var controller = filterContext.Controller as AccountController;
+                var db = controller.Db;
+                
                 if (!db.ValidateUserToken(userId, token)) // Validate the token with the userId
                 {
                     filterContext.Result = new RedirectResult("/Account/Login");

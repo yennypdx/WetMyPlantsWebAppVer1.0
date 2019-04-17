@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 using DBHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-
+/*
 namespace DbHelper.Test
 {
     [TestClass]
@@ -301,7 +301,7 @@ namespace DbHelper.Test
          *  PLANT SPECIES TEST METHODS
          *******************************
          */
-
+/*
         [TestMethod]
         public void DbHelperAddPlantSpeciesTest()
         {
@@ -445,7 +445,7 @@ namespace DbHelper.Test
          ***********************
          */
 
-
+/*
         [TestMethod]
         public void DbHelperAddPlantTest()
         {
@@ -553,3 +553,4 @@ namespace DbHelper.Test
         }
     }
 };
+*/
