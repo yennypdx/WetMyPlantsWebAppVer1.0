@@ -29,7 +29,7 @@ namespace WebApp.Auth
             {
                 //var db = new DBHelper.DbHelper();
                 var controller = filterContext.Controller as AccountController;
-                var db = controller.Db;
+                var db = controller?.Db;
                 
                 if (!db.ValidateUserToken(userId, token)) // Validate the token with the userId
                 {

@@ -121,10 +121,19 @@ namespace WebApp.Tests.Controllers
                 {
                     var user = _userList.FirstOrDefault(u => u.Email.Equals(email));
 
-                    return user != null
-                        ? Crypto.ValidatePassword(password, user.Hash)
-                            ? _tokenTable[user.Id]
-                            : null
+                    if (user == null) return null;
+
+                    string token;
+                    if (_tokenTable.ContainsKey(user.Id))
+                        token = _tokenTable[user.Id];
+                    else
+                    {
+                        token = Crypto.HashPassword(DateTime.Today.ToLongDateString());
+                        _tokenTable.Add(user.Id, token);
+                    }
+
+                    return Crypto.ValidatePassword(password, user.Hash)
+                        ? token
                         : null;
                 });
 
@@ -214,10 +223,21 @@ namespace WebApp.Tests.Controllers
             };
             ValidateModel(model);
 
-            var result = _api.Login(model) as HttpStatusCodeResult;
-            
-            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), result?.StatusCode);
-            Assert.IsNotNull(Json.Decode(result?.StatusDescription)["content"]);
+            var result = _api.Login(model) as JsonResult;
+            if (result == null) Assert.Fail("Result was null");
+
+            var data = Json.Decode(result.Data.ToString());
+            if (data == null) Assert.Fail("Result data was null");
+
+            try
+            {
+                var token = data["content"];
+                Assert.AreEqual(_tokenTable[_testUser.Id], token, "Token did not match");
+            }
+            catch (Exception)
+            {
+                Assert.Fail("Data did not carry expected content");
+            }            
         }
 
         [TestMethod]
@@ -236,7 +256,7 @@ namespace WebApp.Tests.Controllers
             var result = _api.RegisterUser(registerModel) as HttpStatusCodeResult;
 
             Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result?.StatusCode);
-            Assert.AreEqual("Unable to register user", Json.Decode(result?.StatusDescription)["content"]);
+            Assert.AreEqual("User already exists", Json.Decode(result?.StatusDescription)["content"]);
         }
 
         [TestMethod]
@@ -265,10 +285,23 @@ namespace WebApp.Tests.Controllers
             };
             ValidateModel(newUser);
 
-            var result = _api.RegisterUser(newUser) as HttpStatusCodeResult;
+            var result = _api.RegisterUser(newUser) as JsonResult;
+            if (result == null) Assert.Fail("Result is null");
 
-            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), result?.StatusCode);
-            Assert.IsNotNull(Json.Decode(result?.StatusDescription)["id"]);
+            var data = Json.Decode(result.Data.ToString());
+            if (data == null) Assert.Fail("Data is null");
+
+            try
+            {
+                var token = data["content"];
+                var user = _userList.FirstOrDefault(u => u.Email.Equals(newUser.Email));
+                Assert.IsNotNull(user);
+                Assert.AreEqual(_tokenTable[user.Id], token, "Token did not match");
+            }
+            catch (Exception)
+            {
+                Assert.Fail("Data did not contain expected content");
+            }
         }
 
         [TestMethod]
