@@ -575,12 +575,12 @@ namespace DBHelper
 
             // otherwise, get the token and its expiration date
             result.Read();
-            var expiry = result.GetDateTime((int)TokenColumns.Expiry).ToString("ddMMyyyy");
+            var expiry = result.GetDateTime((int) TokenColumns.Expiry);
             var token = result.GetString((int)TokenColumns.Token);
 
             // if the token has expired, generate a new one
             // otherwise return the valid token
-            return ToDateTime(expiry) < DateTime.Today 
+            return DateTime.Compare((expiry), DateTime.Today) <= 0
                 ? GenerateNewTokenForUser(id) 
                 : token;
         }
