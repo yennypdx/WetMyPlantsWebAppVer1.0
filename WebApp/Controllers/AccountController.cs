@@ -6,17 +6,19 @@ using WebApp.Models.AccountViewModels;
 using System.Threading.Tasks;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using System.Net.Http;
 using DbHelper;
 using WebApp.Auth;
+using WebApp.Models.HomeViewModels;
 
 namespace WebApp.Controllers
 {
     public class AccountController : Controller
     {
-        public readonly DBHelper.IDbHelper Db;
+        private readonly DBHelper.IDbHelper _db;
 
         // Inject Dependency
-        public AccountController(DBHelper.IDbHelper db) => Db = db;
+        public AccountController(DBHelper.IDbHelper db) => _db = db;
 
         public ActionResult Login()
         {
@@ -32,13 +34,13 @@ namespace WebApp.Controllers
         {
             if (userId == null || code == null) return RedirectToAction("Login");
 
-            if (Db.ValidateResetCode((int)userId, code))
+            if (_db.ValidateResetCode((int)userId, code))
             {
-                Db.DeleteResetCode((int)userId);
+                _db.DeleteResetCode((int)userId);
 
                 var model = new ResetPasswordViewModel()
                 {
-                    Email = (Db.FindUser((int)userId))?.Email
+                    Email = (_db.FindUser((int)userId))?.Email
                 };
 
                 return View(model);
@@ -49,21 +51,21 @@ namespace WebApp.Controllers
         [HttpPost]
         public ActionResult ForgotUserPassword(ForgotPasswordViewModel uModel)
         {
-            var result = Db.FindUser(uModel.Email);
+            var result = _db.FindUser(uModel.Email);
 
             if (result == null) return Redirect("ForgotPassword");
 
-            var resetCode = Crypto.HashPassword(DateTime.Today.ToLongDateString());
+            var resetCode = Crypto.HashPassword(DateTime.Today.ToString());
             // TODO: Store the reset code in the DB
-            Db.SetResetCode(result.Id, resetCode);
+            _db.SetResetCode(result.Id, resetCode);
 
-            var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = result.Id, code = resetCode }, protocol: Request?.Url?.Scheme);
+            var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = result.Id, code = resetCode }, protocol: Request.Url.Scheme);
 
             SendPasswordResetEmail(uModel.Email, callbackUrl).Wait();
             return View("Login");
         }
 
-        public static async Task SendPasswordResetEmail(string email, string urlString)
+        static public async Task SendPasswordResetEmail(string email, string urlString)
         {
             string apiKey = "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";//System.Environment.GetEnvironmentVariable("SENDGRID_APIKEY");
             var client = new SendGridClient(apiKey);            
@@ -75,7 +77,7 @@ namespace WebApp.Controllers
                 HtmlContent = "<strong>Please click on this link to reset your password: </strong><a href=\"" + urlString + "\" > wetmyplants.azurewebsites.net/Account/ResetPassword</a>"
             };
             msg.AddTo(new EmailAddress(email, "user"));
-            await client.SendEmailAsync(msg).ConfigureAwait(false);
+            var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
         }
 
         [HttpPost]
@@ -83,7 +85,7 @@ namespace WebApp.Controllers
         {
             if(uModel.Password == uModel.ConfirmPassword)
             {
-                Db.ResetPassword(uModel.Email, uModel.Password);
+                _db.ResetPassword(uModel.Email, uModel.Password);
             }
             
             return RedirectToAction("Login");
@@ -109,7 +111,7 @@ namespace WebApp.Controllers
                 Id = user.Id
             };
 
-            return View("MyAccount", userViewModel);
+            return View(userViewModel);
         }
 
         public ActionResult Logout()
@@ -125,13 +127,13 @@ namespace WebApp.Controllers
             // CreateNewUser will be refactored to return the ID of the newly created user
             string token;
 
-            if (Db.CreateNewUser(uModel.FirstName,
+            if (_db.CreateNewUser(uModel.FirstName,
                     uModel.LastName, uModel.Phone, 
                     uModel.Email, uModel.Password) &&
-                (token = Db.LoginAndGetToken(uModel.Email, uModel.Password)) != null)
+                (token = _db.LoginAndGetToken(uModel.Email, uModel.Password)) != null)
             {
                 Session["Token"] = token;
-                Session["User"] = Db.FindUser(uModel.Email);
+                Session["User"] = _db.FindUser(uModel.Email);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -144,8 +146,8 @@ namespace WebApp.Controllers
             string token;
             User user;
 
-            if ((token = Db.LoginAndGetToken(model.Email, model.Password)) != null
-                && (user = Db.FindUser(model.Email)) != null)
+            if ((token = _db.LoginAndGetToken(model.Email, model.Password)) != null
+                && (user = _db.FindUser(model.Email)) != null)
             {
                 Session["Token"] = token;
                 Session["User"] = user;
@@ -171,7 +173,7 @@ namespace WebApp.Controllers
                 Phone = model.Phone
             };
 
-            if (Db.UpdateUser(user)) // if the update is successful
+            if (_db.UpdateUser(user)) // if the update is successful
             {
                 // update the session
                 Session["User"] = user;
@@ -199,7 +201,7 @@ namespace WebApp.Controllers
         public ActionResult DeleteUser()
         {
             // The AuthorizeUser attribute will verify the user is valid, no need to check
-            return View("DeleteUser", new DeleteUserViewModel
+            return View(new DeleteUserViewModel
             {
                 Email = (Session["User"] as User)?.Email
             });
@@ -209,10 +211,10 @@ namespace WebApp.Controllers
         public ActionResult ConfirmDeletion(DeleteUserViewModel model)
         {
             // Check that the user entered the correct password
-            if (Db.AuthenticateUser(model.Email, model.Password))
+            if (_db.AuthenticateUser(model.Email, model.Password))
             {
                 // Delete the user
-                Db.DeleteUser(model.Email);
+                _db.DeleteUser(model.Email);
 
                 // Abandon the session to log the deleted user out
                 Session.Abandon();
@@ -234,14 +236,14 @@ namespace WebApp.Controllers
             {
                 Email = user.Email
             };
-            return View("ChangePassword", model);
+            return View(model);
         }
         [AuthorizeUser, HttpPost]
         public ActionResult ConfirmPasswordChange(ChangePasswordViewModel model)
         {
-            if (Db.AuthenticateUser(model.Email, model.Password))
+            if (_db.AuthenticateUser(model.Email, model.Password))
             {
-                Db.ResetPassword(model.Email, model.NewPassword);
+                _db.ResetPassword(model.Email, model.NewPassword);
 
                 // TODO: Output a message for successful password change
 

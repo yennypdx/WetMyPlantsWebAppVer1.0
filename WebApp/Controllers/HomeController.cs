@@ -10,10 +10,10 @@ namespace WebApp.Controllers
 {
     public class HomeController : Controller
     {
-        public readonly IDbHelper Db;
+        private readonly IDbHelper _db;
 
         // DbHelper injected
-        public HomeController(IDbHelper db) => Db = db;
+        public HomeController(IDbHelper db) => _db = db;
 
         [AuthorizeUser]
         public ActionResult Index()
@@ -25,7 +25,7 @@ namespace WebApp.Controllers
             var model = new DashboardViewModel
             {
                 User = user,
-                Plants = Db.GetPlantsForUser(user.Id) ?? new List<Plant>()
+                Plants = _db.GetPlantsForUser(user.Id) ?? new List<Plant>()
             };
 
             return View(model);
