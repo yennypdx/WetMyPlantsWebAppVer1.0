@@ -37,16 +37,16 @@ namespace WebApp.Tests.Controllers
 
         private readonly ApiController _api;
         private readonly Mock<IDbHelper> _dbMock;
-        private List<User> _userList;
-        private List<Plant> _plantList;
-        private List<Species> _speciesList;
-        private Dictionary<int, string> _tokenTable;
-        private Dictionary<int, int> _userPlantTable;
-        private Dictionary<int, string> _resetCodeTable;
+        private readonly List<User> _userList;
+        private readonly List<Plant> _plantList;
+        private readonly List<Species> _speciesList;
+        private readonly Dictionary<int, string> _tokenTable;
+        private readonly Dictionary<int, int> _userPlantTable;
+        private readonly Dictionary<int, string> _resetCodeTable;
 
-        private User _testUser;
-        private Plant _testPlant;
-        private Species _testSpecies;
+        private readonly User _testUser;
+        private readonly Plant _testPlant;
+        private readonly Species _testSpecies;
 
         public ApiControllerTests()
         {
