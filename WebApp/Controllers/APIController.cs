@@ -68,7 +68,7 @@ namespace WebApp.Controllers
         public ActionResult RegisterUser(RegistrationViewModel model)
         {
             var token = "";
-            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            //var errors = ModelState.Values.SelectMany(v => v.Errors);
             if (!ModelState.IsValid) return BadRequest("Invalid registration model");
 
             if (_db.CreateNewUser(model.FirstName, model.LastName, model.Phone, model.Email, model.Password))
@@ -77,10 +77,10 @@ namespace WebApp.Controllers
             }
             else
             {
-                return BadRequest("User already exist.");
+                return BadRequest("User already exists");
             }
 
-            return token != null ? Json(new { content = token }) : BadRequest("Registration failed");
+            return token != null ? Jsonify(token) : BadRequest("Registration failed");
         }
 
         /* Authenticate user >> return a TOKEN */
@@ -91,15 +91,16 @@ namespace WebApp.Controllers
 
             var token = _db.LoginAndGetToken(model.Email, model.Password);
 
-            return token != null ? Json(new { content = token }) : BadRequest("Invalid login");
+            return token != null ? Jsonify(token) : BadRequest("Invalid login");
         }
 
         // Delete a user from db with ID >> Return OK
         [HttpDelete, Route("user/delete/{id}")]
         public ActionResult DeleteUser(int id)
         {
-            var users = _db.GetAllUsers();
-            var user = users?.FirstOrDefault(u => u.Id.Equals(id));
+            //var users = _db.GetAllUsers();
+            //var user = users?.FirstOrDefault(u => u.Id.Equals(id));
+            var user = _db.FindUser(id);
             if (user == null) return BadRequest("Could not find user " + id);
 
             var result = _db.DeleteUser(user.Email);

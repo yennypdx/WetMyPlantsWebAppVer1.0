@@ -1,4 +1,4 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,8 +8,10 @@ using System.Web.Mvc;
 using DBHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
+using Moq;
 using WebApp.Controllers;
 using WebApp.Models.AccountViewModels;
+using Crypto = DbHelper.Crypto;
 using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 
 namespace WebApp.Tests.Controllers
@@ -32,36 +34,144 @@ namespace WebApp.Tests.Controllers
         }
 
         /*************************************************************************************************/
-        /*
-        private readonly RegistrationViewModel _registrationViewModel;
+
         private readonly ApiController _api;
+        private readonly Mock<IDbHelper> _dbMock;
+        private List<User> _userList;
+        private List<Plant> _plantList;
+        private List<Species> _speciesList;
+        private Dictionary<int, string> _tokenTable;
+        private Dictionary<int, int> _userPlantTable;
+        private Dictionary<int, string> _resetCodeTable;
+
+        private User _testUser;
+        private Plant _testPlant;
+        private Species _testSpecies;
 
         public ApiControllerTests()
         {
-            _api = new ApiController(new DBHelper.DbHelper(AccessHelper.GetTestDbConnectionString()));
-            _registrationViewModel = new RegistrationViewModel
+            // Set up test objects
+            _testUser = new User
             {
-                Email = "test@test.test",
-                Password = "password",
-                //ConfirmPassword = "password",
+                Id = 1,
                 FirstName = "Test",
-                LastName = "User",
-                Phone = "1234567890"
+                LastName = "Test",
+                Email = "test@email.com",
+                Password = "password",
+                Hash = Crypto.HashPassword("password"),
+                Phone = "1234567890",
+                Plants = new List<int>()
             };
+            _testSpecies = new Species
+            {
+                Id = 1,
+                CommonName = "Test",
+                LatinName = "Test",
+                LightMax = 100,
+                LightMin = 0,
+                WaterMax = 100,
+                WaterMin = 0
+            };
+            _testPlant = new Plant
+            {
+                Id = 1,
+                Nickname = "Test",
+                CurrentLight = 50,
+                CurrentWater = 50,
+                SpeciesId = _testSpecies.Id
+            };
+
+            // Initialize lists and dictionaries
+            _userList = new List<User>();
+            _plantList = new List<Plant>();
+            _speciesList = new List<Species>();
+            _tokenTable = new Dictionary<int, string>();
+            _userPlantTable = new Dictionary<int, int>();
+            _resetCodeTable = new Dictionary<int, string>();
+
+            // Database Moq Setup
+            _dbMock = new Mock<IDbHelper>();
+
+            // bool CreateNewUser(string firstName, string lastName, string phone, string email, string password)
+            _dbMock.Setup(db => db.CreateNewUser(
+                    It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns((string firstName, string lastName, string phone, string email, string password) =>
+                {
+                    if (_userList.Exists(u => u.Email.Equals(email)))
+                        return false;
+
+                    var user = new User
+                    {
+                        Id = _userList.Count + 1,
+                        FirstName = firstName,
+                        LastName = lastName,
+                        Email = email,
+                        Password = password,
+                        Hash = Crypto.HashPassword(password),
+                        Phone = phone,
+                        Plants = new List<int>()
+                    };
+
+                    _userList.Add(user);
+                    return true;
+                });
+
+            _dbMock.Setup(db => db.LoginAndGetToken(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns((string email, string password) =>
+                {
+                    var user = _userList.FirstOrDefault(u => u.Email.Equals(email));
+
+                    if (user == null) return null;
+
+                    string token;
+                    if (_tokenTable.ContainsKey(user.Id))
+                        token = _tokenTable[user.Id];
+                    else
+                    {
+                        token = Crypto.HashPassword(DateTime.Today.ToLongDateString());
+                        _tokenTable.Add(user.Id, token);
+                    }
+
+                    return Crypto.ValidatePassword(password, user.Hash)
+                        ? token
+                        : null;
+                });
+
+            _dbMock.Setup(db => db.FindUser(It.IsAny<string>()))
+                .Returns((string email) => { return _userList.FirstOrDefault(u => u.Email.Equals(email)); });
+            _dbMock.Setup(db => db.FindUser(It.IsAny<int>()))
+                .Returns((int id) => { return _userList.FirstOrDefault(u => u.Id.Equals(id)); });
+
+            _dbMock.Setup(db => db.DeleteUser(It.IsAny<string>()))
+                .Returns((string email) =>
+                {
+                    var user = _userList.FirstOrDefault(u => u.Email.Equals(email));
+
+                    return user != null && _userList.Remove(user);
+                });
+
+            _api = new ApiController(_dbMock.Object);
         }
 
         [TestInitialize]
         public void Init()
         {
-            //_api.RegisterUser(_registrationViewModel);
-        }
+            _userList.Clear();
+            _userList.Add(_testUser);
 
-        [TestCleanup]
-        public void Dispose()
-        {
-            var data = _api.GetAllUsers();
-            var list = (List<User>) data.Data;
-            list.ForEach(u => _api.DeleteUser(u.Id));
+            _plantList.Clear();
+            _plantList.Add(_testPlant);
+
+            _speciesList.Clear();
+            _speciesList.Add(_testSpecies);
+
+            _tokenTable.Clear();
+            _tokenTable.Add(_testUser.Id, Crypto.HashPassword(DateTime.Today.ToLongDateString()));
+
+            _resetCodeTable.Clear();
+
+            _userPlantTable.Clear();
+            _userPlantTable.Add(_testUser.Id, _testPlant.Id);
         }
 
         [TestMethod]
@@ -71,15 +181,6 @@ namespace WebApp.Tests.Controllers
 
             Assert.AreEqual("hello world!", msg);
         }
-
-        //[TestMethod]
-        //public void ApiTestGetAllUsers()
-        //{
-        //    var userList = _api.GetAllUsers().Data as List<User>;
-
-        //    Assert.IsNotNull(userList);
-        //    Assert.AreNotEqual(0, userList.Count);
-        //}
 
         [TestMethod]
         public void ApiTestLoginFailInvalidModel()
@@ -98,7 +199,7 @@ namespace WebApp.Tests.Controllers
         {
             var model = new LoginViewModel
             {
-                Email = _registrationViewModel.Email,
+                Email = _testUser.Email,
                 Password = "wrongPassword",
                 RememberMe = false
             };
@@ -111,31 +212,52 @@ namespace WebApp.Tests.Controllers
             Assert.AreEqual("Invalid login", Json.Decode(result?.StatusDescription)["content"]);
         }
 
-        //[TestMethod]
-        //public void ApiTestLoginSuccessRetrievesToken()
-        //{
-        //    var model = new LoginViewModel
-        //    {
-        //        Email = "test@test.test",
-        //        Password = "password",
-        //        RememberMe = false
-        //    };
-        //    ValidateModel(model);
+        [TestMethod]
+        public void ApiTestLoginSuccessRetrievesToken()
+        {
+            var model = new LoginViewModel
+            {
+                Email = _testUser.Email,
+                Password = _testUser.Password,
+                RememberMe = false
+            };
+            ValidateModel(model);
 
-        //    var result = _api.Login(model) as HttpStatusCodeResult;
-            
-        //    Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), result?.StatusCode);
-        //    Assert.IsNotNull(Json.Decode(result?.StatusDescription)["content"]);
-        //}
+            var result = _api.Login(model) as JsonResult;
+            if (result == null) Assert.Fail("Result was null");
 
-        //[TestMethod]
-        //public void ApiTestRegisterFailUserAlreadyExists()
-        //{
-        //    var result = _api.RegisterUser(_registrationViewModel) as HttpStatusCodeResult;
+            var data = Json.Decode(result.Data.ToString());
+            if (data == null) Assert.Fail("Result data was null");
 
-        //    Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result?.StatusCode);
-        //    Assert.AreEqual("Unable to register user", Json.Decode(result?.StatusDescription)["content"]);
-        //}
+            try
+            {
+                var token = data["content"];
+                Assert.AreEqual(_tokenTable[_testUser.Id], token, "Token did not match");
+            }
+            catch (Exception)
+            {
+                Assert.Fail("Data did not carry expected content");
+            }            
+        }
+
+        [TestMethod]
+        public void ApiTestRegisterFailUserAlreadyExists()
+        {
+            var registerModel = new RegistrationViewModel
+            {
+                FirstName = "New",
+                LastName = "User",
+                Email = _testUser.Email,
+                Password = "password",
+                ConfirmPassword = "password",
+                Phone = "1234567890"
+            };
+
+            var result = _api.RegisterUser(registerModel) as HttpStatusCodeResult;
+
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result?.StatusCode);
+            Assert.AreEqual("User already exists", Json.Decode(result?.StatusDescription)["content"]);
+        }
 
         [TestMethod]
         public void ApiTestRegisterUserFailInvalidModel()
@@ -149,35 +271,46 @@ namespace WebApp.Tests.Controllers
             Assert.AreEqual("Invalid registration model", Json.Decode(result?.StatusDescription)["content"]);
         }
 
-        //[TestMethod]
-        //public void ApiTestRegistrationSuccess()
-        //{
-        //    var newUser = new RegistrationViewModel
-        //    {
-        //        Email = "new@user.test",
-        //        Password = "password",
-        //        ConfirmPassword = "password",
-        //        FirstName = "New",
-        //        LastName = "User",
-        //        Phone = "1234567890"
-        //    };
-        //    ValidateModel(newUser);
+        [TestMethod]
+        public void ApiTestRegistrationSuccess()
+        {
+            var newUser = new RegistrationViewModel
+            {
+                Email = "new@user.test",
+                Password = "password",
+                ConfirmPassword = "password",
+                FirstName = "New",
+                LastName = "User",
+                Phone = "1234567890"
+            };
+            ValidateModel(newUser);
 
-        //    var result = _api.RegisterUser(newUser) as HttpStatusCodeResult;
+            var result = _api.RegisterUser(newUser) as JsonResult;
+            if (result == null) Assert.Fail("Result is null");
 
-        //    Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), result?.StatusCode);
-        //    Assert.IsNotNull(Json.Decode(result?.StatusDescription)["id"]);
-        //}
+            var data = Json.Decode(result.Data.ToString());
+            if (data == null) Assert.Fail("Data is null");
 
-        //[TestMethod]
-        //public void ApiTestDeleteUserSuccess()
-        //{
-        //    var id = ((List<User>)_api.GetAllUsers().Data)[0].Id;
-        //    var deleteResult = _api.DeleteUser(id) as HttpStatusCodeResult;
+            try
+            {
+                var token = data["content"];
+                var user = _userList.FirstOrDefault(u => u.Email.Equals(newUser.Email));
+                Assert.IsNotNull(user);
+                Assert.AreEqual(_tokenTable[user.Id], token, "Token did not match");
+            }
+            catch (Exception)
+            {
+                Assert.Fail("Data did not contain expected content");
+            }
+        }
 
-        //    Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), deleteResult?.StatusCode);
-        //    Assert.AreEqual("User deleted", Json.Decode(deleteResult?.StatusDescription)["content"]);
-        //}
+        [TestMethod]
+        public void ApiTestDeleteUserSuccess()
+        {
+            var deleteResult = _api.DeleteUser(_testUser.Id) as HttpStatusCodeResult;
+
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), deleteResult?.StatusCode);
+            Assert.AreEqual("User deleted", Json.Decode(deleteResult?.StatusDescription)["content"]);
+        }
     }
 }
-*/
