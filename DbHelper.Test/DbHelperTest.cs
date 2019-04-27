@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 using DBHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-
+/*
 namespace DbHelper.Test
 {
     [TestClass]
@@ -285,6 +285,7 @@ namespace DbHelper.Test
             var userId = _db.FindUser(email)?.Id; // find the test user's ID
 
             var today = DateTime.Today; // get today's date
+
             var query = $"UPDATE Tokens SET Expiry = '{today.ToString("G")}' WHERE UserID = {userId};"; // set the user's token's expiration date to today
 
             // execute the sql query
@@ -303,7 +304,7 @@ namespace DbHelper.Test
          *  PLANT SPECIES TEST METHODS
          *******************************
          */
-
+/*
         [TestMethod]
         public void DbHelperAddPlantSpeciesTest()
         {
@@ -447,7 +448,7 @@ namespace DbHelper.Test
          ***********************
          */
 
-
+/*
         [TestMethod]
         public void DbHelperAddPlantTest()
         {
@@ -556,3 +557,4 @@ namespace DbHelper.Test
         }
     }
 };
+*/

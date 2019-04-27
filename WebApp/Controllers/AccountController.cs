@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Web.Mvc;
 using Models;
 using WebApp.Models.AccountViewModels;
@@ -6,21 +7,18 @@ using System.Threading.Tasks;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Net.Http;
+using DbHelper;
+using WebApp.Auth;
 using WebApp.Models.HomeViewModels;
 
 namespace WebApp.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly DBHelper.IDbHelper _db;
+        public readonly DBHelper.IDbHelper Db;
 
         // Inject Dependency
-        public AccountController(DBHelper.IDbHelper db) => _db = db;
-
-        public ActionResult Index()
-        {
-            return View();
-        }
+        public AccountController(DBHelper.IDbHelper db) => Db = db;
 
         public ActionResult Login()
         {
@@ -32,27 +30,39 @@ namespace WebApp.Controllers
             return View();
         }
 
-        public ActionResult ResetPassword()
+        public ActionResult ResetPassword(int? userId, string code)
         {
-            return View();
+            if (userId == null || code == null) return RedirectToAction("Login");
+
+            if (Db.ValidateResetCode((int)userId, code))
+            {
+                Db.DeleteResetCode((int)userId);
+
+                var model = new ResetPasswordViewModel()
+                {
+                    Email = (Db.FindUser((int)userId))?.Email
+                };
+
+                return View(model);
+            }
+
+            return RedirectToAction("Login");
         }
-        [HttpGet]
+        [HttpPost]
         public ActionResult ForgotUserPassword(ForgotPasswordViewModel uModel)
         {
-             var result = _db.FindUser(uModel.Email);
-            
-            if (result.Email != null && result.Email == uModel.Email)
-            {
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = result.Id, code = GetHashCode() }, protocol: Request.Url.Scheme);
-                SendPasswordResetEmail(uModel.Email, callbackUrl).Wait();
-                return View("Login");
-            }
-            else
-            {
-                //return Content("<script language= 'javascript' type='text/javascript'>alert ('User not Fonud '); </script>");
-                return View("ForgotPassword");
-            }
-            
+            var result = Db.FindUser(uModel.Email);
+
+            if (result == null) return Redirect("ForgotPassword");
+
+            var resetCode = Crypto.HashPassword(DateTime.Today.ToString());
+            // TODO: Store the reset code in the DB
+            Db.SetResetCode(result.Id, resetCode);
+
+            var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = result.Id, code = resetCode }, protocol: Request.Url.Scheme);
+
+            SendPasswordResetEmail(uModel.Email, callbackUrl).Wait();
+            return View("Login");
         }
 
         static public async Task SendPasswordResetEmail(string email, string urlString)
@@ -73,16 +83,12 @@ namespace WebApp.Controllers
         [HttpPost]
         public ActionResult ResetUserPassword(ResetPasswordViewModel uModel)
         {
-            //string url = Request.Url.AbsolutePath;
-            //string[] UrlParts = url.Split('/');
-            //int id = System.Int32.Parse(url);
-            // int id = (int)RouteData.Values["userId"];
             if(uModel.Password == uModel.ConfirmPassword)
             {
-                _db.ResetPassword(uModel.Email, uModel.Password);
+                Db.ResetPassword(uModel.Email, uModel.Password);
             }
             
-            return View("Login");
+            return RedirectToAction("Login");
         }
 
         public ActionResult Register()
@@ -90,6 +96,7 @@ namespace WebApp.Controllers
             return View();
         }
 
+        [AuthorizeUser]
         public ActionResult MyAccount()
         {
             var user = (User)Session["User"];
@@ -118,65 +125,44 @@ namespace WebApp.Controllers
         public ActionResult RegisterUser(RegistrationViewModel uModel)
         {
             // CreateNewUser will be refactored to return the ID of the newly created user
-            var result = _db.CreateNewUser(
-                uModel.FirstName,
-                uModel.LastName,
-                uModel.Phone,
-                uModel.Email,
-                uModel.Password);
+            string token;
 
-            if (!result) return RedirectToAction("Register");
+            if (Db.CreateNewUser(uModel.FirstName,
+                    uModel.LastName, uModel.Phone, 
+                    uModel.Email, uModel.Password) &&
+                (token = Db.LoginAndGetToken(uModel.Email, uModel.Password)) != null)
+            {
+                Session["Token"] = token;
+                Session["User"] = Db.FindUser(uModel.Email);
+                return RedirectToAction("Index", "Home");
+            }
 
-            var token = _db.LoginAndGetToken(uModel.Email, uModel.Password);
-
-            if (token == null) return RedirectToAction("Register");
-
-            //ViewBag.User = result;
-            ViewBag.Token = token;
-
-            // set the session
-            var user = _db.FindUser(uModel.Email);
-            //Session["User"] = _db.FindUserByEmail(uModel.Email);
-            Session["User"] = user;
-            Session["Email"] = user.Email;
-
-            return RedirectToAction("Index", "Home", user);
+            return RedirectToAction("Register");
         }
 
         [HttpPost]
         public ActionResult LoginUser(LoginViewModel model)
         {
-            // Merge errors for name change from result to token!
-            var token = _db.LoginAndGetToken(model.Email, model.Password);
+            string token;
+            User user;
 
-            if (token != null)
+            if ((token = Db.LoginAndGetToken(model.Email, model.Password)) != null
+                && (user = Db.FindUser(model.Email)) != null)
             {
-                var user = _db.FindUser(model.Email);
-                ViewBag.User = user;
-                ViewBag.Token = token;
-
-                // set the session 
+                Session["Token"] = token;
                 Session["User"] = user;
-                Session["Email"] = user.Email;
 
-                // Create a ViewModel to pass the user to the view
-                var userViewModel = new RegistrationViewModel
-                {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email
-                };
-
-                // store token as a cookie here
-                return RedirectToAction("Index", "Home", user);
+                return RedirectToAction("Index", "Home");
             }
 
             return View("Login");
         }
 
+        [AuthorizeUser]
         [HttpPost]
         public ActionResult UpdateUser(MyAccountViewModel model)
         {
+            var message = "Error updating your account.";
             // Convert model to User to update database and session
             var user = new User
             {
@@ -187,41 +173,48 @@ namespace WebApp.Controllers
                 Phone = model.Phone
             };
 
-            // update the session
-            Session["User"] = user;
-            _db.UpdateUser(user);
-
-            // Convert user to a ViewModel to be passed to the view
-            var userViewModel = new MyAccountViewModel
+            if (Db.UpdateUser(user)) // if the update is successful
             {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                Id = user.Id,
-                Phone = user.Phone
-            };
+                // update the session
+                Session["User"] = user;
 
+                // update the message
+                message = "Updated!";
+
+                // update the view model
+                model = new MyAccountViewModel
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Id = user.Id,
+                    Phone = user.Phone
+                };
+            }
+
+            ViewBag.UpdateMessage = message;
+            // Reload the view with the current model (updated or not)
             return RedirectToAction("MyAccount", "Account", model);
         }
 
-        public ActionResult DeleteUser(string email)
+        [AuthorizeUser]
+        public ActionResult DeleteUser()
         {
-            var user = _db.FindUser(email);
-            var userViewModel = new DeleteUserViewModel
+            // The AuthorizeUser attribute will verify the user is valid, no need to check
+            return View("DeleteUser", new DeleteUserViewModel
             {
-                Email = email
-            };
-            
-            return View(userViewModel);
+                Email = (Session["User"] as User)?.Email
+            });
         }
 
+        [AuthorizeUser]
         public ActionResult ConfirmDeletion(DeleteUserViewModel model)
         {
             // Check that the user entered the correct password
-            if (_db.AuthenticateUser(model.Email, model.Password))
+            if (Db.AuthenticateUser(model.Email, model.Password))
             {
                 // Delete the user
-                _db.DeleteUser(model.Email);
+                Db.DeleteUser(model.Email);
 
                 // Abandon the session to log the deleted user out
                 Session.Abandon();
@@ -230,11 +223,12 @@ namespace WebApp.Controllers
             else
             {
                 // Incorrect password -- return to delete user page with error message
-                TempData["Error"] = "Incorrect Password";
+                ViewBag.Error = "Incorrect Password";
                 return RedirectToAction("DeleteUser", "Account", new { email = model.Email });
             }
         }
 
+        [AuthorizeUser]
         public ActionResult ChangePassword(string email)
         {
             var user = (User)Session["User"];
@@ -242,14 +236,14 @@ namespace WebApp.Controllers
             {
                 Email = user.Email
             };
-            return View(model);
+            return View("ChangePassword", model);
         }
-
+        [AuthorizeUser, HttpPost]
         public ActionResult ConfirmPasswordChange(ChangePasswordViewModel model)
         {
-            if (_db.AuthenticateUser(model.Email, model.Password))
+            if (Db.AuthenticateUser(model.Email, model.Password))
             {
-                _db.ResetPassword(model.Email, model.NewPassword);
+                Db.ResetPassword(model.Email, model.NewPassword);
 
                 // TODO: Output a message for successful password change
 

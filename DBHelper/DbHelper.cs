@@ -263,6 +263,30 @@ namespace DBHelper
             return RunNonQuery(query);
         }
 
+        public void SetResetCode(int id, string resetCode)
+        {
+            if (FindUser(id) != null)
+            {
+                var query = $"INSERT INTO ResetCodes (UserId, Code) VALUES ({id}, '{resetCode}')";
+
+                RunNonQuery(query);
+            }
+        }
+
+        public bool ValidateResetCode(int userId, string resetCode)
+        {
+            var query = $"SELECT UserId FROM ResetCodes WHERE Code = '{resetCode}'";
+            var id = RunScalar(query);
+
+            return userId.ToString().Equals(id);
+        }
+
+        public void DeleteResetCode(int userId)
+        {
+            var query = $"DELETE FROM ResetCodes WHERE UserId = {userId}";
+            RunNonQuery(query);
+        }
+
         public int CreateNewSpecies(string commonName, string latinName, double waterMax = 0, double waterMin = 0, double lightMax = 0,
             double lightMin = 0)
         {
@@ -508,6 +532,11 @@ namespace DBHelper
             return GetUserToken(Convert.ToInt32(userId));
         }
 
+        public bool ValidateUserToken(int userId, string token)
+        {
+            return GetUserToken(userId) == token;
+        }
+
         public bool ResetPassword(string email, string newPassword)
         {
             // find the user and get their ID
@@ -546,12 +575,12 @@ namespace DBHelper
 
             // otherwise, get the token and its expiration date
             result.Read();
-            var expiry = result.GetDateTime((int)TokenColumns.Expiry).ToString("ddMMyyyy");
+            var expiry = result.GetDateTime((int) TokenColumns.Expiry);
             var token = result.GetString((int)TokenColumns.Token);
 
             // if the token has expired, generate a new one
             // otherwise return the valid token
-            return ToDateTime(expiry) > DateTime.Today 
+            return DateTime.Compare((expiry), DateTime.Today) <= 0
                 ? GenerateNewTokenForUser(id) 
                 : token;
         }
