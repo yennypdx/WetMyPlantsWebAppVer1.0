@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Net;
 using System.Web.Mvc;
 using DBHelper;
 using Models;
@@ -47,6 +47,18 @@ namespace WebApp.Controllers
             _db.UpdatePlant(plant);
 
             return RedirectToAction("Edit", "Plant", new {id = plant.Id});
+        }
+
+        [AuthorizeUser, HttpGet, Route("delete/{id}")]
+        public ActionResult DeletePlant(int id)
+        {
+            if (Session["User"] is User user &&
+                user.Plants.Exists(p => p.Equals(id)))
+            {
+                _db.DeletePlant(id);
+            }
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
