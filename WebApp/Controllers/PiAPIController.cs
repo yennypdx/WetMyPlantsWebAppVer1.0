@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Net;
 using DBHelper;
+using Models;
 using System.Web.Mvc;
 
 namespace WebApp.Controllers
@@ -24,6 +25,7 @@ namespace WebApp.Controllers
         private ActionResult Ok(JsonResult content) =>
               new HttpStatusCodeResult(HttpStatusCode.OK, content.Data.ToString());
 
+        //external pi requirements include requests, os, apscheduler
         // CTOR receives the DbHelper through Dependency Injection
         public PiAPIController(IDbHelper db) => _db = db;
 
@@ -34,11 +36,15 @@ namespace WebApp.Controllers
             return "I'm feeling Plant-Tastic!";
         }
         
-        //POST: piapi/update
+        //POST: piapi/updateplant
+        //ID,Water,Light
         [HttpPost]
-        public void UpdateWaterandLigth()
+        public void updateplant(Plant plant)
         {
-
+            Plant currentPlant = _db.FindPlant(plant.Id);
+            currentPlant.CurrentLight = plant.CurrentLight;
+            currentPlant.CurrentWater = plant.CurrentWater;
+            _db.UpdatePlant(currentPlant);
         }
     }
 }

@@ -25,13 +25,13 @@ namespace DBHelper
         bool UpdateSpecies(Species update);
         bool DeleteSpecies(int id);
 
-        int CreateNewPlant(int speciesId, string nickname, double currentWater, double currentLight);
+        bool CreateNewPlant(string plantId, int speciesId, string nickname, double currentWater, double currentLight);
         bool RegisterPlantToUser(Plant plant, User user);
         List<Plant> GetAllPlants();
         List<Plant> GetPlantsForUser(int id);
         List<Plant> FindPlantsByNickname(string nickname);
-        Plant FindPlant(int id);
+        Plant FindPlant(string id);
         bool UpdatePlant(Plant update);
-        bool DeletePlant(int id);
+        bool DeletePlant(string id);
     }
 }

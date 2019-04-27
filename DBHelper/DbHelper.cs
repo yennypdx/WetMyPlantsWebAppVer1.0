@@ -39,10 +39,10 @@ namespace DBHelper
     public enum PlantColumns
     {
         Id,
-        SpeciesId,
         Nickname,
         CurrentWater,
-        CurrentLight
+        CurrentLight,
+        SpeciesId
     }
 
     public class DbHelper : IDbHelper
@@ -195,7 +195,8 @@ namespace DBHelper
             {
                 var plant = new Plant
                 {
-                    Id = reader.GetInt32((int) PlantColumns.Id),
+                    Id = reader.GetString((int) PlantColumns.Id),
+                    //Id = reader.GetInt32((int)PlantColumns.Id),
                     Nickname = reader.GetString((int) PlantColumns.Nickname),
                     SpeciesId = reader.GetInt32((int) PlantColumns.SpeciesId),
                     CurrentLight = reader.GetDouble((int) PlantColumns.CurrentLight),
@@ -378,14 +379,15 @@ namespace DBHelper
             return result;
         }
 
-        public int CreateNewPlant(int speciesId, string nickname, double currentWater = 0, double currentLight = 0)
+        public bool CreateNewPlant(string plantId, int speciesId, string nickname, double currentWater = 0, double currentLight = 0)
         {
-            var query = "INSERT INTO Plants (SpeciesID, Nickname, CurrentWater, CurrentLight)" +
-                        $"VALUES ({speciesId}, '{nickname}', {currentWater}, {currentLight}) " +
-                        "SELECT SCOPE_IDENTITY();";
-
-            var result = Convert.ToInt32(RunScalar(query));
-
+            /* var query = "INSERT INTO Plants (PlantID, SpeciesID, Nickname, CurrentWater, CurrentLight)" +
+                         $"VALUES ('{plantId}', {speciesId}, '{nickname}', {currentWater}, {currentLight}) " +
+                         "SELECT SCOPE_IDENTITY();";*/
+            var query = "INSERT INTO Plants (PlantID, SpeciesID, Nickname, CurrentWater, CurrentLight)" +
+                         $"VALUES ('{plantId}', {speciesId}, '{nickname}', {currentWater}, {currentLight}) ";
+            //var result = Convert.ToString(RunScalar(query));
+            var result = RunNonQuery(query);
             return result;
         }
 
@@ -416,16 +418,16 @@ namespace DBHelper
             var plants = new List<Plant>();
 
             while (plantIds.Read())
-                plants.Add(FindPlant(plantIds.GetInt32(0)));
+                plants.Add(FindPlant(plantIds.GetString(0)));
 
             return plants;
         }
 
         public bool RegisterPlantToUser(Plant plant, User user)
         {
-            var plantId = CreateNewPlant(plant.SpeciesId, plant.Nickname, plant.CurrentWater, plant.CurrentLight);
+            var plantId = CreateNewPlant(plant.Id, plant.SpeciesId, plant.Nickname, plant.CurrentWater, plant.CurrentLight);
 
-            var query = $"INSERT INTO UserPlants(PlantID, UserID) VALUES ({plantId}, {user.Id});";
+            var query = $"INSERT INTO UserPlants(PlantID, UserID) VALUES ('{plantId}', {user.Id});";
 
             var result = RunNonQuery(query);
 
@@ -447,9 +449,9 @@ namespace DBHelper
             return list;
         }
 
-        public Plant FindPlant(int id)
+        public Plant FindPlant(string id)
         {
-            var query = $"SELECT * FROM Plants WHERE PlantID = {id};";
+            var query = $"SELECT * FROM Plants WHERE PlantID = '{id}';";
 
             var result = RunReader(query);
 
@@ -468,17 +470,17 @@ namespace DBHelper
                         $"Nickname = '{update.Nickname}', " +
                         $"CurrentWater = {update.CurrentWater}, " +
                         $"CurrentLight = {update.CurrentLight} " +
-                        $"WHERE PlantID = {update.Id};";
+                        $"WHERE PlantID = '{update.Id}';";
 
             var result = RunNonQuery(query);
 
             return result;
         }
 
-        public bool DeletePlant(int id)
+        public bool DeletePlant(string id)
         {
-            var query = $"DELETE FROM Plants WHERE PlantID = {id};";
-            var unlinkPlantQuery = $"DELETE FROM UserPlants WHERE PlantID = {id};";
+            var query = $"DELETE FROM Plants WHERE PlantID = '{id}';";
+            var unlinkPlantQuery = $"DELETE FROM UserPlants WHERE PlantID = '{id}';";
 
             RunNonQuery(unlinkPlantQuery);
             var result = RunNonQuery(query);
