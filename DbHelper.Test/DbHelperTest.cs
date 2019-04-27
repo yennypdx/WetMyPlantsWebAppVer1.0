@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 using DBHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-/*
+
 namespace DbHelper.Test
 {
     [TestClass]
@@ -304,7 +304,7 @@ namespace DbHelper.Test
          *  PLANT SPECIES TEST METHODS
          *******************************
          */
-/*
+
         [TestMethod]
         public void DbHelperAddPlantSpeciesTest()
         {
@@ -448,7 +448,7 @@ namespace DbHelper.Test
          ***********************
          */
 
-/*
+
         [TestMethod]
         public void DbHelperAddPlantTest()
         {
@@ -494,7 +494,7 @@ namespace DbHelper.Test
             Assert.AreEqual(id, result.Id); // ensure they are the same plant based on the id
         }
 
-        [TestMethod]
+      /*  [TestMethod]
         public void DbHelperUpdatePlantSpeciesTest()
         {
             var plants = _db.GetAllPlants();
@@ -544,7 +544,7 @@ namespace DbHelper.Test
 
             Assert.AreEqual(-1.00, result);
         }
-
+        */
         [TestMethod]
         public void DbHelperDeletePlantTest()
         {
@@ -557,4 +557,3 @@ namespace DbHelper.Test
         }
     }
 };
-*/
