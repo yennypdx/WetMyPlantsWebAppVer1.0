@@ -41,7 +41,7 @@ namespace WebApp.Tests.Controllers
         private List<Plant> _plantList;
         private List<Species> _speciesList;
         private Dictionary<int, string> _tokenTable;
-        private Dictionary<int, int> _userPlantTable;
+        private Dictionary<int, string> _userPlantTable;
         private Dictionary<int, string> _resetCodeTable;
 
         private User _testUser;
@@ -60,7 +60,7 @@ namespace WebApp.Tests.Controllers
                 Password = "password",
                 Hash = Crypto.HashPassword("password"),
                 Phone = "1234567890",
-                Plants = new List<int>()
+                Plants = new List<string>()
             };
             _testSpecies = new Species
             {
@@ -74,7 +74,7 @@ namespace WebApp.Tests.Controllers
             };
             _testPlant = new Plant
             {
-                Id = 1,
+                Id = "C4:7C:8D:6A:51:E9",
                 Nickname = "Test",
                 CurrentLight = 50,
                 CurrentWater = 50,
@@ -86,7 +86,7 @@ namespace WebApp.Tests.Controllers
             _plantList = new List<Plant>();
             _speciesList = new List<Species>();
             _tokenTable = new Dictionary<int, string>();
-            _userPlantTable = new Dictionary<int, int>();
+            _userPlantTable = new Dictionary<int, string>();
             _resetCodeTable = new Dictionary<int, string>();
 
             // Database Moq Setup
@@ -109,7 +109,7 @@ namespace WebApp.Tests.Controllers
                         Password = password,
                         Hash = Crypto.HashPassword(password),
                         Phone = phone,
-                        Plants = new List<int>()
+                        Plants = new List<string>()
                     };
 
                     _userList.Add(user);

@@ -2,7 +2,6 @@
 using System.Web.Mvc;
 using DBHelper;
 using Models;
-using WebApp.Auth;
 
 namespace WebApp.Controllers
 {
@@ -18,28 +17,30 @@ namespace WebApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [AuthorizeUser, HttpGet, Route("edit/{id?}")]
-        public ActionResult Edit(int id = 0)
-        {
-            if (id == 0) return RedirectToAction("Index", "Home");
-            // first, check if the user is logged in; if not, redirect to login
-            var user = (User) Session["User"];
-            if (user == null) return RedirectToAction("Login", "Home");
 
-            // next, get the plant and make sure it belongs to the logged in user;
-            // if not, redirect them back to their dashboard
-            var plant = _db.FindPlant(id);
-            if (!user.Plants.Contains(plant.Id)) return RedirectToAction("Index", "Home");
+         [HttpGet, Route("edit/{id?}")]
+         public ActionResult Edit(string id = " ")
+         {
+             if (id == " ") return RedirectToAction("Index", "Home");
+             // first, check if the user is logged in; if not, redirect to login
+             var user = (User) Session["User"];
+             if (user == null) return RedirectToAction("Login", "Home");
 
-            // if everything is good, then get the list of species and stick in the ViewBag
-            // and return the view with the Plant as the model.
-            var speciesList = _db.GetAllSpecies();
-            ViewBag.Species = speciesList;
+             // next, get the plant and make sure it belongs to the logged in user;
+             // if not, redirect them back to their dashboard
+             var plant = _db.FindPlant(id);
+             if (!user.Plants.Contains(plant.Id)) return RedirectToAction("Index", "Home");
 
-            return View(plant);
-        }
+             // if everything is good, then get the list of species and stick in the ViewBag
+             // and return the view with the Plant as the model.
+             var speciesList = _db.GetAllSpecies();
+             ViewBag.Species = speciesList;
 
-        [AuthorizeUser, HttpGet, Route("update")]
+             return View(plant);
+         }
+         //test to see if sensor mac address will work as id
+
+       /* [HttpGet, Route("update")]
         public ActionResult UpdatePlant(Plant plant)
         {
             if (!ModelState.IsValid) return RedirectToAction("Index", "Home");
@@ -47,6 +48,6 @@ namespace WebApp.Controllers
             _db.UpdatePlant(plant);
 
             return RedirectToAction("Edit", "Plant", new {id = plant.Id});
-        }
+        */
     }
 }

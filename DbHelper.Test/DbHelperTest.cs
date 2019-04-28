@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 using DBHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-/*
+
 namespace DbHelper.Test
 {
     [TestClass]
@@ -19,7 +19,6 @@ namespace DbHelper.Test
     {
         private readonly DBHelper.DbHelper _db;
         private readonly string _connectionString = "Data Source=wetmyplants-test.c9yldqomj91e.us-west-2.rds.amazonaws.com,1433;Initial Catalog=WetMyPlantsTest;User ID=wetmyplants;Password=GR33nThumb;";
-
         private readonly string email = "test@test.test";
         private readonly string password = "password";
         private readonly string phone = "1234567890";
@@ -43,10 +42,12 @@ namespace DbHelper.Test
         private readonly string plantOneAlias = "Alfredo";
         private readonly double plantOneCurrentLight = 7.50;
         private readonly double plantOneCurrentWater = 3.99;
-
+        private readonly string plantOneId = "C4:C7:8D:6A:50:E8";
+      
         private readonly string plantTwoAlias = "Mr. Biggles";
         private readonly double plantTwoCurrentLight = 3.50;
         private readonly double plantTwoCurrentWater = 8.00;
+        private readonly string plantTwoId = "C4:C7:8D:6A:50:E5";
 
         public DbHelperTest()
         {
@@ -69,9 +70,11 @@ namespace DbHelper.Test
             var species = _db.GetAllSpecies();
             var idOne = species[0].Id;
             var idTwo = species[1].Id;
+            
 
-            _db.CreateNewPlant(idOne, plantOneAlias, plantOneCurrentWater, plantOneCurrentLight);
-            _db.CreateNewPlant(idTwo, plantTwoAlias, plantTwoCurrentWater, plantTwoCurrentLight);
+
+            _db.CreateNewPlant(plantOneId, idOne, plantOneAlias, plantOneCurrentWater, plantOneCurrentLight);
+            _db.CreateNewPlant(plantTwoId, idTwo, plantTwoAlias, plantTwoCurrentWater, plantTwoCurrentLight);
 
             _db.RegisterPlantToUser(_db.FindPlantsByNickname(plantOneAlias)[0], _db.FindUser(email));
             _db.RegisterPlantToUser(_db.FindPlantsByNickname(plantTwoAlias)[0], _db.FindUser(email));
@@ -301,7 +304,7 @@ namespace DbHelper.Test
          *  PLANT SPECIES TEST METHODS
          *******************************
          */
-/*
+
         [TestMethod]
         public void DbHelperAddPlantSpeciesTest()
         {
@@ -445,16 +448,17 @@ namespace DbHelper.Test
          ***********************
          */
 
-/*
+
         [TestMethod]
         public void DbHelperAddPlantTest()
         {
             // use DbHelper to register a new plant
             // this method should return true if the query was successful, false otherwise
             var id = _db.GetAllSpecies()[0].Id;
-            var result = _db.CreateNewPlant(id, plantOneAlias, plantOneCurrentWater, plantOneCurrentLight);
+            var pid = "C4:7C:8D:6A:51:23";
+            var result = _db.CreateNewPlant(pid, id, plantOneAlias, plantOneCurrentWater, plantOneCurrentLight);
 
-            Assert.IsTrue(result != 0);
+            Assert.IsTrue(result != false);
         }
 
         [TestMethod]
@@ -490,7 +494,7 @@ namespace DbHelper.Test
             Assert.AreEqual(id, result.Id); // ensure they are the same plant based on the id
         }
 
-        [TestMethod]
+      /*  [TestMethod]
         public void DbHelperUpdatePlantSpeciesTest()
         {
             var plants = _db.GetAllPlants();
@@ -540,7 +544,7 @@ namespace DbHelper.Test
 
             Assert.AreEqual(-1.00, result);
         }
-
+        */
         [TestMethod]
         public void DbHelperDeletePlantTest()
         {
@@ -553,4 +557,3 @@ namespace DbHelper.Test
         }
     }
 };
-*/

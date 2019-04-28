@@ -11,6 +11,6 @@ namespace Models
         public string Email { get; set; }
         public string Hash { get; set; }
         public string Password { get; set; }
-        public List<int> Plants { get; set; }
+        public List<string> Plants { get; set; } //if things break horribly, put this back to int
     }
 }
