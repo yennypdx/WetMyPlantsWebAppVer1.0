@@ -2,6 +2,7 @@
 using System.Net;
 using System.Web.Mvc;
 using DBHelper;
+using Models;
 using WebApp.Models.AccountViewModels;
 
 namespace WebApp.Controllers
@@ -84,6 +85,48 @@ namespace WebApp.Controllers
         public JsonResult GetAllUsers()
         {
             return Json(_db.GetAllUsers(), JsonRequestBehavior.AllowGet);
+        }
+
+        // TOD: HttpGet and Route??
+        public JsonResult GetPlantsList(string email)
+        {
+            // TODO: Maybe check that user exists?? -- problem: return type is JsonResult
+            var user = _db.FindUser(email);
+            var plants = _db.GetPlantsForUser(user.Id);
+
+            // Select only ID and Nickname from the list of plants
+            var plantListOfIdAndNickname = plants.Select(plant => new Plant { Id = plant.Id, Nickname = plant.Nickname });
+            
+            // return list of all plants including nickname and id 
+            return Json(plantListOfIdAndNickname, JsonRequestBehavior.AllowGet);
+        }
+
+        // TODO Route, Http
+        public ActionResult EditPlant(string token, Plant updatedPlant)
+        {
+            // Check that user exists and plant exists for user?
+            var user = _db.FindUser(token);
+            if (user == null) return BadRequest("Could not find user " + token);
+    
+            // Get all the plants for the user where the Id matches updatedPlant ID
+            var userPlantsWithSpecifiedId = _db.GetPlantsForUser(user.Id).Where(plant => plant.Id.Equals(updatedPlant.Id)).ToList();
+
+            // Verify the plant exists for that user
+            if (userPlantsWithSpecifiedId.Count() <= 0) return BadRequest("Plant does not exists for spcified user " + token + " " + updatedPlant.Id);
+
+            // If count is greather than one, there are multiple plants with the same Id -- this should not happen
+            if (userPlantsWithSpecifiedId.Count() > 1) return BadRequest("Multiple plants exist with the same Id" + updatedPlant.Id);
+
+            var result = _db.UpdatePlant(updatedPlant);
+
+            return result ? Ok("Plant updated") : BadRequest("Error updating plant: " + updatedPlant.Id);
+        }
+
+        // TODO: Route, Http
+        public ActionResult DeletePlant(int plantId)
+        {
+            var result = _db.DeletePlant(plantId);
+            return result ? Ok("Plant deleted") : BadRequest("Error deleting plant: " + plantId);
         }
     }
 }

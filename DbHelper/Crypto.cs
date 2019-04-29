@@ -7,6 +7,7 @@
 // Information found on https://cmatskas.com/a-simple-net-password-hashing-implementation-using-bcrypt/
 
 using DevOne.Security.Cryptography.BCrypt;
+using System;
 
 namespace DbHelper
 {
@@ -29,6 +30,13 @@ namespace DbHelper
             // can validate a hashed password + salt without knowing the salt
             if (plaintextPassword == null || hashedPassword == null) return false;
             return BCryptHelper.CheckPassword(plaintextPassword, hashedPassword);
+        }
+
+        // GeneratePin returns a random 6 digit number to be used to reset password on Android
+        public static int GeneratePin()
+        {
+            Random rand = new Random();
+            return rand.Next(100000, 999999);
         }
     }
 }
