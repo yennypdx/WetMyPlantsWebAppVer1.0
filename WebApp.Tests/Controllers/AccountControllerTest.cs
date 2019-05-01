@@ -90,8 +90,24 @@ namespace WebApp.Tests.Controllers
             _db.Setup(db => db.FindUser(It.IsAny<int>()))
                 .Returns((int userId) => _userList.FirstOrDefault(u => u.Id.Equals(userId)));
 
-            _db.Setup(db => db.FindUser(It.IsAny<string>()))
-                .Returns((string email) => _userList.FirstOrDefault(u => u.Email.Equals(email)));
+            _db.Setup(db => db.FindUser(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns((string email, string token) =>
+                {
+                    if(email != null)
+                        return _userList.FirstOrDefault(u => u.Email.Equals(email));
+                    if(token != null)
+                    {
+                        if(_tokenDictionary.ContainsValue(token))
+                        {
+                            var result = _tokenDictionary.FirstOrDefault(k => k.Value.Equals(token));
+                            var key = result.Key;
+                            var user = _userList.FirstOrDefault(u => u.Id.Equals(key));
+                            return user;
+                        }
+                    }
+
+                    return null;
+                });
 
             _db.Setup(db => db.AuthenticateUser(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns((string email, string password) =>

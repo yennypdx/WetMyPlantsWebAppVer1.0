@@ -119,17 +119,44 @@ namespace DBHelper
 
         // Queries the SQL database for a single user and all its data,
         // returns a filled User object
-        public User FindUser(string email)
+        public User FindUser(string email = null, string token = null)
         {
-            var queryString = $"SELECT * FROM Users WHERE Email = '{email}';";
+            if (email != null)
+            {
+                var queryString = $"SELECT * FROM Users WHERE Email = '{email}';";
 
-            var result = RunReader(queryString);
+                var result = RunReader(queryString);
 
-            // If there are no results to the query, the result will not contain
-            // any rows, and attempting to read it will throw an exception.
-            return result.Read()
-                ? BuildUserFromDataReader(result)
-                : null;
+                // If there are no results to the query, the result will not contain
+                // any rows, and attempting to read it will throw an exception.
+                return result.Read()
+                    ? BuildUserFromDataReader(result)
+                    : null;
+            }
+
+            if (token != null)
+            {
+                var tokenQuery = $"SELECT UserId FROM Tokens WHERE Token = '{token}'";
+
+                var idResult = RunScalar(tokenQuery);
+
+                if (idResult == null)
+                    return null;
+
+                var id = Convert.ToInt32(idResult);
+
+                var queryString = $"SELECT * FROM Users WHERE UserID = {id};";
+
+                var result = RunReader(queryString);
+
+                // If there are no results to the query, the result will not contain
+                // any rows, and attempting to read it will throw an exception.
+                return result.Read()
+                    ? BuildUserFromDataReader(result)
+                    : null;
+            }
+
+            return null;
         }
 
         public List<User> GetAllUsers()
@@ -215,7 +242,7 @@ namespace DBHelper
         {
             // Do not create the user if a user with the same email
             // already exists.
-            if (FindUser(email) != null) return false;
+            if (FindUser(email: email) != null) return false;
 
             // Never store the password directly, always use its hash.
             var passwordHash = Crypto.HashPassword(password);
@@ -234,7 +261,7 @@ namespace DBHelper
         // Deletes a user (tuple) from the database
         public bool DeleteUser(string email)
         {
-            var id = FindUser(email)?.Id;
+            var id = FindUser(email: email)?.Id;
             if (id == null) return false;
 
             var tokenQuery = $"DELETE FROM Tokens WHERE UserID = {id};";
@@ -513,7 +540,7 @@ namespace DBHelper
         public bool AuthenticateUser(string email, string password)
         {
             // get the user's hash for comparison
-            var userHash = FindUser(email)?.Hash;
+            var userHash = FindUser(email: email)?.Hash;
             // validate the given password
             return Crypto.ValidatePassword(password, userHash);
         }
@@ -526,7 +553,7 @@ namespace DBHelper
                 return null;
 
             // if valid, get the user's id
-            var userId = FindUser(email)?.Id;
+            var userId = FindUser(email: email)?.Id;
             if (userId == null) throw new DataException("Unable to find user");
             // use the id to get the valid token
             return GetUserToken(Convert.ToInt32(userId));
@@ -540,7 +567,7 @@ namespace DBHelper
         public bool ResetPassword(string email, string newPassword)
         {
             // find the user and get their ID
-            var id = FindUser(email)?.Id;
+            var id = FindUser(email: email)?.Id;
             // if no user (and no ID) was found, return false
             if (id == null) throw new DataException("Unable to find user");
 

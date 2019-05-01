@@ -119,7 +119,7 @@ namespace WebApp.Controllers
         [HttpPost, Route("forgotpass/sg/{token}")]
         public ActionResult ForgotUserPasswordViaEmail(ForgotPasswordViewModel model)
         {
-            var result = _db.FindUser(model.Email);
+            var result = _db.FindUser(email: model.Email);
             if (result == null)
             {
                 return BadRequest("Could not find user " + model);
@@ -138,7 +138,7 @@ namespace WebApp.Controllers
         [HttpPost, Route("forgotpass/rmq/{token}")]
         public ActionResult ForgotUserPasswordViaText(ForgotPasswordViewModel model)
         {
-            var result = _db.FindUser(model.Email);
+            var result = _db.FindUser(email: model.Email);
             if (result == null)
             {
                 return BadRequest("Could not find user " + model);
@@ -158,9 +158,10 @@ namespace WebApp.Controllers
         [Route("submit/{pin}")]
         public ActionResult SubmitUserPin(String userPin, String userEmail)
         {
-            //TODO: utilize ValidateResetCode() to get the confirmation
-
-            return Ok("Success");
+            var user = _db.FindUser(email: userEmail);
+            return user != null && _db.ValidateResetCode(user.Id, userPin)
+                ? Ok("Success")
+                : BadRequest("Invalid PIN or email");
         }
 
         /* Getting single account data >> return User list as JsonObject */
@@ -169,7 +170,7 @@ namespace WebApp.Controllers
         public JsonResult GetUserDetail(String inToken)
         {
             //TODO: create find user method with token as param
-            var result = _db.FindUser(inToken);
+            var result = _db.FindUser(token: inToken);
             return Json(new { content = result });
         }
 

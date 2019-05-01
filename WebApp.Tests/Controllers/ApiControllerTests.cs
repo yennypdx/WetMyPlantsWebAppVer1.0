@@ -145,8 +145,24 @@ namespace WebApp.Tests.Controllers
                         : null;
                 });
 
-            dbMock.Setup(db => db.FindUser(It.IsAny<string>()))
-                .Returns((string email) => { return _userList.FirstOrDefault(u => u.Email.Equals(email)); });
+            dbMock.Setup(db => db.FindUser(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns((string email, string token) =>
+                {
+                    if (email != null)
+                        return _userList.FirstOrDefault(u => u.Email.Equals(email));
+                    if (token != null)
+                    {
+                        if (_tokenTable.ContainsValue(token))
+                        {
+                            var result = _tokenTable.FirstOrDefault(k => k.Value.Equals(token));
+                            var key = result.Key;
+                            var user = _userList.FirstOrDefault(u => u.Id.Equals(key));
+                            return user;
+                        }
+                    }
+
+                    return null;
+                });
             dbMock.Setup(db => db.FindUser(It.IsAny<int>()))
                 .Returns((int id) => { return _userList.FirstOrDefault(u => u.Id.Equals(id)); });
 

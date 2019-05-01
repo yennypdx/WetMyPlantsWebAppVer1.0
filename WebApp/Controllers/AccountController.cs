@@ -51,7 +51,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public ActionResult ForgotUserPassword(ForgotPasswordViewModel uModel)
         {
-            var result = Db.FindUser(uModel.Email);
+            var result = Db.FindUser(email: uModel.Email);
 
             if (result == null) return Redirect("ForgotPassword");
 
@@ -133,7 +133,7 @@ namespace WebApp.Controllers
                 (token = Db.LoginAndGetToken(uModel.Email, uModel.Password)) != null)
             {
                 Session["Token"] = token;
-                Session["User"] = Db.FindUser(uModel.Email);
+                Session["User"] = Db.FindUser(email: uModel.Email);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -147,7 +147,7 @@ namespace WebApp.Controllers
             User user;
 
             if ((token = Db.LoginAndGetToken(model.Email, model.Password)) != null
-                && (user = Db.FindUser(model.Email)) != null)
+                && (user = Db.FindUser(email: model.Email)) != null)
             {
                 Session["Token"] = token;
                 Session["User"] = user;

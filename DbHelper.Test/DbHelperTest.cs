@@ -76,8 +76,8 @@ namespace DbHelper.Test
             _db.CreateNewPlant(plantOneId, idOne, plantOneAlias, plantOneCurrentWater, plantOneCurrentLight);
             _db.CreateNewPlant(plantTwoId, idTwo, plantTwoAlias, plantTwoCurrentWater, plantTwoCurrentLight);
 
-            _db.RegisterPlantToUser(_db.FindPlantsByNickname(plantOneAlias)[0], _db.FindUser(email));
-            _db.RegisterPlantToUser(_db.FindPlantsByNickname(plantTwoAlias)[0], _db.FindUser(email));
+            _db.RegisterPlantToUser(_db.FindPlantsByNickname(plantOneAlias)[0], _db.FindUser(email: email));
+            _db.RegisterPlantToUser(_db.FindPlantsByNickname(plantTwoAlias)[0], _db.FindUser(email: email));
         }
 
         [TestCleanup]
