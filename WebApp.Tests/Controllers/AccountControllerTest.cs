@@ -44,7 +44,7 @@ namespace WebApp.Tests.Controllers
                 Password = "password",
                 Hash = Crypto.HashPassword("password"),
                 Phone = "1234567890",
-                Plants = new List<int>()
+                Plants = new List<string>()
             };
 
             _db = new Mock<IDbHelper>();
@@ -73,7 +73,7 @@ namespace WebApp.Tests.Controllers
                         Password = password,
                         Hash = Crypto.HashPassword(password),
                         Phone = phone,
-                        Plants = new List<int>()
+                        Plants = new List<string>()
                     };
 
                     _userList.Add(newUser);
