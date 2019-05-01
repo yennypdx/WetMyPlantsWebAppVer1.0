@@ -178,15 +178,15 @@ namespace WebApp.Controllers
         [Route("user/update")]
         public ActionResult UpdateAccountInfo(User model)
         {
-            if (_db.UpdateUser(model))
+            if (_db.FindUser(model.Id) != null && _db.UpdateUser(model))
             {
                 Session["User"] = model;
+                return Ok("Success");
             }
             else
             {
                 return BadRequest("Update failed");
             }
-            return Ok("Success");
         }
 
         /* Get list of plant from a user which holds the token*/

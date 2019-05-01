@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using DBHelper;
 using Models;
+using WebApp.Auth;
 
 namespace WebApp.Controllers
 {
@@ -51,7 +52,7 @@ namespace WebApp.Controllers
         }
 
         [AuthorizeUser, HttpGet, Route("delete/{id}")]
-        public ActionResult DeletePlant(int id)
+        public ActionResult DeletePlant(string id)
         {
             if (Session["User"] is User user &&
                 user.Plants.Exists(p => p.Equals(id)))

@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Helpers;
+using System.Web.Mvc;
+using System.Web.Routing;
 using DBHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
@@ -48,8 +51,13 @@ namespace WebApp.Tests.Controllers
         private readonly Plant _testPlant;
         private readonly Species _testSpecies;
 
+        private readonly Mock<HttpContextBase> _mockContext;
+
+
         public ApiControllerTests()
         {
+            _mockContext = new Mock<HttpContextBase>();
+            var mockRequest = new Mock<HttpRequestBase>();
             // Set up test objects
             _testUser = new User
             {
@@ -153,7 +161,8 @@ namespace WebApp.Tests.Controllers
             dbMock.Setup(db => db.UpdateUser(It.IsAny<User>()))
                 .Returns((User update) =>
                 {
-                    if (!_userList.Exists(u => u.Id.Equals(update.Id)))
+                    //if (!_userList.Exists(u => u.Id.Equals(update.Id)))
+                    if (_userList.FirstOrDefault(u => u.Id.Equals(update.Id)) == null)
                         return false;
 
                     _userList.Remove(_userList.First(u => u.Id.Equals(update.Id)));
@@ -169,6 +178,21 @@ namespace WebApp.Tests.Controllers
                 });
 
             _api = new ApiController(dbMock.Object);
+
+            var requestContext = new RequestContext { HttpContext = _mockContext.Object, RouteData = new RouteData() };
+            var helper = new UrlHelper(requestContext);
+
+            var controllerContext = new ControllerContext(_mockContext.Object, new RouteData(), _api);
+            _api.Url = helper;
+            _api.ControllerContext = controllerContext;
+
+            _tokenTable.Add(_testUser.Id, Crypto.HashPassword(DateTime.Today.ToLongDateString()));
+
+            _mockContext.Setup(x => x.Request).Returns(mockRequest.Object);
+            _mockContext.SetupGet(c => c.Session["User"]).Returns(_testUser);
+            _mockContext.SetupGet(c => c.Session["Token"]).Returns(_tokenTable[_testUser.Id]);
+
+            mockRequest.SetupGet(c => c.Url).Returns(new Uri("https://wetmyplants.azurewebsites.net"));
         }
 
         [TestInitialize]
@@ -339,7 +363,7 @@ namespace WebApp.Tests.Controllers
             var result = _api.DeleteUser(id) as HttpStatusCodeResult;
             if (result == null) Assert.Fail("Result was null");
 
-            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode, "Status was not 500 BAD REQUEST");
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result.StatusCode, "Status was not 500 BAD REQUEST");
         }
 
         [TestMethod]
@@ -353,7 +377,7 @@ namespace WebApp.Tests.Controllers
             var result = _api.ForgotUserPasswordViaEmail(model) as HttpStatusCodeResult;
             if (result == null) Assert.Fail("Result was null");
 
-            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode, "Result was not 200 OK");
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), result.StatusCode, "Result was not 200 OK");
         }
 
         [TestMethod]
@@ -367,7 +391,7 @@ namespace WebApp.Tests.Controllers
             var result = _api.ForgotUserPasswordViaEmail(model) as HttpStatusCodeResult;
             if (result == null) Assert.Fail("Result was null");
 
-            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode, "Status was not 400 BAD REQUEST");
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result.StatusCode, "Status was not 400 BAD REQUEST");
         }
 
         [TestMethod]
@@ -381,7 +405,7 @@ namespace WebApp.Tests.Controllers
             var result = _api.ForgotUserPasswordViaText(model) as HttpStatusCodeResult;
             if (result == null) Assert.Fail("Result was null");
 
-            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode, "Result was not 200 OK");
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), result.StatusCode, "Result was not 200 OK");
         }
 
         [TestMethod]
@@ -396,7 +420,7 @@ namespace WebApp.Tests.Controllers
             if(result == null)
                 Assert.Fail("Result was null");
 
-            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode, "Status was not 400 BAD REQUEST");
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result.StatusCode, "Status was not 400 BAD REQUEST");
         }
 
         [TestMethod]
@@ -408,7 +432,7 @@ namespace WebApp.Tests.Controllers
             var result = _api.SubmitUserPin(pin, _testUser.Email) as HttpStatusCodeResult;
             if (result == null) Assert.Fail("Result was null");
 
-            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode, "Status was not 200 OK");
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), result.StatusCode, "Status was not 200 OK");
         }
 
         [TestMethod]
@@ -421,7 +445,7 @@ namespace WebApp.Tests.Controllers
             var result = _api.SubmitUserPin(wrongPin, _testUser.Email) as HttpStatusCodeResult;
             if (result == null) Assert.Fail("Result was null");
 
-            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode, "Status was not 500 BAD REQUEST");
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result.StatusCode, "Status was not 500 BAD REQUEST");
         }
 
         [TestMethod]
@@ -433,7 +457,7 @@ namespace WebApp.Tests.Controllers
             var result = _api.SubmitUserPin(pin, "wrong@email.com") as HttpStatusCodeResult;
             if (result == null) Assert.Fail("Result was null");
 
-            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode, "Status was not 500 BAD REQUEST");
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result.StatusCode, "Status was not 500 BAD REQUEST");
         }
 
         [TestMethod]
@@ -466,26 +490,49 @@ namespace WebApp.Tests.Controllers
         [TestMethod]
         public void ApiController_UpdateAccountInfo()
         {
-            var model = _testUser;
-            model.Email = "new@email.address";
+            //var model = _testUser;
+            //model.Email = "new@email.address";
+            var model = new User
+            {
+                Email = "new@email.address",
+                FirstName = _testUser.FirstName,
+                LastName = _testUser.LastName,
+                Hash = _testUser.Hash,
+                Id = _testUser.Id,
+                Password = _testUser.Password,
+                Phone = _testUser.Phone,
+                Plants = _testUser.Plants
+            };
 
             var result = _api.UpdateAccountInfo(model) as HttpStatusCodeResult;
             if (result == null) Assert.Fail("Result was null");
 
-            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode, "Status was not 200 OK");
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), result.StatusCode, "Status was not 200 OK");
         }
 
         [TestMethod]
         public void ApiController_UpdateAccountInfo_InvalidUserModel()
         {
-            var model = _testUser;
-            model.Email = "new@email.address";
-            model.Id = _testUser.Id + 111;
+            //var model = _testUser;
+            var model = new User
+            {
+                Id = _testUser.Id + 111,
+                Email = "new@email.address",
+                FirstName = _testUser.FirstName,
+                LastName = _testUser.LastName,
+                Hash = _testUser.Hash,
+                Password = _testUser.Password,
+                Phone = _testUser.Phone,
+                Plants = _testUser.Plants
+            };
+
+            //model.Email = "new@email.address";
+            //model.Id = _testUser.Id + 111;
 
             var result = _api.UpdateAccountInfo(model) as HttpStatusCodeResult;
             if (result == null) Assert.Fail("Result is null");
 
-            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode, "Status was not 500 BAD REQUEST");
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result.StatusCode, "Status was not 500 BAD REQUEST");
         }
     }
 }
