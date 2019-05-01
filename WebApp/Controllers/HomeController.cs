@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using DBHelper;
 using Models;
@@ -21,7 +20,8 @@ namespace WebApp.Controllers
         {
             // The AuthorizeUser attribute will ensure only a valid user can access this method,
             // therefore, we know that Session carries a user object; no need to check.
-            var user = Session["User"] as User;
+            if (!(Session["User"] is User user)) return RedirectToAction("Login", "Account");
+
             var plants = Db.GetPlantsForUser(user.Id);
 
             if (plants != null)

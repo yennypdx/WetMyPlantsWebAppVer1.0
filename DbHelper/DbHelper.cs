@@ -374,6 +374,7 @@ namespace DBHelper
             return null;
         }
 
+        /*
         public Species FindSpecies(string commonName)
         {
             var query = $"SELECT * FROM Species WHERE CommonName = '{commonName}';";
@@ -387,6 +388,7 @@ namespace DBHelper
 
             return species;
         }
+        */
 
         public Species FindSpecies(int id)
         {
@@ -644,18 +646,5 @@ namespace DBHelper
             var query = $"INSERT INTO Tokens (UserID, Token, Expiry) VALUES ({userId}, '{token}', '{expiry}');";
             RunNonQuery(query);
         }
-
-        private static DateTime ToDateTime(string dateTime)
-        {
-            // convert a datetime string to a DateTime object
-            // datetime string expected in ddmmyyyy format
-            if (!dateTime.Length.Equals(8)) throw new ArgumentException("dateTime string must be in format ddmmyyyy");
-            return new DateTime()
-                    .AddYears((Convert.ToInt32(dateTime.Substring(4, 4))))
-                    .AddMonths(Convert.ToInt32(dateTime.Substring(2, 2)))
-                    .AddDays(Convert.ToDouble(dateTime.Substring(0, 2)));
-        }
-
-
     }
 }

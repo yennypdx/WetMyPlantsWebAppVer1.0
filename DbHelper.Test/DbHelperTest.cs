@@ -456,7 +456,7 @@ namespace DbHelper.Test
             var pid = "C4:7C:8D:6A:51:23";
             var result = _db.CreateNewPlant(pid, id, plantOneAlias, plantOneCurrentWater, plantOneCurrentLight);
 
-            Assert.IsTrue(result != false);
+            Assert.IsTrue(result);
         }
 
         [TestMethod]
