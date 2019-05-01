@@ -70,14 +70,12 @@ namespace DbHelper.Test
             var species = _db.GetAllSpecies();
             var idOne = species[0].Id;
             var idTwo = species[1].Id;
-            
-
 
             _db.CreateNewPlant(plantOneId, idOne, plantOneAlias, plantOneCurrentWater, plantOneCurrentLight);
             _db.CreateNewPlant(plantTwoId, idTwo, plantTwoAlias, plantTwoCurrentWater, plantTwoCurrentLight);
 
-            _db.RegisterPlantToUser(_db.FindPlantsByNickname(plantOneAlias)[0], _db.FindUser(email: email));
-            _db.RegisterPlantToUser(_db.FindPlantsByNickname(plantTwoAlias)[0], _db.FindUser(email: email));
+            _db.RegisterPlantToUser(_db.FindPlant(plantOneId), _db.FindUser(email: email));
+            _db.RegisterPlantToUser(_db.FindPlant(plantTwoId), _db.FindUser(email: email));
         }
 
         [TestCleanup]
