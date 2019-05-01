@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using DBHelper;
 using Models;
 using WebApp.Controllers;
+using WebApp.Models;
 
 namespace WebApp.Auth
 {
@@ -28,7 +29,7 @@ namespace WebApp.Auth
             if (token != null && userId != -1) // If both the token and userId are valid, proceed to verify
             {
                 //var db = new DBHelper.DbHelper();
-                var controller = filterContext.Controller as AccountController;
+                var controller = filterContext.Controller as AuthController;
                 var db = controller?.Db;
                 
                 if (!db.ValidateUserToken(userId, token)) // Validate the token with the userId

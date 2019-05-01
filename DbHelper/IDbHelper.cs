@@ -8,7 +8,7 @@ namespace DBHelper
     {
         bool CreateNewUser(string firstName, string lastName, string phone, string email, string password);
         List<User> GetAllUsers();
-        User FindUser(string email);
+        User FindUser(string email = null, string token = null);
         User FindUser(int id);
         bool AuthenticateUser(string email, string password);
         string LoginAndGetToken(string email, string password);

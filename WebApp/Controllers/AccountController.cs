@@ -9,16 +9,16 @@ using SendGrid.Helpers.Mail;
 using System.Net.Http;
 using DbHelper;
 using WebApp.Auth;
-using WebApp.Models.HomeViewModels;
+using WebApp.Models;
 
 namespace WebApp.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : AuthController
     {
-        public readonly DBHelper.IDbHelper Db;
+        //public readonly DBHelper.IDbHelper Db;
 
         // Inject Dependency
-        public AccountController(DBHelper.IDbHelper db) => Db = db;
+        public AccountController(DBHelper.IDbHelper db) : base(db) {}
 
         public ActionResult Login()
         {
@@ -51,7 +51,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public ActionResult ForgotUserPassword(ForgotPasswordViewModel uModel)
         {
-            var result = Db.FindUser(uModel.Email);
+            var result = Db.FindUser(email: uModel.Email);
 
             if (result == null) return Redirect("ForgotPassword");
 
@@ -133,7 +133,7 @@ namespace WebApp.Controllers
                 (token = Db.LoginAndGetToken(uModel.Email, uModel.Password)) != null)
             {
                 Session["Token"] = token;
-                Session["User"] = Db.FindUser(uModel.Email);
+                Session["User"] = Db.FindUser(email: uModel.Email);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -147,7 +147,7 @@ namespace WebApp.Controllers
             User user;
 
             if ((token = Db.LoginAndGetToken(model.Email, model.Password)) != null
-                && (user = Db.FindUser(model.Email)) != null)
+                && (user = Db.FindUser(email: model.Email)) != null)
             {
                 Session["Token"] = token;
                 Session["User"] = user;

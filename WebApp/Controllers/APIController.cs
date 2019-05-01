@@ -7,6 +7,7 @@ using DBHelper;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Threading.Tasks;
+using Microsoft.Ajax.Utilities;
 using WebApp.Models.AccountViewModels;
 using Models;
 
@@ -119,7 +120,7 @@ namespace WebApp.Controllers
         [HttpPost, Route("forgotpass/sg/{token}")]
         public ActionResult ForgotUserPasswordViaEmail(ForgotPasswordViewModel model)
         {
-            var result = _db.FindUser(model.Email);
+            var result = _db.FindUser(email: model.Email);
             if (result == null)
             {
                 return BadRequest("Could not find user " + model);
@@ -138,7 +139,7 @@ namespace WebApp.Controllers
         [HttpPost, Route("forgotpass/rmq/{token}")]
         public ActionResult ForgotUserPasswordViaText(ForgotPasswordViewModel model)
         {
-            var result = _db.FindUser(model.Email);
+            var result = _db.FindUser(email: model.Email);
             if (result == null)
             {
                 return BadRequest("Could not find user " + model);
@@ -158,9 +159,10 @@ namespace WebApp.Controllers
         [Route("submit/{pin}")]
         public ActionResult SubmitUserPin(String userPin, String userEmail)
         {
-            //TODO: utilize ValidateResetCode() to get the confirmation
-
-            return Ok("Success");
+            var user = _db.FindUser(email: userEmail);
+            return user != null && _db.ValidateResetCode(user.Id, userPin)
+                ? Ok("Success")
+                : BadRequest("Invalid PIN or email");
         }
 
         /* Getting single account data >> return User list as JsonObject */
@@ -169,8 +171,11 @@ namespace WebApp.Controllers
         public JsonResult GetUserDetail(String inToken)
         {
             //TODO: create find user method with token as param
-            var result = _db.FindUser(inToken);
-            return Json(new { content = result });
+            var result = _db.FindUser(token: inToken);
+
+            return result != null
+                ? Json(System.Web.Helpers.Json.Encode(result))
+                : null;
         }
 
         /* Updating user information on DB >> Return OK */
@@ -178,15 +183,15 @@ namespace WebApp.Controllers
         [Route("user/update")]
         public ActionResult UpdateAccountInfo(User model)
         {
-            if (_db.UpdateUser(model))
+            if (_db.FindUser(model.Id) != null && _db.UpdateUser(model))
             {
                 Session["User"] = model;
+                return Ok("Success");
             }
             else
             {
                 return BadRequest("Update failed");
             }
-            return Ok("Success");
         }
 
         /* Get list of plant from a user which holds the token*/

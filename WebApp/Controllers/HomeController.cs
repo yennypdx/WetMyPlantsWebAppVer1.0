@@ -1,31 +1,37 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using DBHelper;
 using Models;
 using WebApp.Auth;
+using WebApp.Models;
 using WebApp.Models.HomeViewModels;
 
 namespace WebApp.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : AuthController
     {
-        private readonly IDbHelper _db;
+        //protected readonly IDbHelper Db;
 
         // DbHelper injected
-        public HomeController(IDbHelper db) => _db = db;
+        public HomeController(IDbHelper db) : base(db) { }
 
         [AuthorizeUser]
         public ActionResult Index()
         {
             // The AuthorizeUser attribute will ensure only a valid user can access this method,
             // therefore, we know that Session carries a user object; no need to check.
-            var user = Session["User"] as User;
+            if (!(Session["User"] is User user)) return RedirectToAction("Login", "Account");
+
+            var plants = Db.GetPlantsForUser(user.Id);
+
+            if (plants != null)
+                plants.ForEach(p => user.Plants.Add(p.Id));
+            else user.Plants = new List<string>();
 
             var model = new DashboardViewModel
             {
                 User = user,
-                Plants = _db.GetPlantsForUser(user.Id) ?? new List<Plant>()
+                Plants = plants
             };
 
             return View(model);

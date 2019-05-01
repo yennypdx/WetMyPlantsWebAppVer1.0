@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
+using System.Web.Routing;
 using DBHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
@@ -12,6 +14,8 @@ using Moq;
 using WebApp.Controllers;
 using WebApp.Models.AccountViewModels;
 using Crypto = DbHelper.Crypto;
+using HttpStatusCodeResult = System.Web.Mvc.HttpStatusCodeResult;
+using JsonResult = System.Web.Mvc.JsonResult;
 using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 
 namespace WebApp.Tests.Controllers
@@ -36,20 +40,24 @@ namespace WebApp.Tests.Controllers
         /*************************************************************************************************/
 
         private readonly ApiController _api;
-        private readonly Mock<IDbHelper> _dbMock;
-        private List<User> _userList;
-        private List<Plant> _plantList;
-        private List<Species> _speciesList;
-        private Dictionary<int, string> _tokenTable;
-        private Dictionary<int, string> _userPlantTable;
-        private Dictionary<int, string> _resetCodeTable;
+        private readonly List<User> _userList;
+        private readonly List<Plant> _plantList;
+        private readonly List<Species> _speciesList;
+        private readonly Dictionary<int, string> _tokenTable;
+        private readonly Dictionary<int, string> _userPlantTable;
+        private readonly Dictionary<int, string> _resetCodeTable;
 
-        private User _testUser;
-        private Plant _testPlant;
-        private Species _testSpecies;
+        private readonly User _testUser;
+        private readonly Plant _testPlant;
+        private readonly Species _testSpecies;
+
+        private readonly Mock<HttpContextBase> _mockContext;
+
 
         public ApiControllerTests()
         {
+            _mockContext = new Mock<HttpContextBase>();
+            var mockRequest = new Mock<HttpRequestBase>();
             // Set up test objects
             _testUser = new User
             {
@@ -90,10 +98,10 @@ namespace WebApp.Tests.Controllers
             _resetCodeTable = new Dictionary<int, string>();
 
             // Database Moq Setup
-            _dbMock = new Mock<IDbHelper>();
+            var dbMock = new Mock<IDbHelper>();
 
             // bool CreateNewUser(string firstName, string lastName, string phone, string email, string password)
-            _dbMock.Setup(db => db.CreateNewUser(
+            dbMock.Setup(db => db.CreateNewUser(
                     It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns((string firstName, string lastName, string phone, string email, string password) =>
                 {
@@ -116,7 +124,7 @@ namespace WebApp.Tests.Controllers
                     return true;
                 });
 
-            _dbMock.Setup(db => db.LoginAndGetToken(It.IsAny<string>(), It.IsAny<string>()))
+            dbMock.Setup(db => db.LoginAndGetToken(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns((string email, string password) =>
                 {
                     var user = _userList.FirstOrDefault(u => u.Email.Equals(email));
@@ -137,12 +145,28 @@ namespace WebApp.Tests.Controllers
                         : null;
                 });
 
-            _dbMock.Setup(db => db.FindUser(It.IsAny<string>()))
-                .Returns((string email) => { return _userList.FirstOrDefault(u => u.Email.Equals(email)); });
-            _dbMock.Setup(db => db.FindUser(It.IsAny<int>()))
+            dbMock.Setup(db => db.FindUser(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns((string email, string token) =>
+                {
+                    if (email != null)
+                        return _userList.FirstOrDefault(u => u.Email.Equals(email));
+                    if (token != null)
+                    {
+                        if (_tokenTable.ContainsValue(token))
+                        {
+                            var result = _tokenTable.FirstOrDefault(k => k.Value.Equals(token));
+                            var key = result.Key;
+                            var user = _userList.FirstOrDefault(u => u.Id.Equals(key));
+                            return user;
+                        }
+                    }
+
+                    return null;
+                });
+            dbMock.Setup(db => db.FindUser(It.IsAny<int>()))
                 .Returns((int id) => { return _userList.FirstOrDefault(u => u.Id.Equals(id)); });
 
-            _dbMock.Setup(db => db.DeleteUser(It.IsAny<string>()))
+            dbMock.Setup(db => db.DeleteUser(It.IsAny<string>()))
                 .Returns((string email) =>
                 {
                     var user = _userList.FirstOrDefault(u => u.Email.Equals(email));
@@ -150,7 +174,45 @@ namespace WebApp.Tests.Controllers
                     return user != null && _userList.Remove(user);
                 });
 
-            _api = new ApiController(_dbMock.Object);
+            dbMock.Setup(db => db.UpdateUser(It.IsAny<User>()))
+                .Returns((User update) =>
+                {
+                    //if (!_userList.Exists(u => u.Id.Equals(update.Id)))
+                    if (_userList.FirstOrDefault(u => u.Id.Equals(update.Id)) == null)
+                        return false;
+
+                    _userList.Remove(_userList.First(u => u.Id.Equals(update.Id)));
+                    _userList.Add(update);
+                    return true;
+                });
+
+            dbMock.Setup(db => db.SetResetCode(It.IsAny<int>(), It.IsAny<string>()))
+                .Callback((int userId, string code) =>
+                {
+                    if (!_resetCodeTable.ContainsKey(userId))
+                        _resetCodeTable.Add(userId, code);
+                });
+
+            dbMock.Setup(db => db.ValidateResetCode(It.IsAny<int>(), It.IsAny<string>()))
+                .Returns((int userId, string code) => _resetCodeTable.ContainsKey(userId)
+                                                      && _resetCodeTable[userId] == code);
+
+            _api = new ApiController(dbMock.Object);
+
+            var requestContext = new RequestContext { HttpContext = _mockContext.Object, RouteData = new RouteData() };
+            var helper = new UrlHelper(requestContext);
+
+            var controllerContext = new ControllerContext(_mockContext.Object, new RouteData(), _api);
+            _api.Url = helper;
+            _api.ControllerContext = controllerContext;
+
+            _tokenTable.Add(_testUser.Id, Crypto.HashPassword(DateTime.Today.ToLongDateString()));
+
+            _mockContext.Setup(x => x.Request).Returns(mockRequest.Object);
+            _mockContext.SetupGet(c => c.Session["User"]).Returns(_testUser);
+            _mockContext.SetupGet(c => c.Session["Token"]).Returns(_tokenTable[_testUser.Id]);
+
+            mockRequest.SetupGet(c => c.Url).Returns(new Uri("https://wetmyplants.azurewebsites.net"));
         }
 
         [TestInitialize]
@@ -175,7 +237,7 @@ namespace WebApp.Tests.Controllers
         }
 
         [TestMethod]
-        public void ApiTestGetHelloWorld()
+        public void ApiController_GetHelloWorld()
         {
             var msg = _api.Index();
 
@@ -183,7 +245,7 @@ namespace WebApp.Tests.Controllers
         }
 
         [TestMethod]
-        public void ApiTestLoginFailInvalidModel()
+        public void ApiController_Login_InvalidModel()
         {
             var model = new LoginViewModel();
             ValidateModel(model);
@@ -195,7 +257,7 @@ namespace WebApp.Tests.Controllers
         }
 
         [TestMethod]
-        public void ApiTestLoginFailInvalidPassword()
+        public void ApiController_Login_InvalidPassword()
         {
             var model = new LoginViewModel
             {
@@ -213,7 +275,7 @@ namespace WebApp.Tests.Controllers
         }
 
         [TestMethod]
-        public void ApiTestLoginSuccessRetrievesToken()
+        public void ApiController_Login()
         {
             var model = new LoginViewModel
             {
@@ -241,7 +303,7 @@ namespace WebApp.Tests.Controllers
         }
 
         [TestMethod]
-        public void ApiTestRegisterFailUserAlreadyExists()
+        public void ApiController_Register_UserAlreadyExists()
         {
             var registerModel = new RegistrationViewModel
             {
@@ -260,7 +322,7 @@ namespace WebApp.Tests.Controllers
         }
 
         [TestMethod]
-        public void ApiTestRegisterUserFailInvalidModel()
+        public void ApiController_Register_InvalidModel()
         {
             var model = new RegistrationViewModel();
             ValidateModel(model);
@@ -272,7 +334,7 @@ namespace WebApp.Tests.Controllers
         }
 
         [TestMethod]
-        public void ApiTestRegistrationSuccess()
+        public void ApiController_Register()
         {
             var newUser = new RegistrationViewModel
             {
@@ -305,12 +367,194 @@ namespace WebApp.Tests.Controllers
         }
 
         [TestMethod]
-        public void ApiTestDeleteUserSuccess()
+        public void ApiController_DeleteUser()
         {
             var deleteResult = _api.DeleteUser(_testUser.Id) as HttpStatusCodeResult;
 
             Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), deleteResult?.StatusCode);
             Assert.AreEqual("User deleted", Json.Decode(deleteResult?.StatusDescription)["content"]);
+        }
+
+        [TestMethod]
+        public void ApiController_DeleteUser_InvalidId()
+        {
+            var id = _testUser.Id + 111;
+
+            var result = _api.DeleteUser(id) as HttpStatusCodeResult;
+            if (result == null) Assert.Fail("Result was null");
+
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result.StatusCode, "Status was not 500 BAD REQUEST");
+        }
+
+        [TestMethod]
+        public void ApiController_ForgotUserPasswordViaEmailTest()
+        {
+            var model = new ForgotPasswordViewModel
+            {
+                Email = _testUser.Email
+            };
+
+            var result = _api.ForgotUserPasswordViaEmail(model) as HttpStatusCodeResult;
+            if (result == null) Assert.Fail("Result was null");
+
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), result.StatusCode, "Result was not 200 OK");
+        }
+
+        [TestMethod]
+        public void ApiController_ForgotUserPasswordViaEmail_InvalidUser()
+        {
+            var model = new ForgotPasswordViewModel
+            {
+                Email = "invalid@email.domain"
+            };
+
+            var result = _api.ForgotUserPasswordViaEmail(model) as HttpStatusCodeResult;
+            if (result == null) Assert.Fail("Result was null");
+
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result.StatusCode, "Status was not 400 BAD REQUEST");
+        }
+
+        [TestMethod]
+        public void ApiController_ForgotUserPasswordViaText()
+        {
+            var model = new ForgotPasswordViewModel
+            {
+                Email = _testUser.Email
+            };
+
+            var result = _api.ForgotUserPasswordViaText(model) as HttpStatusCodeResult;
+            if (result == null) Assert.Fail("Result was null");
+
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), result.StatusCode, "Result was not 200 OK");
+        }
+
+        [TestMethod]
+        public void ApiController_ForgotUserPasswordViaText_InvalidUser()
+        {
+            var model = new ForgotPasswordViewModel
+            {
+                Email = "invalid@email.domain"
+            };
+
+            var result = _api.ForgotUserPasswordViaText(model) as HttpStatusCodeResult;
+            if(result == null)
+                Assert.Fail("Result was null");
+
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result.StatusCode, "Status was not 400 BAD REQUEST");
+        }
+
+        [TestMethod]
+        public void ApiController_SubmitUserPin()
+        {
+            var pin = "12345";
+            _resetCodeTable.Add(_testUser.Id, pin);
+
+            var result = _api.SubmitUserPin(pin, _testUser.Email) as HttpStatusCodeResult;
+            if (result == null) Assert.Fail("Result was null");
+
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), result.StatusCode, "Status was not 200 OK");
+        }
+
+        [TestMethod]
+        public void ApiController_SubmitUserPin_InvalidPin()
+        {
+            var pin = "12345";
+            var wrongPin = "09876";
+            _resetCodeTable.Add(_testUser.Id, pin);
+
+            var result = _api.SubmitUserPin(wrongPin, _testUser.Email) as HttpStatusCodeResult;
+            if (result == null) Assert.Fail("Result was null");
+
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result.StatusCode, "Status was not 500 BAD REQUEST");
+        }
+
+        [TestMethod]
+        public void ApiController_SubmitUserPin_InvalidEmail()
+        {
+            var pin = "12345";
+            _resetCodeTable.Add(_testUser.Id, pin);
+
+            var result = _api.SubmitUserPin(pin, "wrong@email.com") as HttpStatusCodeResult;
+            if (result == null) Assert.Fail("Result was null");
+
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result.StatusCode, "Status was not 500 BAD REQUEST");
+        }
+
+        [TestMethod]
+        public void ApiController_GetUserDetail()
+        {
+            var token = _tokenTable.FirstOrDefault(t => t.Key.Equals(_testUser.Id)).Value;
+
+            var result = _api.GetUserDetail(token);
+            if (result == null) Assert.Fail("Result was null");
+
+            var data = result.Data.ToString();
+
+            var returned = Json.Decode<User>(data);
+            if (returned == null) Assert.Fail("Data was null");
+
+            Assert.AreEqual(_testUser.Id, returned.Id, "User returned did not have matching ID");
+        }
+
+        [TestMethod]
+        public void ApiController_GetUserDetail_InvalidToken()
+        {
+            var token = "12345";
+
+            var result = _api.GetUserDetail(token);
+            //if (result == null) Assert.Fail("Result was null");
+
+            //var returned = Json.Decode(result.Data.ToString())["content"];
+
+            Assert.IsNull(result, "Returned was not null");
+        }
+
+        [TestMethod]
+        public void ApiController_UpdateAccountInfo()
+        {
+            //var model = _testUser;
+            //model.Email = "new@email.address";
+            var model = new User
+            {
+                Email = "new@email.address",
+                FirstName = _testUser.FirstName,
+                LastName = _testUser.LastName,
+                Hash = _testUser.Hash,
+                Id = _testUser.Id,
+                Password = _testUser.Password,
+                Phone = _testUser.Phone,
+                Plants = _testUser.Plants
+            };
+
+            var result = _api.UpdateAccountInfo(model) as HttpStatusCodeResult;
+            if (result == null) Assert.Fail("Result was null");
+
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), result.StatusCode, "Status was not 200 OK");
+        }
+
+        [TestMethod]
+        public void ApiController_UpdateAccountInfo_InvalidUserModel()
+        {
+            //var model = _testUser;
+            var model = new User
+            {
+                Id = _testUser.Id + 111,
+                Email = "new@email.address",
+                FirstName = _testUser.FirstName,
+                LastName = _testUser.LastName,
+                Hash = _testUser.Hash,
+                Password = _testUser.Password,
+                Phone = _testUser.Phone,
+                Plants = _testUser.Plants
+            };
+
+            //model.Email = "new@email.address";
+            //model.Id = _testUser.Id + 111;
+
+            var result = _api.UpdateAccountInfo(model) as HttpStatusCodeResult;
+            if (result == null) Assert.Fail("Result is null");
+
+            Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result.StatusCode, "Status was not 500 BAD REQUEST");
         }
     }
 }
