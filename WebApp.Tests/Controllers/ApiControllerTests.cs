@@ -193,6 +193,10 @@ namespace WebApp.Tests.Controllers
                         _resetCodeTable.Add(userId, code);
                 });
 
+            dbMock.Setup(db => db.ValidateResetCode(It.IsAny<int>(), It.IsAny<string>()))
+                .Returns((int userId, string code) => _resetCodeTable.ContainsKey(userId)
+                                                      && _resetCodeTable[userId] == code);
+
             _api = new ApiController(dbMock.Object);
 
             var requestContext = new RequestContext { HttpContext = _mockContext.Object, RouteData = new RouteData() };
@@ -484,7 +488,9 @@ namespace WebApp.Tests.Controllers
             var result = _api.GetUserDetail(token);
             if (result == null) Assert.Fail("Result was null");
 
-            var returned = Json.Decode(result.ToString())["content"] as User;
+            var data = result.Data.ToString();
+
+            var returned = Json.Decode<User>(data);
             if (returned == null) Assert.Fail("Data was null");
 
             Assert.AreEqual(_testUser.Id, returned.Id, "User returned did not have matching ID");
@@ -496,11 +502,11 @@ namespace WebApp.Tests.Controllers
             var token = "12345";
 
             var result = _api.GetUserDetail(token);
-            if (result == null) Assert.Fail("Result was null");
+            //if (result == null) Assert.Fail("Result was null");
 
-            var returned = Json.Decode(result.ToString())["content"];
+            //var returned = Json.Decode(result.Data.ToString())["content"];
 
-            Assert.IsNull(returned, "Returned was not null");
+            Assert.IsNull(result, "Returned was not null");
         }
 
         [TestMethod]

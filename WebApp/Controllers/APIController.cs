@@ -7,6 +7,7 @@ using DBHelper;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Threading.Tasks;
+using Microsoft.Ajax.Utilities;
 using WebApp.Models.AccountViewModels;
 using Models;
 
@@ -171,7 +172,10 @@ namespace WebApp.Controllers
         {
             //TODO: create find user method with token as param
             var result = _db.FindUser(token: inToken);
-            return Json(new { content = result });
+
+            return result != null
+                ? Json(System.Web.Helpers.Json.Encode(result))
+                : null;
         }
 
         /* Updating user information on DB >> Return OK */
