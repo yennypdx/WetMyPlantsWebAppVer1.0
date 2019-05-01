@@ -1,0 +1,40 @@
+﻿@using Models
+@model Models.Plant
+
+@{
+    ViewBag.Title = "Add";
+    var speciesList = (List<Species>)ViewBag.Species ?? new List<Species>();
+}
+
+<h2 class="text-success text-">Register a new plant!</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+ 
+    <div class="form-group">
+        <label for="nickname">Name (Go ahead, be creative!)</label>
+        <input type="text" name="Nickname" id="nickname" max="120" class="form-control" required/>
+    </div>
+    <div class="form-group">
+        <label for="species">Species</label>
+        <select name="SpeciesId" id="species" class="form-control">
+            @foreach (var species in speciesList)
+            {
+                <option value=@species.Id>@species.CommonName</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="id">Sensor ID (Required)</label>
+        <input type="text" name="Id" required class="form-control"/>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-success"/>
+    </div>
+    <div>
+        <input type="hidden" name="CurrentLight" value="-1"/>
+        <input type="hidden" name="CurrentWater" value="-1"/>
+    </div>
+}

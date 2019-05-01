@@ -1,7 +1,15 @@
 ﻿@using Models
 @model List<Models.Plant>
 @{
-
+    List<Plant> plantList;
+    if (Model == null)
+    {
+        plantList = new List<Plant>();
+    }
+    else
+    {
+        plantList = Model;
+    }
 }
 
 <div class="row">
@@ -11,7 +19,7 @@
     <div class="col-3"></div>
 </div>
 
-@foreach (var p in Model)
+@foreach (var p in plantList)
 {
     <div class="row">
         <div class="plant-col plant-name col-3">

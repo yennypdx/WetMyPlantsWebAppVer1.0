@@ -9,16 +9,16 @@ using SendGrid.Helpers.Mail;
 using System.Net.Http;
 using DbHelper;
 using WebApp.Auth;
-using WebApp.Models.HomeViewModels;
+using WebApp.Models;
 
 namespace WebApp.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : AuthController
     {
-        public readonly DBHelper.IDbHelper Db;
+        //public readonly DBHelper.IDbHelper Db;
 
         // Inject Dependency
-        public AccountController(DBHelper.IDbHelper db) => Db = db;
+        public AccountController(DBHelper.IDbHelper db) : base(db) {}
 
         public ActionResult Login()
         {

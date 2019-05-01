@@ -1,62 +1,55 @@
 ﻿@using Models
+@using WebApp.Controllers
 @model Models.Plant
 @{
     ViewBag.Title = "Edit Plant";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var speciesList = (List<Species>) ViewBag.Species ?? new List<Species>();
+    var status = ViewBag.Message as StatusResponse;
+    
 }
-<a href="~/home">Back</a>
-<h2>Edit</h2>
 
-<div>
-    <div class="container">
-        <form action="~/plant/update" method="get">
-            <input type="hidden" value="@Model.Id" name="Id" />
-            <div class="row">
-                <div class="col-sm-3">
-                    <label for="plant_name">Name</label>
-                </div>
-                <div class="col-sm-9">
-                    <input type="text" id="plant_name" name="Nickname" value="@Model.Nickname" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-3">
-                    <label for="plant_species">Species</label>
-                </div>
-                <div class="col-sm-9">
-                    <select name="SpeciesId" id="plant_species">
-                        @foreach(var sp in (List<Species>)ViewBag.Species)
-                        {
-                            if(Model.SpeciesId != sp.Id)
-                            {
-                                <option id="@sp.Id" value="@sp.Id">@sp.CommonName - @sp.LatinName</option>
-                            }
-                            else
-                            {
-                                <option id="@sp.Id" value="@sp.Id" selected>@sp.CommonName - @sp.LatinName</option>
-                            }
-                        }
-                    </select>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-3">
-                    <label for="current_water">Current Water Level</label>
-                </div>
-                <div class="col-sm-9">
-                    <input type="text" id="current_water" name="CurrentWater" value="@Model.CurrentWater" readonly />
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-3">
-                    <label for="current_light">Current Light Level</label>
-                </div>
-                <div class="col-sm-9">
-                    <input type="text" id="current_light" name="CurrentLight" value="@Model.CurrentLight" readonly />
-                </div>
-            </div>
-            <button class="btn btn-success" id="save_button" type="submit">Save</button>
-            <a href="/plant/delete/@Model.Id" class="btn btn-danger">Delete</a>
-        </form>
+@if (status != null)
+{
+    if (status.Error)
+    {
+        <div class="alert alert-danger">Sorry, something went wrong. We were unable to save your changes.</div>
+    }
+    if (status.Success)
+    {
+        <div class="alert alert-success">Saved successfully!</div>
+    }
+}
+
+<a href="~/home" class="text-info h6"><i class="far fa-arrow-alt-circle-left"></i> Back</a>
+<h2 class="text-success">Your plant's details:</h2>
+
+<form method="post" action="~/plant/update" class="form form-light">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="Id" value="@Model.Id"/>
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" required name="Nickname" id="name" value="@Model.Nickname"class="form-control"/>
     </div>
-</div>
+    <div class="form-group">
+        <label for="species">Species</label>
+        <select name="SpeciesId" id="species" class="form-control">
+            @foreach (var species in speciesList)
+            {
+                <option value="@species.Id">@species.CommonName</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="water">Current Water</label>
+        <input type="text" readonly name="CurrentWater" value="@Model.CurrentWater" class="form-control form-control-md"/>
+    </div>
+    <div class="form-group">
+        <label for="light">Current Light</label>
+        <input type="text" readonly name="CurrentLight" value="@Model.CurrentLight" class="form-control form-control-sm"/>
+    </div>
+    <div class="form-group">
+        <input type="submit" class="btn btn-success" value="Save"/>
+        <a href="/plant/delete?id=@Model.Id" class="btn btn-danger">Delete</a>
+    </div>
+</form>

@@ -39,10 +39,10 @@ namespace DBHelper
     public enum PlantColumns
     {
         Id,
-        SpeciesId,
         Nickname,
         CurrentWater,
-        CurrentLight
+        CurrentLight,
+        SpeciesId
     }
 
     public class DbHelper : IDbHelper
@@ -463,11 +463,11 @@ namespace DBHelper
             var plantIds = RunReader(plantIdQuery);
 
             if (!plantIds.HasRows) return null;
-
+            
             var plants = new List<Plant>();
 
             while (plantIds.Read())
-                plants.Add(FindPlant(plantIds.ToString()));
+                plants.Add(FindPlant(plantIds.GetString(0)));
 
             return plants;
         }
@@ -519,7 +519,7 @@ namespace DBHelper
                         $"Nickname = '{update.Nickname}', " +
                         $"CurrentWater = {update.CurrentWater}, " +
                         $"CurrentLight = {update.CurrentLight} " +
-                        $"WHERE PlantID = {update.Id};";
+                        $"WHERE PlantID = '{update.Id}';";
 
             var result = RunNonQuery(query);
 

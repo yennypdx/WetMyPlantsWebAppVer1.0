@@ -16,18 +16,56 @@
     </style>
 }
 
-<h1>Welcome to your dashboard!</h1>
-<h3>@( ViewBag.FirstName ?? "Test" )</h3>
-
-<div class="jumbotron">
-    <div class="container container-fluid">
-        <div class="row" id="plant-list-header">
-            <div class="col-12">
-                <h4>Your plants:</h4>
-            </div>
-        </div>
-        <div>
-            @Html.Partial("PlantListPartial", Model.Plants)
-        </div>
+<h2>Your dashboard</h2>
+<h4>@Model.Plants.Count registered plants</h4>
+<a href="/plant/new" class="btn btn-success my-3">Add New Plant</a>
+<div class="container">
+    <div class="row">
+        <table class="table table-light table-hover">
+            <thead class="thead-dark">
+            <tr>
+                <th>Name</th>
+                <th>Current Sunlight</th>
+                <th>Current Water</th>
+                <th colspan="2"></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var p in Model.Plants)
+            {
+                <tr>
+                    <td>
+                        @p.Nickname
+                    </td>
+                    <td>
+                        @if (p.CurrentLight < 0)
+                        {
+                            <text>No data</text>
+                        }
+                        else
+                        {
+                            @p.CurrentLight
+                        }
+                    </td>
+                    <td>
+                        @if (p.CurrentWater < 0)
+                        {
+                            <text>No data</text>
+                        }
+                        else
+                        {
+                            @p.CurrentWater
+                        }
+                    </td>
+                    <td>
+                        <a href="/plant/edit?id=@p.Id">Edit</a>
+                    </td>
+                    <td>
+                        <a href="/plant/delete?id=@p.Id" class="text-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
     </div>
 </div>
