@@ -26,5 +26,8 @@ namespace WebApp.Models.AccountViewModels
 
         [Display(Name = "Id")]
         public int Id { get; set; }
+
+        [Display(Name = "Phone")] public bool NotifyPhone { get; set; } = false;
+        [Display(Name = "Email")] public bool NotifyEmail { get; set; } = false;
     }
 }

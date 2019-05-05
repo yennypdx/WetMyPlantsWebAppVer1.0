@@ -1,20 +1,28 @@
 ﻿@model WebApp.Models.AccountViewModels.MyAccountViewModel
 
 @{
+    bool doNotNotify = false;
     ViewBag.Title = "View";
+    if(Model.NotifyPhone == false && Model.NotifyEmail == false)
+    {
+        doNotNotify = true;
+    }
 }
 
-@if (ViewBag.UpdateMessage != null)
+@if(ViewBag.UpdateMessage != null)
 {
     <div>ViewBag.UpdateMessage</div>
 }
 
-@using (Html.BeginForm("UpdateUser", "Account", FormMethod.Post))
+<h2 class="text-success">My Account</h2>
+
+@using(Html.BeginForm("UpdateUser", "Account", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
         <hr />
+        <h6 class="text-success">Account Details:</h6>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -47,18 +55,83 @@
                 @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
             </div>
         </div>
+        <hr />
+        <h6 class="text-success">Notification Settings:</h6>
+        <div class="row flex-column">
+            <div class="form-group col-12">
+                <div class="col-3 d-flex flex-row align-content-center justify-content-between">
+                    <label for="notify-phone">Phone:</label>
+                    <div>
+                        <input type="checkbox" name="NotifyPhone" id="notify-phone" checked="@Model.NotifyPhone" />
+                    </div>
+                </div>
+                @Html.ValidationMessageFor(model => model.NotifyPhone, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group col-12">
+                <div class="col-3 d-flex flex-row justify-content-between">
+                    <label for="notify-email">Email:</label>
+                    <input type="checkbox" name="NotifyEmail" id="notify-email" checked="@Model.NotifyEmail" />
+                </div>
+                @Html.ValidationMessageFor(model => model.NotifyPhone, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group col-12">
+                <div class="col-3 d-flex flex-row justify-content-between">
+                    <label for="notify-email">None:</label>
+                    <input type="checkbox" name="" id="do-not-notify" checked="@doNotNotify" />
+                </div>
+                @Html.ValidationMessageFor(model => model.NotifyPhone, "", new { @class = "text-danger" })
+            </div>
+        </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10 mb-2">
-                <input type="submit" value="Update" class="btn btn-success" />
-            </div>
-            <div class="col-md-offset-2 col-md-10">
-                <a href="/Account/ChangePassword?email=@Model.Email" class="btn btn-secondary">Change Password</a>
-                <a href="/Account/DeleteUser?email=@Model.Email" class="btn btn-secondary">Delete My Account</a>
+                <input type="submit" value="Save Changes" class="btn btn-success" />
             </div>
         </div>
     </div>
+
 }
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(() => {
+            const doNotNotify = $('input#do-not-notify');
+            const notifyEmail = $('input#notify-email');
+            const notifyPhone = $('input#notify-phone');
+
+            console.log(doNotNotify);
+            console.log(notifyEmail);
+            console.log(notifyPhone);
+
+            notifyEmail.change(() => unCheckDoNotNotify(notifyEmail.prop('checked')));
+            notifyPhone.change(() => unCheckDoNotNotify(notifyPhone.prop('checked')));
+            doNotNotify.change(() => unCheckNotificationBoxes(doNotNotify.prop('checked')));
+
+            function unCheckNotificationBoxes(isChecked) {
+                console.log(isChecked);
+                if (isChecked) {
+                    notifyEmail.prop('checked', false);
+                    notifyPhone.prop('checked', false);
+                }
+            }
+
+            function unCheckDoNotNotify(isChecked) {
+                console.log(isChecked);
+                if (isChecked && doNotNotify.prop('checked') === true) {
+                    doNotNotify.prop('checked', false);
+                }
+                inspectDoNotNotifyBox();
+            }
+
+            function inspectDoNotNotifyBox() {
+                if (notifyEmail.prop('checked') === false &&
+                    notifyPhone.prop('checked') === false &&
+                    doNotNotify.prop('checked') === false)
+                {
+                    doNotNotify.prop('checked', true);
+                }
+            }
+        });
+    </script>
 }
