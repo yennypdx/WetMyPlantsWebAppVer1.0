@@ -277,9 +277,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DBHelper\DBHelper.csproj">
-      <Project>{2d088a89-0542-4d61-acf9-9c36dfd19696}</Project>
-      <Name>DBHelper</Name>
+    <ProjectReference Include="..\DbHelper\DbHelper.csproj">
+      <Project>{86BE900D-42C1-4210-B1AD-F3F769CE5DD3}</Project>
+      <Name>DbHelper</Name>
     </ProjectReference>
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{15aaf300-c672-4ff7-9ec8-b9e3de57e990}</Project>

@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Routing;
-using DBHelper;
+using DbHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
 using Moq;

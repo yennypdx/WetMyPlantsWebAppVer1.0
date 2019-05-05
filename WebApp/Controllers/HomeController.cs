@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using DBHelper;
+using DbHelper;
 using Models;
 using WebApp.Auth;
 using WebApp.Models;

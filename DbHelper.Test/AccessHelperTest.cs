@@ -1,4 +1,4 @@
-﻿using DBHelper;
+﻿using DbHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DbHelper.Test

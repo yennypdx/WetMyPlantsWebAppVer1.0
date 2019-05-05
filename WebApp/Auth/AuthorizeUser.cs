@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
-using DBHelper;
 using Models;
-using WebApp.Controllers;
 using WebApp.Models;
 
 namespace WebApp.Auth

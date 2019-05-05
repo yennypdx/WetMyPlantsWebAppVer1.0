@@ -1,5 +1,5 @@
 ﻿using System.Web.Mvc;
-using DBHelper;
+using DbHelper;
 
 namespace WebApp.Models
 {

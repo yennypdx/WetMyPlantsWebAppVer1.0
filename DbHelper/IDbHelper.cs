@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Models;
 
-namespace DBHelper
+namespace DbHelper
 {
     public interface IDbHelper
     {

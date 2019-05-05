@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using DbHelper;
 using Models;
 
-namespace DBHelper
+namespace DbHelper
 {
     public enum UserColumns
     {
