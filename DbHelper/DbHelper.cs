@@ -313,6 +313,21 @@ namespace DbHelper
             RunNonQuery(query);
         }
 
+        public void SetEmailNotificationPreference(int userId, bool setting)
+        {
+
+        }
+
+        public void SetPhoneNotificationPreference(int userId, bool setting)
+        {
+
+        }
+
+        public Dictionary<string, bool> GetNotificationPreferences(int userId)
+        {
+            return null;
+        }
+
         public int CreateNewSpecies(string commonName, string latinName, double waterMax = 0, double waterMin = 0, double lightMax = 0,
             double lightMin = 0)
         {
