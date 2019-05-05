@@ -338,14 +338,14 @@ namespace DbHelper
         public Dictionary<string, bool> GetNotificationPreferences(int userId)
         {
             var dict = new Dictionary<string, bool>();
-            var phoneQuery = $"SELECT Email FROM Preferences WHERE UserID = {userId};";
-            var emailQuery = $"SELECT Phone FROM Preferences WHERE UserID = {userId};";
+            var phoneQuery = $"SELECT Phone FROM Preferences WHERE UserID = {userId};";
+            var emailQuery = $"SELECT Email FROM Preferences WHERE UserID = {userId};";
 
             var phoneResult = RunScalar(phoneQuery);
             var emailResult = RunScalar(emailQuery);
 
-            dict["Phone"] = phoneResult != null && Convert.ToBoolean(phoneResult);
-            dict["Email"] = emailResult != null && Convert.ToBoolean(emailResult);
+            dict["Phone"] = phoneResult != null && Convert.ToInt32(phoneResult) == 1;
+            dict["Email"] = emailResult != null && Convert.ToInt32(emailResult) == 1;
 
             return dict;
         }
