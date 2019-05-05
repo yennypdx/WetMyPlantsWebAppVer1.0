@@ -18,7 +18,7 @@ namespace WebApp.Controllers
         //public readonly DBHelper.IDbHelper Db;
 
         // Inject Dependency
-        public AccountController(DBHelper.IDbHelper db) : base(db) {}
+        public AccountController(IDbHelper db) : base(db) {}
 
         public ActionResult Login()
         {
@@ -55,11 +55,11 @@ namespace WebApp.Controllers
 
             if (result == null) return Redirect("ForgotPassword");
 
-            var resetCode = Crypto.HashPassword(DateTime.Today.ToString());
+            var resetCode = Crypto.HashPassword(DateTime.Today.ToLongDateString());
             // TODO: Store the reset code in the DB
             Db.SetResetCode(result.Id, resetCode);
 
-            var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = result.Id, code = resetCode }, protocol: Request.Url.Scheme);
+            var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = result.Id, code = resetCode }, protocol: Request?.Url?.Scheme);
 
             SendPasswordResetEmail(uModel.Email, callbackUrl).Wait();
             return View("Login");

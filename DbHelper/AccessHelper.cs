@@ -1,4 +1,4 @@
-﻿namespace DBHelper
+﻿namespace DbHelper
 {
     public static class AccessHelper
     {

@@ -1,3 +1,4 @@
+using DbHelper;
 using System.Web.Mvc;
 using Unity;
 using Unity.Mvc5;
@@ -14,9 +15,9 @@ namespace WebApp
 			// it is NOT necessary to register your controllers
 
 			// e.g. container.RegisterType<ITestService, TestService>();
-			container.RegisterType<DBHelper.IDbHelper, DBHelper.DbHelper>();
+			container.RegisterType<IDbHelper, DbHelper.DbHelper>();
 			// Must have RegisterInstance in our case because the constructor takes a parameter
-			container.RegisterInstance<DBHelper.DbHelper>(new DBHelper.DbHelper(DBHelper.AccessHelper.GetDbConnectionString()));
+			container.RegisterInstance<DbHelper.DbHelper>(new DbHelper.DbHelper(AccessHelper.GetDbConnectionString()));
 			DependencyResolver.SetResolver(new UnityDependencyResolver(container));
 		}
 	}

@@ -1,4 +1,4 @@
-﻿using DBHelper;
+﻿using DbHelper;
 using Models;
 using System.Web.Mvc;
 using WebApp.Auth;

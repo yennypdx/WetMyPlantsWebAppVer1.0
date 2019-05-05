@@ -8,7 +8,6 @@
 
 using System;
 using System.Data.SqlClient;
-using DBHelper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
@@ -17,7 +16,7 @@ namespace DbHelper.Test
     [TestClass]
     public class DbHelperTest
     {
-        private readonly DBHelper.DbHelper _db;
+        private readonly DbHelper _db;
         private readonly string _connectionString = "Data Source=wetmyplants-test.c9yldqomj91e.us-west-2.rds.amazonaws.com,1433;Initial Catalog=WetMyPlantsTest;User ID=wetmyplants;Password=GR33nThumb;";
         private readonly string email = "test@test.test";
         private readonly string password = "password";
@@ -55,9 +54,9 @@ namespace DbHelper.Test
         }
 
 
-        private DBHelper.DbHelper GetDb()
+        private DbHelper GetDb()
         {
-            return new DBHelper.DbHelper(_connectionString);
+            return new DbHelper(_connectionString);
         }
 
         [TestInitialize]

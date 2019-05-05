@@ -109,9 +109,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DBHelper\DBHelper.csproj">
-      <Project>{2D088A89-0542-4D61-ACF9-9C36DFD19696}</Project>
-      <Name>DBHelper</Name>
+    <ProjectReference Include="..\DbHelper\DbHelper.csproj">
+      <Project>{86be900d-42c1-4210-b1ad-f3f769ce5dd3}</Project>
+      <Name>DbHelper</Name>
     </ProjectReference>
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{15aaf300-c672-4ff7-9ec8-b9e3de57e990}</Project>

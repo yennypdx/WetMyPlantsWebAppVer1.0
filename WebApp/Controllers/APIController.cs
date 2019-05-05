@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
-using System.Web.Helpers;
 using System.Web.Mvc;
-using DBHelper;
+using DbHelper;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Threading.Tasks;
-using Microsoft.Ajax.Utilities;
 using WebApp.Models.AccountViewModels;
 using Models;
 
@@ -68,7 +65,7 @@ namespace WebApp.Controllers
         [HttpPost, Route("user/register")]
         public ActionResult RegisterUser(RegistrationViewModel model)
         {
-            var token = "";
+            var token = string.Empty;
             //var errors = ModelState.Values.SelectMany(v => v.Errors);
             if (!ModelState.IsValid) return BadRequest("Invalid registration model");
 
@@ -126,7 +123,7 @@ namespace WebApp.Controllers
                 return BadRequest("Could not find user " + model);
             }
 
-            var resetCode = Crypto.HashPassword(DateTime.Today.ToString());
+            var resetCode = Crypto.HashPassword(DateTime.Today.ToLongDateString());
             //TODO: Store the reset code in the DB
             _db.SetResetCode(result.Id, resetCode);
 
@@ -145,7 +142,7 @@ namespace WebApp.Controllers
                 return BadRequest("Could not find user " + model);
             }
 
-            var resetCode = Crypto.HashPassword(DateTime.Today.ToString());
+            var resetCode = Crypto.HashPassword(DateTime.Today.ToLongDateString());
             //TODO: Store the reset code in the DB
             _db.SetResetCode(result.Id, resetCode);
 
