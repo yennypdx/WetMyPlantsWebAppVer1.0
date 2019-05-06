@@ -62,7 +62,7 @@ namespace DbHelper.Test
         [TestInitialize]
         public void Init()
         {
-            _db.CreateNewUser(firstName, lastName, phone, email, password); // only added here after CreateNewUser was tested
+            _db.CreateNewUser(firstName, lastName, phone, email, password);
             _db.CreateNewSpecies(speciesOneCommonName, speciesOneLatinName, speciesOneWaterMax, speciesOneWaterMin, speciesOneLightMax, speciesOneLightMin);
             _db.CreateNewSpecies(speciesTwoCommonName, speciesTwoLatinName, speciesTwoWaterMax, speciesTwoWaterMin, speciesTwoLightMax, speciesTwoLightMin);
 
@@ -551,6 +551,54 @@ namespace DbHelper.Test
             var result = _db.FindPlant(id); // ensure the plant is gone
 
             Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public void DbHelper_SetEmailNotificationTrueTest()
+        {
+            var notifyEmailSetting = true;
+            var user = _db.GetAllUsers()[0];
+            _db.SetEmailNotificationPreference(user.Id, notifyEmailSetting);
+
+            var isSet = _db.GetNotificationPreferences(user.Id)["Email"];
+
+            Assert.IsTrue(isSet, "Email notification not set to true");
+        }
+
+        [TestMethod]
+        public void DbHelper_SetEmailNotificationFalseTest()
+        {
+            var setting = false;
+            var user = _db.GetAllUsers()[0];
+            _db.SetEmailNotificationPreference(user.Id, setting);
+
+            var isSet = _db.GetNotificationPreferences(user.Id)["Email"];
+
+            Assert.IsFalse(isSet, "Email notification not set to false");
+        }
+
+        [TestMethod]
+        public void DbHelper_SetPhoneNotificationTrueTest()
+        {
+            var setting = true;
+            var user = _db.GetAllUsers()[0];
+            _db.SetPhoneNotificationPreference(user.Id, setting);
+
+            var isSet = _db.GetNotificationPreferences(user.Id)["Phone"];
+
+            Assert.IsTrue(isSet, "Phone notification preference not set to true");
+        }
+
+        [TestMethod]
+        public void DbHelper_SetPhoneNotificationFalseTest()
+        {
+            var setting = false;
+            var user = _db.GetAllUsers()[0];
+            _db.SetPhoneNotificationPreference(user.Id, setting);
+
+            var isSet = _db.GetNotificationPreferences(user.Id)["Phone"];
+
+            Assert.IsFalse(isSet, "Phone notification preference not set to false");
         }
     }
 };

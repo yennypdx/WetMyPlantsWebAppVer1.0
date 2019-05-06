@@ -23,6 +23,7 @@ namespace WebApp.Tests.Controllers
         private readonly AccountController _accountController;
         private readonly Dictionary<int, string> _resetCodeDictionary;
         private readonly Dictionary<int, string> _tokenDictionary;
+        private readonly Dictionary<int, Dictionary<string, bool>> _preferenceDictionary;
         private readonly List<User> _userList;
         private readonly User _testUser;
 
@@ -31,6 +32,7 @@ namespace WebApp.Tests.Controllers
             _resetCodeDictionary = new Dictionary<int, string>();
             _tokenDictionary = new Dictionary<int, string>();
             _userList = new List<User>();
+            _preferenceDictionary = new Dictionary<int, Dictionary<string, bool>>();
             _mockContext = new Mock<HttpContextBase>();
             var mockRequest = new Mock<HttpRequestBase>();
 
@@ -167,6 +169,19 @@ namespace WebApp.Tests.Controllers
                     return true;
                 });
 
+            _db.Setup(db => db.GetNotificationPreferences(It.IsAny<int>()))
+                .Returns((int userId) =>
+                {
+                    var preferences = _preferenceDictionary.FirstOrDefault(key => key.Key.Equals(userId));
+                    return preferences.Value;
+                });
+
+            _db.Setup(db => db.SetEmailNotificationPreference(It.IsAny<int>(), It.IsAny<bool>()))
+                .Callback((int userId, bool setting) => { _preferenceDictionary[userId]["Email"] = setting; });
+
+            _db.Setup(db => db.SetPhoneNotificationPreference(It.IsAny<int>(), It.IsAny<bool>()))
+                .Callback((int userId, bool setting) => { _preferenceDictionary[userId]["Phone"] = setting; });
+
             _tokenDictionary.Add(_testUser.Id, Crypto.HashPassword(DateTime.Today.ToLongDateString()));
 
             // Set up the controller context for using server variables
@@ -195,6 +210,11 @@ namespace WebApp.Tests.Controllers
 
             _tokenDictionary.Clear();
             _tokenDictionary.Add(_testUser.Id, Crypto.HashPassword(DateTime.Today.ToLongDateString()));
+
+            _preferenceDictionary.Clear();
+            _preferenceDictionary.Add(_testUser.Id, new Dictionary<string, bool>());
+            _preferenceDictionary[_testUser.Id]["Phone"] = true;
+            _preferenceDictionary[_testUser.Id]["Email"] = true;
         }
 
         [TestMethod]
@@ -466,7 +486,9 @@ namespace WebApp.Tests.Controllers
                 Email = "new@test.email",
                 FirstName = "Update",
                 LastName = "Update",
-                Phone = "0009998888"
+                Phone = "0009998888",
+                NotifyPhone = false,
+                NotifyEmail = false
             };
 
             var result = _accountController.UpdateUser(model) as RedirectToRouteResult;
@@ -479,7 +501,9 @@ namespace WebApp.Tests.Controllers
             Assert.IsTrue(model.Id.Equals(update.Id) && model.Email.Equals(update.Email)
                           && model.FirstName.Equals(update.FirstName)
                           && model.LastName.Equals(update.LastName)
-                          && model.Phone.Equals(update.Phone), "User wasn't updated correctly");
+                          && model.Phone.Equals(update.Phone)
+                && model.NotifyPhone.Equals(_preferenceDictionary[model.Id]["Phone"])
+                && model.NotifyEmail.Equals(_preferenceDictionary[model.Id]["Email"]), "User wasn't updated correctly");
         }
 
         [TestMethod]

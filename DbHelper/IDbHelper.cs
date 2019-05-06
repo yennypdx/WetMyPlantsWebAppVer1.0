@@ -19,6 +19,9 @@ namespace DbHelper
         bool DeleteUser(string email);
         bool ResetPassword(string email, string newPassword);
         bool UpdateUser(User user);
+        void SetEmailNotificationPreference(int userId, bool setting);
+        void SetPhoneNotificationPreference(int userId, bool setting);
+        Dictionary<string, bool> GetNotificationPreferences(int userId);
 
         int CreateNewSpecies(string commonName, string latinName, double waterMax, double waterMin, double lightMax,
             double lightMin);

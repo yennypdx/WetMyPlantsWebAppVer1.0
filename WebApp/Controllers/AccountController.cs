@@ -101,6 +101,8 @@ namespace WebApp.Controllers
         {
             var user = (User)Session["User"];
 
+            var preferences = Db.GetNotificationPreferences(user.Id);
+
             // Convert user to ViewModel to pass to the View
             var userViewModel = new MyAccountViewModel
             {
@@ -108,7 +110,9 @@ namespace WebApp.Controllers
                 LastName = user.LastName,
                 Phone = user.Phone,
                 Email = user.Email,
-                Id = user.Id
+                Id = user.Id,
+                NotifyEmail = preferences["Email"],
+                NotifyPhone = preferences["Phone"]
             };
 
             return View(userViewModel);
@@ -178,8 +182,13 @@ namespace WebApp.Controllers
                 // update the session
                 Session["User"] = user;
 
+                Db.SetEmailNotificationPreference(user.Id, model.NotifyEmail);
+                Db.SetPhoneNotificationPreference(user.Id, model.NotifyPhone);
+
                 // update the message
                 message = "Updated!";
+
+                var preferences = Db.GetNotificationPreferences(user.Id);
 
                 // update the view model
                 model = new MyAccountViewModel
@@ -188,7 +197,9 @@ namespace WebApp.Controllers
                     LastName = user.LastName,
                     Email = user.Email,
                     Id = user.Id,
-                    Phone = user.Phone
+                    Phone = user.Phone,
+                    NotifyPhone = preferences["Phone"],
+                    NotifyEmail = preferences["Phone"]
                 };
             }
 

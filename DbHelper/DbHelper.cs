@@ -254,6 +254,13 @@ namespace DbHelper
                               $", '{passwordHash}');";
 
             var result = RunNonQuery(queryString);
+
+            if (result)
+            {
+                var user = FindUser(email: email);
+                CreateNotificationPreferences(user.Id);
+            }
+
             return result;
         }
 
@@ -271,6 +278,7 @@ namespace DbHelper
             RunNonQuery(tokenQuery);
             RunNonQuery(unlinkPlantsQuery);
             RunNonQuery(removeLinkedPlantsQuery);
+            DeleteNotificationPreferences(Convert.ToInt32(id));
             
             return RunNonQuery(userQuery);
         }
@@ -310,6 +318,47 @@ namespace DbHelper
         public void DeleteResetCode(int userId)
         {
             var query = $"DELETE FROM ResetCodes WHERE UserId = {userId}";
+            RunNonQuery(query);
+        }
+
+        public void SetEmailNotificationPreference(int userId, bool setting)
+        {
+            int set = setting ? 1 : 0;
+            var query = $"UPDATE Preferences SET Email = {set} WHERE UserID = {userId}";
+            RunNonQuery(query);
+        }
+
+        public void SetPhoneNotificationPreference(int userId, bool setting)
+        {
+            int set = setting ? 1 : 0;
+            var query = $"UPDATE Preferences SET Phone = {set} WHERE UserID = {userId};";
+            RunNonQuery(query);
+        }
+
+        public Dictionary<string, bool> GetNotificationPreferences(int userId)
+        {
+            var dict = new Dictionary<string, bool>();
+            var phoneQuery = $"SELECT Phone FROM Preferences WHERE UserID = {userId};";
+            var emailQuery = $"SELECT Email FROM Preferences WHERE UserID = {userId};";
+
+            var phoneResult = RunScalar(phoneQuery);
+            var emailResult = RunScalar(emailQuery);
+
+            dict["Phone"] = phoneResult != null && Convert.ToInt32(phoneResult) == 1;
+            dict["Email"] = emailResult != null && Convert.ToInt32(emailResult) == 1;
+
+            return dict;
+        }
+
+        private void CreateNotificationPreferences(int userId)
+        {
+            var query = $"INSERT INTO Preferences (UserID, Email, Phone) VALUES ({userId}, 1, 1);";
+            RunNonQuery(query);
+        }
+
+        private void DeleteNotificationPreferences(int userId)
+        {
+            var query = $"DELETE FROM Preferences WHERE UserID = {userId};";
             RunNonQuery(query);
         }
 
