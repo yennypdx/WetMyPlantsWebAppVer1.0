@@ -188,6 +188,8 @@ namespace WebApp.Controllers
                 // update the message
                 message = "Updated!";
 
+                var preferences = Db.GetNotificationPreferences(user.Id);
+
                 // update the view model
                 model = new MyAccountViewModel
                 {
@@ -195,7 +197,9 @@ namespace WebApp.Controllers
                     LastName = user.LastName,
                     Email = user.Email,
                     Id = user.Id,
-                    Phone = user.Phone
+                    Phone = user.Phone,
+                    NotifyPhone = preferences["Phone"],
+                    NotifyEmail = preferences["Phone"]
                 };
             }
 

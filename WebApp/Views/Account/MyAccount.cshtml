@@ -19,11 +19,9 @@
 @using(Html.BeginForm("UpdateUser", "Account", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
-
+    <input type="hidden" name="Id" value="@Model.Id" />
     <div class="form-horizontal">
-        <hr />
-        <h6 class="text-success">Account Details:</h6>
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <hr /><h6 class="text-success">Account Details:</h6>@Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -62,7 +60,8 @@
                 <div class="col-3 d-flex flex-row align-content-center justify-content-between">
                     <label for="notify-phone">Phone:</label>
                     <div>
-                        <input type="checkbox" name="NotifyPhone" id="notify-phone" checked="@Model.NotifyPhone" />
+                        <input type="checkbox" id="notify-phone" checked="@Model.NotifyPhone" class="pointer"/>
+                        <input type="hidden" name="NotifyPhone" value=@(Model.NotifyPhone ? "true" : "false") id="notify-phone-value" />
                     </div>
                 </div>
                 @Html.ValidationMessageFor(model => model.NotifyPhone, "", new { @class = "text-danger" })
@@ -70,14 +69,15 @@
             <div class="form-group col-12">
                 <div class="col-3 d-flex flex-row justify-content-between">
                     <label for="notify-email">Email:</label>
-                    <input type="checkbox" name="NotifyEmail" id="notify-email" checked="@Model.NotifyEmail" />
+                    <input type="checkbox" id="notify-email" checked="@Model.NotifyEmail" class="pointer" />
+                    <input type="hidden" name="NotifyEmail" value=@(Model.NotifyEmail ? "true" : "false") id="notify-email-value" />
                 </div>
                 @Html.ValidationMessageFor(model => model.NotifyPhone, "", new { @class = "text-danger" })
             </div>
             <div class="form-group col-12">
                 <div class="col-3 d-flex flex-row justify-content-between">
                     <label for="notify-email">None:</label>
-                    <input type="checkbox" name="" id="do-not-notify" checked="@doNotNotify" />
+                    <input type="checkbox" name="" id="do-not-notify" checked="@doNotNotify" class="pointer"/>
                 </div>
                 @Html.ValidationMessageFor(model => model.NotifyPhone, "", new { @class = "text-danger" })
             </div>
@@ -97,40 +97,53 @@
     <script>
         $(document).ready(() => {
             const doNotNotify = $('input#do-not-notify');
-            const notifyEmail = $('input#notify-email');
-            const notifyPhone = $('input#notify-phone');
+            const notifyEmailBox = $('input#notify-email');
+            const notifyPhoneBox = $('input#notify-phone');
+            const notifyEmailValue = $('input#notify-email-value');
+            const notifyPhoneValue = $('input#notify-phone-value');
 
-            console.log(doNotNotify);
-            console.log(notifyEmail);
-            console.log(notifyPhone);
+            notifyEmailBox.click(() => modifyNotifyEmail());
+            notifyPhoneBox.click(() => modifyNotifyPhone());
+            doNotNotify.click(() => setDoNotNotify());
 
-            notifyEmail.change(() => unCheckDoNotNotify(notifyEmail.prop('checked')));
-            notifyPhone.change(() => unCheckDoNotNotify(notifyPhone.prop('checked')));
-            doNotNotify.change(() => unCheckNotificationBoxes(doNotNotify.prop('checked')));
-
-            function unCheckNotificationBoxes(isChecked) {
-                console.log(isChecked);
-                if (isChecked) {
-                    notifyEmail.prop('checked', false);
-                    notifyPhone.prop('checked', false);
+            function modifyNotifyEmail() {
+                let isSet = notifyEmailValue.val() === 'true';
+                if (isSet) {
+                    notifyEmailValue.val('false');
+                    notifyEmailBox.prop('checked', false);
+                } else {
+                    notifyEmailValue.val('true');
+                    notifyEmailBox.prop('checked', true);
                 }
+                assessDoNotNotifyBox();
             }
 
-            function unCheckDoNotNotify(isChecked) {
-                console.log(isChecked);
-                if (isChecked && doNotNotify.prop('checked') === true) {
+            function modifyNotifyPhone() {
+                let isSet = notifyPhoneValue.val() === 'true';
+                if (isSet) {
+                    notifyPhoneValue.val('false');
+                    notifyPhoneBox.prop('checked', false);
+                } else {
+                    notifyPhoneValue.val('true');
+                    notifyPhoneBox.prop('checked', true);
+                }
+                assessDoNotNotifyBox();
+            }
+
+            function assessDoNotNotifyBox() {
+                if (notifyPhoneBox.prop('checked') || notifyEmailBox.prop('checked')) {
                     doNotNotify.prop('checked', false);
-                }
-                inspectDoNotNotifyBox();
-            }
-
-            function inspectDoNotNotifyBox() {
-                if (notifyEmail.prop('checked') === false &&
-                    notifyPhone.prop('checked') === false &&
-                    doNotNotify.prop('checked') === false)
-                {
+                } else {
                     doNotNotify.prop('checked', true);
                 }
+            }
+
+            function setDoNotNotify() {
+                doNotNotify.prop('checked', true);
+                notifyPhoneValue.val('false');
+                notifyPhoneBox.prop('checked', false);
+                notifyEmailValue.val('false');
+                notifyEmailBox.prop('checked', false);
             }
         });
     </script>
