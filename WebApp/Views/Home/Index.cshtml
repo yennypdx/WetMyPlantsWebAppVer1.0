@@ -2,6 +2,8 @@
 @model WebApp.Models.HomeViewModels.DashboardViewModel
 @{
     ViewBag.Title = "Dashboard";
+    var numPlants = Model.Plants != null ? Model.Plants.Count : 0;
+    var plantList = Model.Plants != null ? Model.Plants : new List<Plant>();
 }
 
 <nav aria-label="breadcrumb">
@@ -10,59 +12,62 @@
     </ol>
 </nav>
 
-<div class="container">
-    <h2>Your dashboard</h2>
-    <h4>@Model.Plants.Count registered plants</h4>
-    <a href="/plant/new" class="text-primary my-3">Add New Plant</a>
-    <div class="container">
-        <div class="row">
+<div class="container pt-5">
+    <h2 class="text-center">My Dashboard</h2>
+    <hr />
+    <h4>@numPlants registered plants</h4>
+    <a href="/plant/new" class="text-primary my-3">Add a new plant</a><br />
+    <a href="/plant/hub/new" class="text-sm">Register a Hub</a>
+    <div class="row">
+        @if(numPlants > 0)
+        {
             <table class="table table-light table-hover">
                 <thead class="thead-dark">
-                <tr>
-                    <th>Name</th>
-                    <th>Current Sunlight</th>
-                    <th>Current Water</th>
-                    <th colspan="2"></th>
-                </tr>
+                    <tr>
+                        <th>Name</th>
+                        <th>Current Sunlight</th>
+                        <th>Current Water</th>
+                        <th colspan="2"></th>
+                    </tr>
                 </thead>
                 <tbody>
-                @foreach (var p in Model.Plants)
-                {
-                    <tr>
-                        <td>
-                            @p.Nickname
-                        </td>
-                        <td>
-                            @if (p.CurrentLight < 0)
-                            {
-                                <text>No data</text>
-                            }
-                            else
-                            {
-                                @p.CurrentLight
-                            }
-                        </td>
-                        <td>
-                            @if (p.CurrentWater < 0)
-                            {
-                                <text>No data</text>
-                            }
-                            else
-                            {
-                                @p.CurrentWater
-                            }
-                        </td>
-                        <td>
-                            <a href="/plant/edit?id=@p.Id">Edit</a>
-                        </td>
-                        <td>
-                            <a href="/plant/delete?id=@p.Id" class="text-danger delete-button">Delete</a>
-                        </td>
-                    </tr>
-                }
+                    @foreach(var p in plantList)
+                    {
+                        <tr>
+                            <td>
+                                @p.Nickname
+                            </td>
+                            <td>
+                                @if(p.CurrentLight < 0)
+                                {
+                                    <text>No data</text>
+                                }
+                                else
+                                {
+                                    @p.CurrentLight
+                                }
+                            </td>
+                            <td>
+                                @if(p.CurrentWater < 0)
+                                {
+                                    <text>No data</text>
+                                }
+                                else
+                                {
+                                    @p.CurrentWater
+                                }
+                            </td>
+                            <td>
+                                <a href="/plant/edit?id=@p.Id">Edit</a>
+                            </td>
+                            <td>
+                                <a href="/plant/delete?id=@p.Id" class="text-danger delete-button">Delete</a>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
-        </div>
+        }
     </div>
 </div>
 

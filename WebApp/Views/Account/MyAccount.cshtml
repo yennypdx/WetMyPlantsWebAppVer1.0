@@ -16,11 +16,21 @@
     </ol>
 </nav>
 
-<div class="container">
-    @if(ViewBag.UpdateMessage != null)
-    {
-        <div>ViewBag.UpdateMessage</div>
-    }
+@if(ViewBag.Update != null)
+{
+    <div class="container">
+        @if ((string) ViewBag.Update == "true")
+        {
+            <div class="alert alert-success text-center">Saved!</div>
+        }
+        else if ((string) ViewBag.Update == "false")
+        {
+            <div class="alert alert-warning text-center">There was an error saving your information.</div>
+        }
+    </div>
+}
+
+<div class="container pt-5">
 
     <h2 class="text-center">My Account</h2>
     <hr />
@@ -64,30 +74,33 @@
                 <div class="col-md-5">
                     <h5>Notification Settings:</h5>
                     <div class="row flex-column">
-                        <div class="form-group">
-                            <div class="col-3 d-flex flex-row align-content-center justify-content-between">
+                        <div class="form-group row">
+                            <div class="col-2">
                                 <label for="notify-phone">Phone:</label>
-                                <div>
-                                    <input type="checkbox" id="notify-phone" checked="@Model.NotifyPhone" class="pointer" />
-                                    <input type="hidden" name="NotifyPhone" value=@(Model.NotifyPhone ? "true" : "false") id="notify-phone-value" />
-                                </div>
+                            </div>
+                            <div class="col">
+                                <input type="checkbox" id="notify-phone" checked="@Model.NotifyPhone" class="pointer ml-3" />
+                                <input type="hidden" name="NotifyPhone" value=@(Model.NotifyPhone ? "true" : "false") id="notify-phone-value" />
                             </div>
                             @Html.ValidationMessageFor(model => model.NotifyPhone, "", new { @class = "text-danger" })
                         </div>
-                        <div class="form-group">
-                            <div class="col-3 d-flex flex-row justify-content-between">
+                        <div class="form-group row">
+                            <div class="col-2">
                                 <label for="notify-email">Email:</label>
-                                <input type="checkbox" id="notify-email" checked="@Model.NotifyEmail" class="pointer" />
+                            </div>
+                            <div class="col">
+                                <input type="checkbox" id="notify-email" checked="@Model.NotifyEmail" class="pointer ml-3" />
                                 <input type="hidden" name="NotifyEmail" value=@(Model.NotifyEmail ? "true" : "false") id="notify-email-value" />
                             </div>
                             @Html.ValidationMessageFor(model => model.NotifyPhone, "", new { @class = "text-danger" })
                         </div>
-                        <div class="form-group">
-                            <div class="col-3 d-flex flex-row justify-content-between">
+                        <div class="form-group row">
+                            <div class="col-2">
                                 <label for="notify-email">None:</label>
-                                <input type="checkbox" name="" id="do-not-notify" checked="@doNotNotify" class="pointer" />
                             </div>
-                            @Html.ValidationMessageFor(model => model.NotifyPhone, "", new { @class = "text-danger" })
+                            <div class="col">
+                                <input type="checkbox" name="" id="do-not-notify" checked="@doNotNotify" class="pointer ml-3" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -98,7 +111,7 @@
         </div>
 
     }
-    <a href="/account/deleteuser" class="text-danger">Delete My Account</a>
+    <a href="/Account/DeleteUser" class="text-danger position-relative" style="bottom: -100px;">Delete My Account</a>
 </div>
 
 
