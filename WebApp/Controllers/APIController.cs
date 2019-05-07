@@ -93,17 +93,17 @@ namespace WebApp.Controllers
         }
 
         // Delete a user from db with ID >> Return OK
-        [HttpDelete, Route("user/delete/{id}")]
-        public ActionResult DeleteUser(int id)
+        [HttpDelete, Route("user/delete/{token}")]
+        public ActionResult DeleteUser(string token)
         {
             //var users = _db.GetAllUsers();
             //var user = users?.FirstOrDefault(u => u.Id.Equals(id));
-            var user = _db.FindUser(id);
-            if (user == null) return BadRequest("Could not find user " + id);
+            var user = _db.FindUser(null, token);
+            if (user == null) return BadRequest("Could not find user");
 
             var result = _db.DeleteUser(user.Email);
 
-            return result ? Ok("User deleted") : BadRequest("Error deleting user " + id);
+            return result ? Ok("User deleted") : BadRequest("Error deleting user");
         }
 
         /* INSECURE! >> return User list */
@@ -168,7 +168,7 @@ namespace WebApp.Controllers
         public JsonResult GetUserDetail(String inToken)
         {
             //TODO: create find user method with token as param
-            var result = _db.FindUser(token: inToken);
+            var result = _db.FindUser(null, inToken);
 
             return result != null
                 ? Json(System.Web.Helpers.Json.Encode(result))
