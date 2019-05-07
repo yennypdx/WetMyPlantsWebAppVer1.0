@@ -4,68 +4,80 @@
     ViewBag.Title = "Dashboard";
 }
 
-@section scripts {
-    <style>
-        .header {
-            font-weight: bold;
-        }
-        .jumbotron {
-            background-color: honeydew;
-            padding: 15px;
-        }
-    </style>
-}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Home</li>
+    </ol>
+</nav>
 
-<h2>Your dashboard</h2>
-<h4>@Model.Plants.Count registered plants</h4>
-<a href="/plant/new" class="btn btn-success my-3">Add New Plant</a>
 <div class="container">
-    <div class="row">
-        <table class="table table-light table-hover">
-            <thead class="thead-dark">
-            <tr>
-                <th>Name</th>
-                <th>Current Sunlight</th>
-                <th>Current Water</th>
-                <th colspan="2"></th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var p in Model.Plants)
-            {
+    <h2>Your dashboard</h2>
+    <h4>@Model.Plants.Count registered plants</h4>
+    <a href="/plant/new" class="btn btn-success my-3">Add New Plant</a>
+    <div class="container">
+        <div class="row">
+            <table class="table table-light table-hover">
+                <thead class="thead-dark">
                 <tr>
-                    <td>
-                        @p.Nickname
-                    </td>
-                    <td>
-                        @if (p.CurrentLight < 0)
-                        {
-                            <text>No data</text>
-                        }
-                        else
-                        {
-                            @p.CurrentLight
-                        }
-                    </td>
-                    <td>
-                        @if (p.CurrentWater < 0)
-                        {
-                            <text>No data</text>
-                        }
-                        else
-                        {
-                            @p.CurrentWater
-                        }
-                    </td>
-                    <td>
-                        <a href="/plant/edit?id=@p.Id">Edit</a>
-                    </td>
-                    <td>
-                        <a href="/plant/delete?id=@p.Id" class="text-danger">Delete</a>
-                    </td>
+                    <th>Name</th>
+                    <th>Current Sunlight</th>
+                    <th>Current Water</th>
+                    <th colspan="2"></th>
                 </tr>
-            }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                @foreach (var p in Model.Plants)
+                {
+                    <tr>
+                        <td>
+                            @p.Nickname
+                        </td>
+                        <td>
+                            @if (p.CurrentLight < 0)
+                            {
+                                <text>No data</text>
+                            }
+                            else
+                            {
+                                @p.CurrentLight
+                            }
+                        </td>
+                        <td>
+                            @if (p.CurrentWater < 0)
+                            {
+                                <text>No data</text>
+                            }
+                            else
+                            {
+                                @p.CurrentWater
+                            }
+                        </td>
+                        <td>
+                            <a href="/plant/edit?id=@p.Id">Edit</a>
+                        </td>
+                        <td>
+                            <a href="/plant/delete?id=@p.Id" class="text-danger delete-button">Delete</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
+@section scripts {
+    <script>
+        $(document).ready(() => {
+            const deleteButtons = $('a.delete-button');
+
+            deleteButtons.on('click',
+                (e) => {
+                    e.preventDefault();
+                    if (confirm('Are you sure you want to delete this plant?')) {
+                        $(location).attr('href', e.target.href);
+                    }
+                });
+        })
+    </script>
+}

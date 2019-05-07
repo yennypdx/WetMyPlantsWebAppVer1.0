@@ -8,7 +8,7 @@
     @Scripts.Render("~/bundles/modernizr")
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 </head>
-<body>
+<body class="bg-light text-primary">
 
 <style>
     .navbar {
@@ -27,8 +27,8 @@
     }
 </style>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark text-white">
-    <a class="navbar-brand">WetMyPlants</a>
+<nav class="navbar navbar-expand-md navbar-light bg-primary shadow border-dark border-bottom text-light">
+    <a class="navbar-brand"><img src="../../Content/wmp_icon.png" style="height: 38px;"> WetMyPlants</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -37,15 +37,15 @@
         {
             <ul class="nav navbar-nav">
                 <li>
-                    <a class="nav-item nav-link" href="~/home">Home</a>
+                    <a class="nav-item nav-link text-light" href="~/home">Home</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav" id="nav-user-options">
                 <li>
-                    <a class="nav-item nav-link" href="/account/myaccount">My Account</a>
+                    <a class="nav-item nav-link text-light" href="/account/myaccount">My Account</a>
                 </li>
                 <li>
-                    <a class="nav-item nav-link" href="/account/logout">Log Out</a>
+                    <a class="nav-item nav-link text-light" href="/account/logout">Log Out</a>
                 </li>
             </ul>
         }
@@ -54,20 +54,20 @@
             @* Somehow change nav bar from "Login | Register" to "My Account" when a user is logged in *@
             <ul class="nav navbar-nav" id="nav-user-options">
                 <li>
-                    <a class="nav-item nav-link" href="/account/login">Login</a>
+                    <a class="nav-item nav-link text-light" href="/account/login">Login</a>
                 </li>
                 <li>
-                    <a class="nav-item nav-link" href="/account/register">Register</a>
+                    <a class="nav-item nav-link text-light" href="/account/register">Register</a>
                 </li>              
             </ul>
         }
     </div>
 </nav>
 
-<div class="container body-content">
+<div class="body-content">
     @RenderBody()
-    <hr/>
-    <footer>
+    <footer class="fixed-bottom px-3">
+        <hr />
         <p>&copy; @DateTime.Now.Year - WetMyPlants</p>
     </footer>
 </div>
