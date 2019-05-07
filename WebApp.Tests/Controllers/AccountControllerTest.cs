@@ -512,19 +512,19 @@ namespace WebApp.Tests.Controllers
             var model = new MyAccountViewModel
             {
                 Id = 100,
-                Email = "new@test.emal",
+                Email = "new@test.email",
                 FirstName = "Update",
                 LastName = "Update",
                 Phone = "0987654321"
             };
 
-            var result = _accountController.UpdateUser(model) as RedirectToRouteResult;
+            var result = _accountController.UpdateUser(model) as ViewResult;
             var update = _userList.FirstOrDefault(u => u.Id.Equals(model.Id));
 
             Assert.IsNull(update, "Invalid user added to the database");
             Assert.IsNotNull(result, "Result is null");
-            Assert.IsTrue(result.RouteValues.ContainsKey("action"), "Result does not contain redirect to action");
-            Assert.AreEqual("MyAccount", result.RouteValues["action"], "Result did not redirect to MyAccount");
+            Assert.AreEqual("MyAccount", result.ViewName, "Did not return the My Account view");
+            Assert.IsNotNull(result.Model, "Returned the My Account view without a model");
         }
 
         [TestMethod]
