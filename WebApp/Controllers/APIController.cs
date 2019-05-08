@@ -87,11 +87,11 @@ namespace WebApp.Controllers
             return Json(_db.GetAllUsers(), JsonRequestBehavior.AllowGet);
         }
 
-        // TOD: HttpGet and Route??
-        public JsonResult GetPlantsList(string email)
+
+        [HttpGet, Route("plant/{token}")]
+        public JsonResult GetPlantsList(string token)
         {
-            // TODO: Maybe check that user exists?? -- problem: return type is JsonResult
-            var user = _db.FindUser(email);
+            var user = _db.FindUser(token);
             var plants = _db.GetPlantsForUser(user.Id);
 
             // Select only ID and Nickname from the list of plants
@@ -101,7 +101,8 @@ namespace WebApp.Controllers
             return Json(plantListOfIdAndNickname, JsonRequestBehavior.AllowGet);
         }
 
-        // TODO Route, Http
+
+        [HttpPut, Route("plant/edit/{token}")]
         public ActionResult EditPlant(string token, Plant updatedPlant)
         {
             // Check that user exists and plant exists for user?
@@ -123,8 +124,15 @@ namespace WebApp.Controllers
         }
 
         // TODO: Route, Http
-        public ActionResult DeletePlant(int plantId)
+        [HttpDelete, Route("plant/del/{token}")]
+        public ActionResult DeletePlant(string token, int plantId)
         {
+            // Check that the user exists
+            var user = _db.FindUser(token);
+            if (user == null) return BadRequest("Could not find user " + token);
+
+            // Check that plant exists for that user
+
             var result = _db.DeletePlant(plantId);
             return result ? Ok("Plant deleted") : BadRequest("Error deleting plant: " + plantId);
         }
