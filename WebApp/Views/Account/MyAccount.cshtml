@@ -9,87 +9,110 @@
     }
 }
 
-@if(ViewBag.UpdateMessage != null)
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/home">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">My Account</li>
+    </ol>
+</nav>
+
+@if(ViewBag.Update != null)
 {
-    <div>ViewBag.UpdateMessage</div>
+    <div class="container">
+        @if ((string) ViewBag.Update == "true")
+        {
+            <div class="alert alert-success text-center">Saved!</div>
+        }
+        else if ((string) ViewBag.Update == "false")
+        {
+            <div class="alert alert-warning text-center">There was an error saving your information.</div>
+        }
+    </div>
 }
 
-<h2 class="text-success">My Account</h2>
+<div class="container pt-5">
 
-@using(Html.BeginForm("UpdateUser", "Account", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-    <input type="hidden" name="Id" value="@Model.Id" />
-    <div class="form-horizontal">
-        <hr /><h6 class="text-success">Account Details:</h6>@Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
-            </div>
-        </div>
+    <h2 class="text-center">My Account</h2>
+    <hr />
+    @using(Html.BeginForm("UpdateUser", "Account", FormMethod.Post))
+    {
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    <h5>Account Details:</h5>
+                    <div class="form-group">
+                        <label for="first-name">First Name</label>
+                        @*@Html.LabelFor(model => model.FirstName, htmlAttributes: new {@class = "control-label col-md-2"})*@
+                        @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                    <div class="form-group">
+                        <label for="last-name">Last Name</label>
+                        @* @Html.LabelFor(model => model.LastName, htmlAttributes: new {@class = "control-label col-md-2"})*@
+                        @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        @*@Html.LabelFor(model => model.Phone, htmlAttributes: new {@class = "control-label col-md-2"})*@
+                        @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <hr />
-        <h6 class="text-success">Notification Settings:</h6>
-        <div class="row flex-column">
-            <div class="form-group col-12">
-                <div class="col-3 d-flex flex-row align-content-center justify-content-between">
-                    <label for="notify-phone">Phone:</label>
-                    <div>
-                        <input type="checkbox" id="notify-phone" checked="@Model.NotifyPhone" class="pointer"/>
-                        <input type="hidden" name="NotifyPhone" value=@(Model.NotifyPhone ? "true" : "false") id="notify-phone-value" />
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        @*@Html.LabelFor(model => model.Email, htmlAttributes: new {@class = "control-label col-md-2"})*@
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                @Html.ValidationMessageFor(model => model.NotifyPhone, "", new { @class = "text-danger" })
-            </div>
-            <div class="form-group col-12">
-                <div class="col-3 d-flex flex-row justify-content-between">
-                    <label for="notify-email">Email:</label>
-                    <input type="checkbox" id="notify-email" checked="@Model.NotifyEmail" class="pointer" />
-                    <input type="hidden" name="NotifyEmail" value=@(Model.NotifyEmail ? "true" : "false") id="notify-email-value" />
+                <div class="col-md-5">
+                    <h5>Notification Settings:</h5>
+                    <div class="row flex-column">
+                        <div class="form-group row">
+                            <div class="col-2">
+                                <label for="notify-phone">Phone:</label>
+                            </div>
+                            <div class="col">
+                                <input type="checkbox" id="notify-phone" checked="@Model.NotifyPhone" class="pointer ml-3" />
+                                <input type="hidden" name="NotifyPhone" value=@(Model.NotifyPhone ? "true" : "false") id="notify-phone-value" />
+                            </div>
+                            @Html.ValidationMessageFor(model => model.NotifyPhone, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-2">
+                                <label for="notify-email">Email:</label>
+                            </div>
+                            <div class="col">
+                                <input type="checkbox" id="notify-email" checked="@Model.NotifyEmail" class="pointer ml-3" />
+                                <input type="hidden" name="NotifyEmail" value=@(Model.NotifyEmail ? "true" : "false") id="notify-email-value" />
+                            </div>
+                            @Html.ValidationMessageFor(model => model.NotifyPhone, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-2">
+                                <label for="notify-email">None:</label>
+                            </div>
+                            <div class="col">
+                                <input type="checkbox" name="" id="do-not-notify" checked="@doNotNotify" class="pointer ml-3" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                @Html.ValidationMessageFor(model => model.NotifyPhone, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group col-12">
-                <div class="col-3 d-flex flex-row justify-content-between">
-                    <label for="notify-email">None:</label>
-                    <input type="checkbox" name="" id="do-not-notify" checked="@doNotNotify" class="pointer"/>
-                </div>
-                @Html.ValidationMessageFor(model => model.NotifyPhone, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10 mb-2">
+            <div class="form-group">
                 <input type="submit" value="Save Changes" class="btn btn-success" />
             </div>
         </div>
-    </div>
 
-}
+    }
+    <a href="/Account/DeleteUser" class="text-danger position-relative" style="bottom: -100px;">Delete My Account</a>
+</div>
 
 
 @section Scripts {

@@ -100,6 +100,7 @@ namespace WebApp.Controllers
         public ActionResult MyAccount()
         {
             var user = (User)Session["User"];
+            //var update = ViewData["Update"];
 
             var preferences = Db.GetNotificationPreferences(user.Id);
 
@@ -114,6 +115,9 @@ namespace WebApp.Controllers
                 NotifyEmail = preferences["Email"],
                 NotifyPhone = preferences["Phone"]
             };
+
+            if (TempData["Update"] != null && (string) TempData["Update"] == "true")
+                ViewBag.Update = "true";
 
             return View(userViewModel);
         }
@@ -166,8 +170,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public ActionResult UpdateUser(MyAccountViewModel model)
         {
-            var message = "Error updating your account.";
-            // Convert model to User to update database and session
+            // Convert model to User to update database
             var user = new User
             {
                 FirstName = model.FirstName,
@@ -179,33 +182,17 @@ namespace WebApp.Controllers
 
             if (Db.UpdateUser(user)) // if the update is successful
             {
-                // update the session
-                Session["User"] = user;
-
                 Db.SetEmailNotificationPreference(user.Id, model.NotifyEmail);
                 Db.SetPhoneNotificationPreference(user.Id, model.NotifyPhone);
 
-                // update the message
-                message = "Updated!";
-
-                var preferences = Db.GetNotificationPreferences(user.Id);
-
-                // update the view model
-                model = new MyAccountViewModel
-                {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email,
-                    Id = user.Id,
-                    Phone = user.Phone,
-                    NotifyPhone = preferences["Phone"],
-                    NotifyEmail = preferences["Phone"]
-                };
+                // if update was successful, reload the account page to refresh the data
+                TempData["Update"] = "true";
+                return RedirectToAction("MyAccount");
             }
 
-            ViewBag.UpdateMessage = message;
-            // Reload the view with the current model (updated or not)
-            return RedirectToAction("MyAccount", "Account", model);
+            // if the update was unsuccessful, reload the view with an error message
+            ViewBag.Update = "false";
+            return View("MyAccount", model);
         }
 
         [AuthorizeUser]
