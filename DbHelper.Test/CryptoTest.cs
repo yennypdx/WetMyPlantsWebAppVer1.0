@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DbHelper.Test
 {
@@ -47,6 +48,27 @@ namespace DbHelper.Test
             // should return false, indicating the password used was incorrect
             var isCorrect = Crypto.ValidatePassword(incorrectPassword, hash);
             Assert.IsFalse(isCorrect);
+        }
+
+        [TestMethod]
+        public void CryptoGenerateTokenTest()
+        {
+            var token = Crypto.GenerateToken();
+            Assert.IsNotNull(token);
+        }
+
+        [TestMethod]
+        public void CryptoSafeTokenTest()
+        {
+            var token = Crypto.GenerateToken();
+
+            var isSafe = true;
+
+            foreach (var t in token)
+                if(t == '\\')
+                    isSafe = false;
+
+            Assert.IsTrue(isSafe, "Token contains a backslash");
         }
     }
 }

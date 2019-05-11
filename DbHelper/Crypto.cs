@@ -6,6 +6,7 @@
 // Utilizes the BCrypt.Net package to provide the methods.
 // Information found on https://cmatskas.com/a-simple-net-password-hashing-implementation-using-bcrypt/
 
+using System;
 using DevOne.Security.Cryptography.BCrypt;
 
 namespace DbHelper
@@ -29,6 +30,14 @@ namespace DbHelper
             // can validate a hashed password + salt without knowing the salt
             if (plaintextPassword == null || hashedPassword == null) return false;
             return BCryptHelper.CheckPassword(plaintextPassword, hashedPassword);
+        }
+
+        public static string GenerateToken()
+        {
+            var dateString = DateTime.Today.ToLongDateString();
+            var token = HashPassword(dateString);
+            var safeToken = token.Replace("\\", null);
+            return safeToken;
         }
     }
 }
