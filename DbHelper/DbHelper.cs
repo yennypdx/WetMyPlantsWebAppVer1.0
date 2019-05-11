@@ -667,7 +667,7 @@ namespace DbHelper
             // remove any old tokens, as we should only have one per user
             DeleteUserToken(id);
             // generate a new token based on the current date and time
-            var newToken = GenerateNewToken();
+            var newToken = Crypto.GenerateToken();
             // set the new token
             SetTokenForUser(id, newToken);
             return newToken;
@@ -677,13 +677,6 @@ namespace DbHelper
         {
             var query = $"DELETE FROM Tokens WHERE UserID = {userId};";
             RunNonQuery(query);
-        }
-
-        private static string GenerateNewToken()
-        {
-            // generate a new token based on the current date and time
-            var dateString = DateTime.Today.Ticks.ToString();
-            return Crypto.HashPassword(dateString);
         }
 
         private void SetTokenForUser(int userId, string token)
