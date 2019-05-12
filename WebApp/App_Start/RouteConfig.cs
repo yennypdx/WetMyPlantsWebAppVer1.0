@@ -38,7 +38,7 @@ namespace WebApp
                   action = "ResetUserPassword",
                   userId = UrlParameter.Optional
               }
-          );
+            );
         }
     }
 }

@@ -15,6 +15,9 @@ namespace WebApp.Controllers
     {
         private readonly IDbHelper _db;
 
+        /* CTOR receives the DbHelper through Dependency Injection */
+        public ApiController(IDbHelper db) => _db = db;
+
         /* HELPER FUNCTIONS */
         /* Jsonify takes a string and packages it as a JSON object under the "content" key */
         private JsonResult Jsonify(string content) => Json($"{{ content: '{content}' }}");
@@ -30,9 +33,6 @@ namespace WebApp.Controllers
 
         private ActionResult Ok(JsonResult content) =>
             new HttpStatusCodeResult(HttpStatusCode.OK, content.Data.ToString());
-
-        /* CTOR receives the DbHelper through Dependency Injection */
-        public ApiController(IDbHelper db) => _db = db;
 
         /* SendGrid >> helper method Android style */
         static public async Task SendPasswordResetEmail(string email)
@@ -62,19 +62,16 @@ namespace WebApp.Controllers
         }
 
         /* Create new user in db >> return a TOKEN */
-        [HttpPost, Route("user/register")]
+        [HttpPost]
+        [Route("user/register")]
         public ActionResult RegisterUser(RegistrationViewModel model)
         {
             var token = string.Empty;
-            //var errors = ModelState.Values.SelectMany(v => v.Errors);
             if (!ModelState.IsValid) return BadRequest("Invalid registration model");
 
-            if (_db.CreateNewUser(model.FirstName, model.LastName, model.Phone, model.Email, model.Password))
-            {
+            if (_db.CreateNewUser(model.FirstName, model.LastName, model.Phone, model.Email, model.Password)){
                 token = _db.LoginAndGetToken(model.Email, model.Password);
-            }
-            else
-            {
+            } else {
                 return BadRequest("User already exists");
             }
 
@@ -82,7 +79,8 @@ namespace WebApp.Controllers
         }
 
         /* Authenticate user >> return a TOKEN */
-        [HttpPost, Route("login")]
+        [HttpPost]
+        [Route("login")]
         public ActionResult Login(LoginViewModel model)
         {
             if (!ModelState.IsValid) return BadRequest("Invalid login model");
@@ -93,7 +91,8 @@ namespace WebApp.Controllers
         }
 
         // Delete a user from db with ID >> Return OK
-        [HttpDelete, Route("user/delete/{token}")]
+        [HttpDelete]
+        [Route("user/delete/{token}/")]
         public ActionResult DeleteUser(string token)
         {
             //var users = _db.GetAllUsers();
@@ -107,14 +106,16 @@ namespace WebApp.Controllers
         }
 
         /* INSECURE! >> return User list */
-        [HttpGet, Route("users/all")]
+        [HttpGet]
+        [Route("users/all")]
         public JsonResult GetAllUsers()
         {
             return Json(_db.GetAllUsers(), JsonRequestBehavior.AllowGet);
         }
 
         /* User update their password >> Return OK */
-        [HttpPost, Route("forgotpass/sg/{token}")]
+        [HttpPost]
+        [Route("forgotpass/sg/{token}/")]
         public ActionResult ForgotUserPasswordViaEmail(ForgotPasswordViewModel model)
         {
             var result = _db.FindUser(email: model.Email);
@@ -133,7 +134,8 @@ namespace WebApp.Controllers
         }
 
         /* User update their password >> Return OK */
-        [HttpPost, Route("forgotpass/rmq/{token}")]
+        [HttpPost]
+        [Route("forgotpass/rmq/{token}/")]
         public ActionResult ForgotUserPasswordViaText(ForgotPasswordViewModel model)
         {
             var result = _db.FindUser(email: model.Email);
@@ -153,7 +155,7 @@ namespace WebApp.Controllers
 
         /* Sumbitting pin to get token and access to dashboard */
         [HttpPost]
-        [Route("submit/{pin}")]
+        [Route("submit/{pin}/")]
         public ActionResult SubmitUserPin(String userPin, String userEmail)
         {
             var user = _db.FindUser(email: userEmail);
@@ -162,23 +164,23 @@ namespace WebApp.Controllers
                 : BadRequest("Invalid PIN or email");
         }
 
-        /* Getting single account data >> return User list as JsonObject */
+        /* Getting single account data >> return User list as USER Object */
         [HttpGet]
-        [Route("user/{token}")]
-        public JsonResult GetUserDetail(String inToken)
+        [Route("user/{token}/")]
+        public JsonResult GetUserDetail(String token)
         {
-            //TODO: create find user method with token as param
-            var result = _db.FindUser(null, inToken);
+            var user = _db.FindUser(token: token);
 
-            return result != null
-                ? Json(System.Web.Helpers.Json.Encode(result))
-                : null;
+            if (user == null)
+                BadRequest("User not found.");
+
+            return Json(user, JsonRequestBehavior.AllowGet);
         }
 
         /* Updating user information on DB >> Return OK */
-        [HttpPut]
-        [Route("user/update")]
-        public ActionResult UpdateAccountInfo(User model)
+        [HttpPatch]
+        [Route("user/update/{token}/")]
+        public ActionResult UpdateAccountInfo(String token, User model)
         {
             if (_db.FindUser(model.Id) != null && _db.UpdateUser(model))
             {
@@ -190,15 +192,6 @@ namespace WebApp.Controllers
                 return BadRequest("Update failed");
             }
         }
-
-        /* Get list of plant from a user which holds the token*/
-        /*[HttpGet]
-        [Route("plant/{token}")]
-        public JsonResult GetPlantListFromUser()
-        {
-            //return JsonObject of plant list
-            return Json(new {plantList});
-        }*/
 
     }
 }
