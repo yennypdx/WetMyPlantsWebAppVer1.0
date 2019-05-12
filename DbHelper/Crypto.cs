@@ -34,9 +34,12 @@ namespace DbHelper
 
         public static string GenerateToken()
         {
+            // generate a date string with today's time and date
             var dateString = DateTime.Today.ToLongDateString();
+            // hash the date string into a token
             var token = HashPassword(dateString);
-            var safeToken = token.Replace("\\", null);
+            // strip out any back or forward slashes
+            var safeToken = token.Replace("\\", null).Replace("/", null);
             return safeToken;
         }
     }

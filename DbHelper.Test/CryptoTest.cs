@@ -65,7 +65,7 @@ namespace DbHelper.Test
             var isSafe = true;
 
             foreach (var t in token)
-                if(t == '\\')
+                if(t == '\\' || t == '/')
                     isSafe = false;
 
             Assert.IsTrue(isSafe, "Token contains a backslash");
