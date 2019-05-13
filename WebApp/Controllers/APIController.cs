@@ -90,7 +90,7 @@ namespace WebApp.Controllers
             return token != null ? Jsonify(token) : BadRequest("Invalid login");
         }
 
-        // Delete a user from db with ID >> Return OK
+        /* Delete a user from db with ID >> Return OK (currently not implemented) */
         [HttpDelete]
         [Route("user/delete/{token}/")]
         public ActionResult DeleteUser(string token)
@@ -105,7 +105,7 @@ namespace WebApp.Controllers
             return result ? Ok("User deleted") : BadRequest("Error deleting user");
         }
 
-        /* INSECURE! >> return User list */
+        /* INSECURE! >> return User list  (currently not implemented) */
         [HttpGet]
         [Route("users/all")]
         public JsonResult GetAllUsers()
@@ -164,7 +164,7 @@ namespace WebApp.Controllers
                 : BadRequest("Invalid PIN or email");
         }
 
-        /* Getting single account data >> return User list as USER Object */
+        /* Getting single account data >> return single USER Object */
         [HttpGet]
         [Route("user/{token}/")]
         public JsonResult GetUserDetail(String token)
