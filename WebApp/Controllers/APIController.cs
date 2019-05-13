@@ -186,12 +186,25 @@ namespace WebApp.Controllers
             {
                 Session["User"] = model;
                 return Ok("Success");
-            }
-            else
-            {
+
+            } else {
                 return BadRequest("Update failed");
             }
         }
+        
+        /* Updating user PASSWORD on DB (user is logged in) >> Return OK */
+        [HttpPatch]
+        [Route("newpass/in")]
+        public ActionResult UpdatePasswordAfterLoggedIn(ResetPasswordViewModel model)
+        {
+            if (model.Password == model.ConfirmPassword) {
+                _db.ResetPassword(model.Email, model.Password);
 
+            } else {
+                return BadRequest("Update failed");
+            }
+
+            return Ok("Success");
+        }
     }
 }
