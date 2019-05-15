@@ -192,18 +192,27 @@ namespace WebApp.Controllers
                 return BadRequest("Update failed");
             }
         }
-<<<<<<< HEAD
         
         /* Updating user PASSWORD on DB (user is logged in) >> Return OK */
         [HttpPatch]
         [Route("newpass/in")]
         public ActionResult UpdatePasswordAfterLoggedIn(ResetPasswordViewModel model)
-=======
+        {
+            if (model.Password == model.ConfirmPassword){
+                _db.ResetPassword(model.Email, model.Password);
+            }
+            else{
+                return BadRequest("Update failed");
+            }
 
-        [HttpGet, Route("plant/{token}")]
+            return Ok("Success");
+        }
+
+
+        [HttpGet, Route("plant/{token}/")]
         public JsonResult GetPlantsList(string token)
         {
-            var user = _db.FindUser(token);
+            var user = _db.FindUser(token: token);
             var plants = _db.GetPlantsForUser(user.Id);
 
             // Select only ID and Nickname from the list of plants
@@ -214,12 +223,12 @@ namespace WebApp.Controllers
         }
 
 
-        [HttpPut, Route("plant/edit/{token}")]
+        [HttpPut, Route("plant/edit/{token}/")]
         public ActionResult EditPlant(string token, Plant updatedPlant)
         {
             // Check that user exists and plant exists for user?
-            var user = _db.FindUser(token);
-            if (user == null) return BadRequest("Could not find user " + token);
+            var user = _db.FindUser(token: token);
+            if (user == null) return BadRequest("Invalid token ");
 
             // Get all the plants for the user where the Id matches updatedPlant ID
             var userPlantsWithSpecifiedId = _db.GetPlantsForUser(user.Id).Where(plant => plant.Id.Equals(updatedPlant.Id)).ToList();
@@ -236,33 +245,18 @@ namespace WebApp.Controllers
         }
 
        
-        [HttpDelete, Route("plant/del/{token}")]
+        [HttpDelete, Route("plant/del/{token}/")]
         public ActionResult DeletePlant(string token, string plantId)
         {
             // Check that the user exists
-            var user = _db.FindUser(token);
-            if (user == null) return BadRequest("Could not find user " + token);
+            var user = _db.FindUser(token: token);
+            if (user == null) return BadRequest("Invalid token");
 
             // Check that plant exists for that user
-
             var result = _db.DeletePlant(plantId);
             return result ? Ok("Plant deleted") : BadRequest("Error deleting plant: " + plantId);
         }
 
-        /* Get list of plant from a user which holds the token*/
-        /*[HttpGet]
-        [Route("plant/{token}")]
-        public JsonResult GetPlantListFromUser()
->>>>>>> Development
-        {
-            if (model.Password == model.ConfirmPassword) {
-                _db.ResetPassword(model.Email, model.Password);
-
-            } else {
-                return BadRequest("Update failed");
-            }
-
-            return Ok("Success");
-        }
+       
     }
 }
