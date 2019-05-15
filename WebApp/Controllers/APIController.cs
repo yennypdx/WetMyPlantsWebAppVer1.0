@@ -7,6 +7,7 @@ using SendGrid.Helpers.Mail;
 using System.Threading.Tasks;
 using WebApp.Models.AccountViewModels;
 using Models;
+using System.Linq;
 
 namespace WebApp.Controllers
 {
@@ -191,11 +192,68 @@ namespace WebApp.Controllers
                 return BadRequest("Update failed");
             }
         }
+<<<<<<< HEAD
         
         /* Updating user PASSWORD on DB (user is logged in) >> Return OK */
         [HttpPatch]
         [Route("newpass/in")]
         public ActionResult UpdatePasswordAfterLoggedIn(ResetPasswordViewModel model)
+=======
+
+        [HttpGet, Route("plant/{token}")]
+        public JsonResult GetPlantsList(string token)
+        {
+            var user = _db.FindUser(token);
+            var plants = _db.GetPlantsForUser(user.Id);
+
+            // Select only ID and Nickname from the list of plants
+            var plantListOfIdAndNickname = plants.Select(plant => new Plant { Id = plant.Id, Nickname = plant.Nickname });
+
+            // return list of all plants including nickname and id 
+            return Json(plantListOfIdAndNickname, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPut, Route("plant/edit/{token}")]
+        public ActionResult EditPlant(string token, Plant updatedPlant)
+        {
+            // Check that user exists and plant exists for user?
+            var user = _db.FindUser(token);
+            if (user == null) return BadRequest("Could not find user " + token);
+
+            // Get all the plants for the user where the Id matches updatedPlant ID
+            var userPlantsWithSpecifiedId = _db.GetPlantsForUser(user.Id).Where(plant => plant.Id.Equals(updatedPlant.Id)).ToList();
+
+            // Verify the plant exists for that user
+            if (userPlantsWithSpecifiedId.Count() <= 0) return BadRequest("Plant does not exists for spcified user " + token + " " + updatedPlant.Id);
+
+            // If count is greather than one, there are multiple plants with the same Id -- this should not happen
+            if (userPlantsWithSpecifiedId.Count() > 1) return BadRequest("Multiple plants exist with the same Id" + updatedPlant.Id);
+
+            var result = _db.UpdatePlant(updatedPlant);
+
+            return result ? Ok("Plant updated") : BadRequest("Error updating plant: " + updatedPlant.Id);
+        }
+
+       
+        [HttpDelete, Route("plant/del/{token}")]
+        public ActionResult DeletePlant(string token, string plantId)
+        {
+            // Check that the user exists
+            var user = _db.FindUser(token);
+            if (user == null) return BadRequest("Could not find user " + token);
+
+            // Check that plant exists for that user
+
+            var result = _db.DeletePlant(plantId);
+            return result ? Ok("Plant deleted") : BadRequest("Error deleting plant: " + plantId);
+        }
+
+        /* Get list of plant from a user which holds the token*/
+        /*[HttpGet]
+        [Route("plant/{token}")]
+        public JsonResult GetPlantListFromUser()
+>>>>>>> Development
         {
             if (model.Password == model.ConfirmPassword) {
                 _db.ResetPassword(model.Email, model.Password);
