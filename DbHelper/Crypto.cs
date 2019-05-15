@@ -63,4 +63,5 @@ namespace DbHelper
             Random rand = new Random();
             return rand.Next(100000, 999999);
         }
+    }
 }
