@@ -56,5 +56,11 @@ namespace DbHelper
             // return the character string
             return str;
         }
-    }
+
+        // GeneratePin returns a random 6 digit number to be used to reset password on Android
+        public static int GeneratePin()
+        {
+            Random rand = new Random();
+            return rand.Next(100000, 999999);
+        }
 }
