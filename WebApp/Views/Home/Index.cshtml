@@ -2,38 +2,87 @@
 @model WebApp.Models.HomeViewModels.DashboardViewModel
 @{
     ViewBag.Title = "Dashboard";
+    var numPlants = Model.Plants != null ? Model.Plants.Count : 0;
+    var plantList = Model.Plants != null ? Model.Plants : new List<Plant>();
 }
 
-@section scripts {
-    <style>
-        .header {
-            font-weight: bold;
-        }
-        .jumbotron {
-            background-color: honeydew;
-            padding: 15px;
-        }
-        .plant-links {
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Home</li>
+    </ol>
+</nav>
 
+<div class="container pt-5">
+    <h2 class="text-center">My Dashboard</h2>
+    <hr />
+    <h4>@numPlants registered plants</h4>
+    <a href="/plant/new" class="text-primary my-3">Add a new plant</a><br />
+    <a href="/plant/hub/new" class="text-sm">Register a Hub</a>
+    <div class="row">
+        @if(numPlants > 0)
+        {
+            <table class="table table-light table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Current Sunlight</th>
+                        <th>Current Water</th>
+                        <th colspan="2"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var p in plantList)
+                    {
+                        <tr>
+                            <td>
+                                @p.Nickname
+                            </td>
+                            <td>
+                                @if(p.CurrentLight < 0)
+                                {
+                                    <text>No data</text>
+                                }
+                                else
+                                {
+                                    @p.CurrentLight
+                                }
+                            </td>
+                            <td>
+                                @if(p.CurrentWater < 0)
+                                {
+                                    <text>No data</text>
+                                }
+                                else
+                                {
+                                    @p.CurrentWater
+                                }
+                            </td>
+                            <td>
+                                <a href="/plant/edit?id=@p.Id">Edit</a>
+                            </td>
+                            <td>
+                                <a href="/plant/delete?id=@p.Id" class="text-danger delete-button">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         }
-
-        .plant-links > button {
-        }
-    </style>
-}
-
-<h1>Welcome to your dashboard!</h1>
-<h3>@( ViewBag.FirstName ?? "Test" )</h3>
-
-<div class="jumbotron">
-    <div class="container container-fluid">
-        <div class="row" id="plant-list-header">
-            <div class="col-12">
-                <h4>Your plants:</h4>
-            </div>
-        </div>
-        <div>
-            @Html.Partial("PlantListPartial", Model.Plants)
-        </div>
     </div>
 </div>
+
+@section scripts {
+    <script>
+        $(document).ready(() => {
+            const deleteButtons = $('a.delete-button');
+
+            deleteButtons.on('click',
+                (e) => {
+                    e.preventDefault();
+                    if (confirm('Are you sure you want to delete this plant?')) {
+                        $(location).attr('href', e.target.href);
+                    }
+                });
+        })
+    </script>
+}

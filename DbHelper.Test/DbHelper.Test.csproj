@@ -100,20 +100,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CryptoTest.cs" />
-    <Compile Include="DbHelperMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AccessHelperTest.cs" />
     <Compile Include="DbHelperTest.cs" />
-    <Compile Include="DbHelperMockTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DBHelper\DBHelper.csproj">
-      <Project>{2d088a89-0542-4d61-acf9-9c36dfd19696}</Project>
-      <Name>DBHelper</Name>
+    <ProjectReference Include="..\DbHelper\DbHelper.csproj">
+      <Project>{86be900d-42c1-4210-b1ad-f3f769ce5dd3}</Project>
+      <Name>DbHelper</Name>
     </ProjectReference>
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{15aaf300-c672-4ff7-9ec8-b9e3de57e990}</Project>

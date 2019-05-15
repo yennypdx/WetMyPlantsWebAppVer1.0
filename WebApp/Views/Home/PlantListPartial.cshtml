@@ -1,7 +1,15 @@
 ﻿@using Models
 @model List<Models.Plant>
 @{
-
+    List<Plant> plantList;
+    if (Model == null)
+    {
+        plantList = new List<Plant>();
+    }
+    else
+    {
+        plantList = Model;
+    }
 }
 
 <div class="row">
@@ -11,7 +19,7 @@
     <div class="col-3"></div>
 </div>
 
-@foreach (var p in Model)
+@foreach (var p in plantList)
 {
     <div class="row">
         <div class="plant-col plant-name col-3">
@@ -24,8 +32,8 @@
             @p.CurrentWater
         </div>
         <div class="plant-links col-3">
-            <button class="button btn btn-outline-info btn-sm" id=@p.Id>Edit</button>
-            <button class="button btn btn-outline-danger btn-sm" id=@p.Id>Delete</button>
+            <a href="~/plant/edit/@p.Id"><button class="button btn btn-outline-info btn-sm">Edit</button></a>
+            <a href="~/plant/delete/@p.Id"><button class="button btn btn-outline-danger btn-sm">Delete</button></a>
         </div>
     </div>
 }

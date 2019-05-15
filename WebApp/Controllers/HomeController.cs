@@ -1,33 +1,39 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
-using DBHelper;
+using DbHelper;
 using Models;
+using WebApp.Auth;
+using WebApp.Models;
 using WebApp.Models.HomeViewModels;
-using DbHelper = DBHelper.DbHelper;
 
 namespace WebApp.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : AuthController
     {
-        private readonly IDbHelper _db;
+        //protected readonly IDbHelper Db;
 
         // DbHelper injected
-        public HomeController(IDbHelper db) => _db = db;
+        public HomeController(IDbHelper db) : base(db) { }
 
-        //public HomeController() => _helper = new DBHelper.DbHelper();
-        public ActionResult Index(User user)
+        [AuthorizeUser]
+        public ActionResult Index()
         {
-            if (user == null)
-                return RedirectToAction("Login", "Account");
+            // The AuthorizeUser attribute will ensure only a valid user can access this method,
+            // therefore, we know that Session carries a user object; no need to check.
+            if (!(Session["User"] is User user)) return RedirectToAction("Login", "Account");
 
-            var plants = _db.GetPlantsForUser(user.Id);
+            var plants = Db.GetPlantsForUser(user.Id);
 
-            var model = new DashboardViewModel {User = user, Plants = plants?? new List<Plant>()};
+            if (plants != null)
+                plants.ForEach(p => user.Plants.Add(p.Id));
+            else user.Plants = new List<string>();
 
-            //ViewBag.User = user;
+            var model = new DashboardViewModel
+            {
+                User = user,
+                Plants = plants
+            };
 
-            Session["User"] = user;
             return View(model);
         }
     }

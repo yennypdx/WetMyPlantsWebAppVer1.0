@@ -6,8 +6,10 @@
     <title>@ViewBag.Title - WetMyPlants</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Chewy|Roboto+Slab|PT+Sans" rel="stylesheet">
 </head>
-<body>
+<body class="bg-light text-dark">
 
 <style>
     .navbar {
@@ -24,52 +26,53 @@
         justify-content: flex-end;
         -webkit-justify-content: flex-end;
     }
+    footer {
+        font-size: 1rem;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
 </style>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark text-white">
-    <a class="navbar-brand">WetMyPlants</a>
+<nav class="navbar navbar-expand-md navbar-light bg-primary shadow border-dark border-bottom text-light">
+    <a href="/home" class="navbar-brand text-light"><img src="../../Content/wmp_icon.png" class="d-inline-block align-top" height="30" width="30"> WetMyPlants</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navigation">
         @if (Session["User"] != null)
         {
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav justify-content-end" id="nav-user-options">
                 <li>
-                    <a class="nav-item nav-link" href="~/home">Home</a>
+                    <a class="nav-item nav-link text-light" href="/home">Home</a>
                 </li>
                 <li>
-                    <a class="nav-item nav-link" href="~/home/plants">My Plants</a>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav" id="nav-user-options">
-                <li>
-                    <a class="nav-item nav-link" href="/account/myaccount">My Account</a>
+                    <a class="nav-item nav-link text-light" href="/account/myaccount">My Account</a>
                 </li>
                 <li>
-                    <a class="nav-item nav-link" href="/account/logout">Log Out</a>
+                    <a class="nav-item nav-link text-light" href="/account/logout">Log Out</a>
                 </li>
             </ul>
         }
         else
         {
-            @* Somehow change nav bar from "Login | Register" to "My Account" when a user is logged in *@
-            <ul class="nav navbar-nav" id="nav-user-options">
+            <ul class="nav navbar-nav justify-content-end" id="nav-user-options">
                 <li>
-                    <a class="nav-item nav-link" href="/account/login">Login</a>
+                    <a class="nav-item nav-link text-light" href="/account/login">Login</a>
                 </li>
                 <li>
-                    <a class="nav-item nav-link" href="/account/register">Register</a>
+                    <a class="nav-item nav-link text-light" href="/account/register">Register</a>
                 </li>              
             </ul>
         }
     </div>
 </nav>
 
-<div class="container body-content">
+<div class="body-content">
     @RenderBody()
-    <hr/>
-    <footer>
+    <footer class="px-3 text-primary">
+        <hr />
         <p>&copy; @DateTime.Now.Year - WetMyPlants</p>
     </footer>
 </div>

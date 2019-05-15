@@ -2,19 +2,26 @@
 using System.Collections.Generic;
 using Models;
 
-namespace DBHelper
+namespace DbHelper
 {
     public interface IDbHelper
     {
         bool CreateNewUser(string firstName, string lastName, string phone, string email, string password);
         List<User> GetAllUsers();
-        User FindUser(string email);
+        User FindUser(string email = null, string token = null);
         User FindUser(int id);
         bool AuthenticateUser(string email, string password);
         string LoginAndGetToken(string email, string password);
+        void SetResetCode(int userId, string resetCode);
+        bool ValidateResetCode(int userId, string resetCode);
+        void DeleteResetCode(int userId);
+        bool ValidateUserToken(int userId, string token);
         bool DeleteUser(string email);
         bool ResetPassword(string email, string newPassword);
         bool UpdateUser(User user);
+        void SetEmailNotificationPreference(int userId, bool setting);
+        void SetPhoneNotificationPreference(int userId, bool setting);
+        Dictionary<string, bool> GetNotificationPreferences(int userId);
 
         int CreateNewSpecies(string commonName, string latinName, double waterMax, double waterMin, double lightMax,
             double lightMin);
@@ -25,13 +32,13 @@ namespace DBHelper
         bool UpdateSpecies(Species update);
         bool DeleteSpecies(int id);
 
-        int CreateNewPlant(int speciesId, string nickname, double currentWater, double currentLight);
+        bool CreateNewPlant(string plantId, int speciesId, string nickname, double currentWater, double currentLight);
         bool RegisterPlantToUser(Plant plant, User user);
         List<Plant> GetAllPlants();
         List<Plant> GetPlantsForUser(int id);
         List<Plant> FindPlantsByNickname(string nickname);
-        Plant FindPlant(int id);
+        Plant FindPlant(string id);
         bool UpdatePlant(Plant update);
-        bool DeletePlant(int id);
+        bool DeletePlant(string id);
     }
 }

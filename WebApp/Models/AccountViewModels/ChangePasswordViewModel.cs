@@ -13,12 +13,11 @@ namespace WebApp.Models.AccountViewModels
         public string Email { get; set; }
 
         [Required]
-        [DataType(DataType.Password)]
+        [DataType(DataType.Password), Display(Name = "Current Password")]
         public string Password { get; set; }
 
         [Required]
-        [DataType(DataType.Password)]
+        [DataType(DataType.Password), Display(Name = "New Password")]
         public string NewPassword { get; set; }
-
     }
 }

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using DbHelper;
 using Models;
 
-namespace DBHelper
+namespace DbHelper
 {
     public enum UserColumns
     {
@@ -39,10 +38,10 @@ namespace DBHelper
     public enum PlantColumns
     {
         Id,
-        SpeciesId,
         Nickname,
         CurrentWater,
-        CurrentLight
+        CurrentLight,
+        SpeciesId
     }
 
     public class DbHelper : IDbHelper
@@ -119,17 +118,44 @@ namespace DBHelper
 
         // Queries the SQL database for a single user and all its data,
         // returns a filled User object
-        public User FindUser(string email)
+        public User FindUser(string email = null, string token = null)
         {
-            var queryString = $"SELECT * FROM Users WHERE Email = '{email}';";
+            if (email != null)
+            {
+                var queryString = $"SELECT * FROM Users WHERE Email = '{email}';";
 
-            var result = RunReader(queryString);
+                var result = RunReader(queryString);
 
-            // If there are no results to the query, the result will not contain
-            // any rows, and attempting to read it will throw an exception.
-            return result.Read()
-                ? BuildUserFromDataReader(result)
-                : null;
+                // If there are no results to the query, the result will not contain
+                // any rows, and attempting to read it will throw an exception.
+                return result.Read()
+                    ? BuildUserFromDataReader(result)
+                    : null;
+            }
+
+            if (token != null)
+            {
+                var tokenQuery = $"SELECT UserId FROM Tokens WHERE Token = '{token}'";
+
+                var idResult = RunScalar(tokenQuery);
+
+                if (idResult == null)
+                    return null;
+
+                var id = Convert.ToInt32(idResult);
+
+                var queryString = $"SELECT * FROM Users WHERE UserID = {id};";
+
+                var result = RunReader(queryString);
+
+                // If there are no results to the query, the result will not contain
+                // any rows, and attempting to read it will throw an exception.
+                return result.Read()
+                    ? BuildUserFromDataReader(result)
+                    : null;
+            }
+
+            return null;
         }
 
         public List<User> GetAllUsers()
@@ -195,7 +221,7 @@ namespace DBHelper
             {
                 var plant = new Plant
                 {
-                    Id = reader.GetInt32((int) PlantColumns.Id),
+                    Id = reader.GetString((int) PlantColumns.Id),
                     Nickname = reader.GetString((int) PlantColumns.Nickname),
                     SpeciesId = reader.GetInt32((int) PlantColumns.SpeciesId),
                     CurrentLight = reader.GetDouble((int) PlantColumns.CurrentLight),
@@ -215,7 +241,7 @@ namespace DBHelper
         {
             // Do not create the user if a user with the same email
             // already exists.
-            if (FindUser(email) != null) return false;
+            if (FindUser(email: email) != null) return false;
 
             // Never store the password directly, always use its hash.
             var passwordHash = Crypto.HashPassword(password);
@@ -228,13 +254,20 @@ namespace DBHelper
                               $", '{passwordHash}');";
 
             var result = RunNonQuery(queryString);
+
+            if (result)
+            {
+                var user = FindUser(email: email);
+                CreateNotificationPreferences(user.Id);
+            }
+
             return result;
         }
 
         // Deletes a user (tuple) from the database
         public bool DeleteUser(string email)
         {
-            var id = FindUser(email)?.Id;
+            var id = FindUser(email: email)?.Id;
             if (id == null) return false;
 
             var tokenQuery = $"DELETE FROM Tokens WHERE UserID = {id};";
@@ -245,6 +278,7 @@ namespace DBHelper
             RunNonQuery(tokenQuery);
             RunNonQuery(unlinkPlantsQuery);
             RunNonQuery(removeLinkedPlantsQuery);
+            DeleteNotificationPreferences(Convert.ToInt32(id));
             
             return RunNonQuery(userQuery);
         }
@@ -261,6 +295,71 @@ namespace DBHelper
                         $"WHERE UserId = {update.Id};";
 
             return RunNonQuery(query);
+        }
+
+        public void SetResetCode(int id, string resetCode)
+        {
+            if (FindUser(id) != null)
+            {
+                var query = $"INSERT INTO ResetCodes (UserId, Code) VALUES ({id}, '{resetCode}')";
+
+                RunNonQuery(query);
+            }
+        }
+
+        public bool ValidateResetCode(int userId, string resetCode)
+        {
+            var query = $"SELECT UserId FROM ResetCodes WHERE Code = '{resetCode}'";
+            var id = RunScalar(query);
+
+            return userId.ToString().Equals(id);
+        }
+
+        public void DeleteResetCode(int userId)
+        {
+            var query = $"DELETE FROM ResetCodes WHERE UserId = {userId}";
+            RunNonQuery(query);
+        }
+
+        public void SetEmailNotificationPreference(int userId, bool setting)
+        {
+            int set = setting ? 1 : 0;
+            var query = $"UPDATE Preferences SET Email = {set} WHERE UserID = {userId}";
+            RunNonQuery(query);
+        }
+
+        public void SetPhoneNotificationPreference(int userId, bool setting)
+        {
+            int set = setting ? 1 : 0;
+            var query = $"UPDATE Preferences SET Phone = {set} WHERE UserID = {userId};";
+            RunNonQuery(query);
+        }
+
+        public Dictionary<string, bool> GetNotificationPreferences(int userId)
+        {
+            var dict = new Dictionary<string, bool>();
+            var phoneQuery = $"SELECT Phone FROM Preferences WHERE UserID = {userId};";
+            var emailQuery = $"SELECT Email FROM Preferences WHERE UserID = {userId};";
+
+            var phoneResult = RunScalar(phoneQuery);
+            var emailResult = RunScalar(emailQuery);
+
+            dict["Phone"] = phoneResult != null && Convert.ToInt32(phoneResult) == 1;
+            dict["Email"] = emailResult != null && Convert.ToInt32(emailResult) == 1;
+
+            return dict;
+        }
+
+        private void CreateNotificationPreferences(int userId)
+        {
+            var query = $"INSERT INTO Preferences (UserID, Email, Phone) VALUES ({userId}, 1, 1);";
+            RunNonQuery(query);
+        }
+
+        private void DeleteNotificationPreferences(int userId)
+        {
+            var query = $"DELETE FROM Preferences WHERE UserID = {userId};";
+            RunNonQuery(query);
         }
 
         public int CreateNewSpecies(string commonName, string latinName, double waterMax = 0, double waterMin = 0, double lightMax = 0,
@@ -323,6 +422,7 @@ namespace DBHelper
             return null;
         }
 
+        /*
         public Species FindSpecies(string commonName)
         {
             var query = $"SELECT * FROM Species WHERE CommonName = '{commonName}';";
@@ -336,6 +436,7 @@ namespace DBHelper
 
             return species;
         }
+        */
 
         public Species FindSpecies(int id)
         {
@@ -378,13 +479,13 @@ namespace DBHelper
             return result;
         }
 
-        public int CreateNewPlant(int speciesId, string nickname, double currentWater = 0, double currentLight = 0)
+        public bool CreateNewPlant(string plantId, int speciesId, string nickname, double currentWater = 0, double currentLight = 0)
         {
-            var query = "INSERT INTO Plants (SpeciesID, Nickname, CurrentWater, CurrentLight)" +
-                        $"VALUES ({speciesId}, '{nickname}', {currentWater}, {currentLight}) " +
+            var query = "INSERT INTO Plants (PlantId, SpeciesID, Nickname, CurrentWater, CurrentLight)" +
+                        $"VALUES ('{plantId}', {speciesId}, '{nickname}', {currentWater}, {currentLight}) " +
                         "SELECT SCOPE_IDENTITY();";
 
-            var result = Convert.ToInt32(RunScalar(query));
+            var result = RunNonQuery(query);
 
             return result;
         }
@@ -412,20 +513,20 @@ namespace DBHelper
             var plantIds = RunReader(plantIdQuery);
 
             if (!plantIds.HasRows) return null;
-
+            
             var plants = new List<Plant>();
 
             while (plantIds.Read())
-                plants.Add(FindPlant(plantIds.GetInt32(0)));
+                plants.Add(FindPlant(plantIds.GetString(0)));
 
             return plants;
         }
 
         public bool RegisterPlantToUser(Plant plant, User user)
         {
-            var plantId = CreateNewPlant(plant.SpeciesId, plant.Nickname, plant.CurrentWater, plant.CurrentLight);
+            var plantId = plant.Id;
 
-            var query = $"INSERT INTO UserPlants(PlantID, UserID) VALUES ({plantId}, {user.Id});";
+            var query = $"INSERT INTO UserPlants(PlantID, UserID) VALUES ('{plantId}', {user.Id});";
 
             var result = RunNonQuery(query);
 
@@ -447,9 +548,9 @@ namespace DBHelper
             return list;
         }
 
-        public Plant FindPlant(int id)
+        public Plant FindPlant(string id)
         {
-            var query = $"SELECT * FROM Plants WHERE PlantID = {id};";
+            var query = $"SELECT * FROM Plants WHERE PlantID = '{id}';";
 
             var result = RunReader(query);
 
@@ -468,17 +569,17 @@ namespace DBHelper
                         $"Nickname = '{update.Nickname}', " +
                         $"CurrentWater = {update.CurrentWater}, " +
                         $"CurrentLight = {update.CurrentLight} " +
-                        $"WHERE PlantID = {update.Id};";
+                        $"WHERE PlantID = '{update.Id}';";
 
             var result = RunNonQuery(query);
 
             return result;
         }
 
-        public bool DeletePlant(int id)
+        public bool DeletePlant(string id)
         {
-            var query = $"DELETE FROM Plants WHERE PlantID = {id};";
-            var unlinkPlantQuery = $"DELETE FROM UserPlants WHERE PlantID = {id};";
+            var query = $"DELETE FROM Plants WHERE PlantID = '{id}';";
+            var unlinkPlantQuery = $"DELETE FROM UserPlants WHERE PlantID = '{id}';";
 
             RunNonQuery(unlinkPlantQuery);
             var result = RunNonQuery(query);
@@ -489,7 +590,7 @@ namespace DBHelper
         public bool AuthenticateUser(string email, string password)
         {
             // get the user's hash for comparison
-            var userHash = FindUser(email)?.Hash;
+            var userHash = FindUser(email: email)?.Hash;
             // validate the given password
             return Crypto.ValidatePassword(password, userHash);
         }
@@ -502,16 +603,21 @@ namespace DBHelper
                 return null;
 
             // if valid, get the user's id
-            var userId = FindUser(email)?.Id;
+            var userId = FindUser(email: email)?.Id;
             if (userId == null) throw new DataException("Unable to find user");
             // use the id to get the valid token
             return GetUserToken(Convert.ToInt32(userId));
         }
 
+        public bool ValidateUserToken(int userId, string token)
+        {
+            return GetUserToken(userId) == token;
+        }
+
         public bool ResetPassword(string email, string newPassword)
         {
             // find the user and get their ID
-            var id = FindUser(email)?.Id;
+            var id = FindUser(email: email)?.Id;
             // if no user (and no ID) was found, return false
             if (id == null) throw new DataException("Unable to find user");
 
@@ -546,12 +652,12 @@ namespace DBHelper
 
             // otherwise, get the token and its expiration date
             result.Read();
-            var expiry = result.GetDateTime((int)TokenColumns.Expiry).ToString("ddMMyyyy");
+            var expiry = result.GetDateTime((int) TokenColumns.Expiry);
             var token = result.GetString((int)TokenColumns.Token);
 
             // if the token has expired, generate a new one
             // otherwise return the valid token
-            return ToDateTime(expiry) > DateTime.Today 
+            return DateTime.Compare((expiry), DateTime.Today) <= 0
                 ? GenerateNewTokenForUser(id) 
                 : token;
         }
@@ -588,18 +694,5 @@ namespace DBHelper
             var query = $"INSERT INTO Tokens (UserID, Token, Expiry) VALUES ({userId}, '{token}', '{expiry}');";
             RunNonQuery(query);
         }
-
-        private static DateTime ToDateTime(string dateTime)
-        {
-            // convert a datetime string to a DateTime object
-            // datetime string expected in ddmmyyyy format
-            if (!dateTime.Length.Equals(8)) throw new ArgumentException("dateTime string must be in format ddmmyyyy");
-            return new DateTime()
-                    .AddYears((Convert.ToInt32(dateTime.Substring(4, 4))))
-                    .AddMonths(Convert.ToInt32(dateTime.Substring(2, 2)))
-                    .AddDays(Convert.ToDouble(dateTime.Substring(0, 2)));
-        }
-
-
     }
 }
