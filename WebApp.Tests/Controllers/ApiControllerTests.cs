@@ -499,11 +499,11 @@ namespace WebApp.Tests.Controllers
         {
             var token = "123456789";
 
-            var result = _api.GetUserDetail(token);
+            var result = _api.GetUserDetail(token).Data;
             //if (result == null) Assert.Fail("Result was null");
             //var returned = Json.Decode(result.Data.ToString())["content"];
 
-            Assert.IsNull(result, "Returned null");
+            Assert.IsNull(result, "Returned not null");
         }
 
         [TestMethod]
