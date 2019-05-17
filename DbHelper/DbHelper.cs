@@ -52,7 +52,6 @@ namespace DbHelper
         public DbHelper(string connectionString = null)
         {
             _connectionString = connectionString ?? AccessHelper.GetDbConnectionString();
-            _dbConnection = new SqlConnection(_connectionString);
         }
 
         // Open() makes it easier to use the SqlConnection without worrying about
@@ -77,7 +76,7 @@ namespace DbHelper
         // typically an ID or a count.
         private string RunScalar(string queryString)
         {
-            using (SqlConnection connection = new SqlConnection(AccessHelper.GetDbConnectionString()))
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 var sqlCommand = new SqlCommand(queryString, connection);
@@ -91,7 +90,7 @@ namespace DbHelper
         // RunReader executes a SQL query command, returning a collection of data.
         private DataTableReader RunReader(string queryString)
         {
-            using (SqlConnection connection = new SqlConnection(AccessHelper.GetDbConnectionString()))
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 var sqlCommand = new SqlCommand(queryString, connection);
@@ -111,7 +110,7 @@ namespace DbHelper
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(AccessHelper.GetDbConnectionString()))
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
                     var sqlCommand = new SqlCommand(queryString, connection);

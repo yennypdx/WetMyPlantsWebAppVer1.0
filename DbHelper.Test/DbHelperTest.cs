@@ -243,8 +243,9 @@ namespace DbHelper.Test
         {
             var originalToken = _db.LoginAndGetToken(email, password);
             var userId = _db.FindUser(email).Id;
-            
-            using (SqlConnection connection = new SqlConnection(AccessHelper.GetDbConnectionString()))
+
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 for (var i = 0; i < 10; i++)
@@ -258,7 +259,7 @@ namespace DbHelper.Test
                 connection.Close();
             }
 
-            using (SqlConnection connection = new SqlConnection(AccessHelper.GetDbConnectionString()))
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 var numTokensQuery = $"SELECT COUNT(*) FROM Tokens WHERE UserID = {userId};";
@@ -287,7 +288,7 @@ namespace DbHelper.Test
             var today = DateTime.Today; // get today's date
             var query = $"UPDATE Tokens SET Expiry = '{today.ToString("G")}' WHERE UserID = {userId};"; // set the user's token's expiration date to today
 
-            using (SqlConnection connection = new SqlConnection(AccessHelper.GetDbConnectionString()))
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 
