@@ -483,50 +483,50 @@ namespace WebApp.Tests.Controllers
         [TestMethod]
         public void ApiController_GetUserDetail()
         {
-            //var token = _tokenTable.FirstOrDefault(t => t.Key.Equals(_testUser.Id)).Value;
-
-            //var result = _api.GetUserDetail(token);
+            var token = _tokenTable.FirstOrDefault(t => t.Key.Equals(_testUser.Id)).Value;
+            var result = _api.GetUserDetail(token);
             //if (result == null) Assert.Fail("Result was null");
-
-            //var data = result.Data.ToString();
+            var data = result.Data.ToString();
 
             //var returned = Json.Decode<User>(data);
             //if (returned == null) Assert.Fail("Data was null");
 
-            //Assert.AreEqual(_testUser.Id, returned.Id, "User returned did not have matching ID");
+            Assert.AreEqual(data, "Models.User", "User returned did not have matching value");
         }
 
         [TestMethod]
         public void ApiController_GetUserDetail_InvalidToken()
         {
-            //var token = "123456789";
+            var token = "123456789";
 
-            //var result = _api.GetUserDetail(token);
-            ////if (result == null) Assert.Fail("Result was null");
-            ////var returned = Json.Decode(result.Data.ToString())["content"];
+            var result = _api.GetUserDetail(token);
+            //if (result == null) Assert.Fail("Result was null");
+            //var returned = Json.Decode(result.Data.ToString())["content"];
 
-            //Assert.IsNull(result, "Returned null");
+            Assert.IsNull(result, "Returned null");
         }
 
         [TestMethod]
         public void ApiController_UpdateAccountInfo()
         {
+            var token = "12345";
             //var model = _testUser;
             //model.Email = "new@email.address";
-            //var model = new User
-            //{
-            //    Email = "new@email.address",
-            //    FirstName = _testUser.FirstName,
-            //    LastName = _testUser.LastName,
-            //    Hash = _testUser.Hash,
-            //    Id = _testUser.Id,
-            //    Password = _testUser.Password,
-            //    Phone = _testUser.Phone,
-            //    Plants = _testUser.Plants
-            //};
+            var model = new User
+            {
+                Id = _testUser.Id,
+                FirstName = _testUser.FirstName,
+                LastName = _testUser.LastName,
+                Phone = _testUser.Phone,
+                Email = "new@email.address",
+                Hash = _testUser.Hash,
+                Password = _testUser.Password,
+                Plants = _testUser.Plants
+            };
 
-            //var result = _api.UpdateAccountInfo(model) as HttpStatusCodeResult;
-            //if (result == null) Assert.Fail("Result was null");
+            var result = _api.UpdateAccountInfo(token, model) as HttpStatusCodeResult;
+            if (result == null)
+                Assert.Fail("Result was null");
 
             //Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), result.StatusCode, "Status was not 200 OK");
         }
