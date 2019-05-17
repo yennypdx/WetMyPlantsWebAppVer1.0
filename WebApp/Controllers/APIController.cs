@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using WebApp.Models.AccountViewModels;
 using Models;
 using System.Linq;
+using System.Data.SqlClient;
 
 namespace WebApp.Controllers
 {
@@ -171,9 +172,9 @@ namespace WebApp.Controllers
         public JsonResult GetUserDetail(String token)
         {
             var user = _db.FindUser(token: token);
-
-            if (user == null)
+            if (user == null){
                 BadRequest("User not found.");
+            }
 
             return Json(user, JsonRequestBehavior.AllowGet);
         }
@@ -208,18 +209,49 @@ namespace WebApp.Controllers
             return Ok("Success");
         }
 
+        [HttpGet]
+        [Route("plant/id/{id}/")]
+        public JsonResult GetPlantDetail(String inId)
+        {
+            var plant = _db.FindPlant(id: inId);
+            if (plant == null){
+                BadRequest("Plant not found.");
+            }
+
+            return Json(plant, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [Route("plant/add/{token}/")]
+        public ActionResult AddNewPlant(String token, Plant newPlant)
+        {
+            var user = _db.FindUser(token: token);
+            if (user != null)
+            {
+                _db.CreateNewPlant(newPlant.Id, newPlant.SpeciesId, newPlant.Nickname,
+                    newPlant.CurrentWater, newPlant.CurrentLight);
+
+                _db.RegisterPlantToUser(newPlant, user);
+            }
+            else
+            {
+                BadRequest("Input is null");
+            }
+                
+            return Ok("Success");
+        }
 
         [HttpGet, Route("plant/{token}/")]
-        public JsonResult GetPlantsList(string token)
+        public JsonResult GetPlantsList(String token)
         {
             var user = _db.FindUser(token: token);
             var plants = _db.GetPlantsForUser(user.Id);
 
             // Select only ID and Nickname from the list of plants
-            var plantListOfIdAndNickname = plants.Select(plant => new Plant { Id = plant.Id, Nickname = plant.Nickname });
+            //var plantListOfIdAndNickname = plants.Select(plant => new Plant { Id = plant.Id, Nickname = plant.Nickname });
 
             // return list of all plants including nickname and id 
-            return Json(plantListOfIdAndNickname, JsonRequestBehavior.AllowGet);
+            return Json(plants, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -234,10 +266,10 @@ namespace WebApp.Controllers
             var userPlantsWithSpecifiedId = _db.GetPlantsForUser(user.Id).Where(plant => plant.Id.Equals(updatedPlant.Id)).ToList();
 
             // Verify the plant exists for that user
-            if (userPlantsWithSpecifiedId.Count() <= 0) return BadRequest("Plant does not exists for spcified user " + token + " " + updatedPlant.Id);
+            if (userPlantsWithSpecifiedId.Count() <= 0) return BadRequest("Invalid token");
 
             // If count is greather than one, there are multiple plants with the same Id -- this should not happen
-            if (userPlantsWithSpecifiedId.Count() > 1) return BadRequest("Multiple plants exist with the same Id" + updatedPlant.Id);
+            if (userPlantsWithSpecifiedId.Count() > 1) return BadRequest("Invalid token");
 
             var result = _db.UpdatePlant(updatedPlant);
 

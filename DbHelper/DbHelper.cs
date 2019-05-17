@@ -62,9 +62,14 @@ namespace DbHelper
             // Need to reset the connection string anytime the connection closes.
             // The using() statements in the helper methods below will close the
             // connection once the block's execution completes.
-            _dbConnection.ConnectionString = _connectionString;
+            if (_dbConnection.State == ConnectionState.Closed)
+            {
+                _dbConnection.ConnectionString = _connectionString;
+            }
             if (_dbConnection.State != ConnectionState.Open)
+            {
                 _dbConnection.Open();
+            }
             return _dbConnection;
         }
 
@@ -72,11 +77,13 @@ namespace DbHelper
         // typically an ID or a count.
         private string RunScalar(string queryString)
         {
-            var sqlCommand = new SqlCommand(queryString, _dbConnection);
-
-            using(Open())
+            using (SqlConnection connection = new SqlConnection(AccessHelper.GetDbConnectionString()))
             {
+                connection.Open();
+                var sqlCommand = new SqlCommand(queryString, connection);
+                sqlCommand.CommandTimeout = 0;
                 var result = sqlCommand.ExecuteScalar()?.ToString();
+                connection.Close();
                 return result;
             }
         }
@@ -84,13 +91,16 @@ namespace DbHelper
         // RunReader executes a SQL query command, returning a collection of data.
         private DataTableReader RunReader(string queryString)
         {
-            var sqlCommand = new SqlCommand(queryString, _dbConnection);
-            var adapter = new SqlDataAdapter(sqlCommand);
-            var dataSet = new DataSet();
-
-            using(Open())
+            using (SqlConnection connection = new SqlConnection(AccessHelper.GetDbConnectionString()))
             {
+                connection.Open();
+                var sqlCommand = new SqlCommand(queryString, connection);
+                sqlCommand.CommandTimeout = 0;
+                var adapter = new SqlDataAdapter(sqlCommand);
+                var dataSet = new DataSet();
+
                 adapter.Fill(dataSet);
+                connection.Close();
                 return dataSet.CreateDataReader();
             }
         }
@@ -99,12 +109,14 @@ namespace DbHelper
         // will return the number of rows affected by the action.
         private bool RunNonQuery(string queryString)
         {
-            var sqlCommand = new SqlCommand(queryString, _dbConnection);
-
             try
             {
-                using(Open())
+                using (SqlConnection connection = new SqlConnection(AccessHelper.GetDbConnectionString()))
                 {
+                    connection.Open();
+                    var sqlCommand = new SqlCommand(queryString, connection);
+                    sqlCommand.CommandTimeout = 0;
+
                     var result = sqlCommand.ExecuteNonQuery();
                     return result != 0;
                 }
