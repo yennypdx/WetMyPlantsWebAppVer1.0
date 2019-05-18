@@ -48,6 +48,7 @@ namespace WebApp.Controllers
 
             return RedirectToAction("Login");
         }
+
         [HttpPost]
         public ActionResult ForgotUserPassword(ForgotPasswordViewModel uModel)
         {
@@ -236,6 +237,7 @@ namespace WebApp.Controllers
             };
             return View("ChangePassword", model);
         }
+
         [AuthorizeUser, HttpPost]
         public ActionResult ConfirmPasswordChange(ChangePasswordViewModel model)
         {
