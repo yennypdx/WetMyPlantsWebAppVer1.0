@@ -242,30 +242,36 @@ namespace DbHelper.Test
         public void DbHelperRemoveErroneousTokensTest()
         {
             var originalToken = _db.LoginAndGetToken(email, password);
-
-            var db = new SqlConnection(_connectionString);
             var userId = _db.FindUser(email).Id;
-            db.Open();
-            for (var i = 0; i < 10; i++)
+
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                var testQuery = "INSERT INTO Tokens (UserID, Token, Expiry) " +
-                                $"VALUES ({userId}, '{new Random().Next(100000000, 999999999)}', 01012000);";
+                connection.Open();
+                for (var i = 0; i < 10; i++)
+                {
+                    var testQuery = "INSERT INTO Tokens (UserID, Token, Expiry) " +
+                                    $"VALUES ({userId}, '{new Random().Next(100000000, 999999999)}', 01012000);";
 
-                var testCommand = new SqlCommand(testQuery, db);
-                testCommand.ExecuteNonQuery();
+                    var testCommand = new SqlCommand(testQuery, connection);
+                    testCommand.ExecuteNonQuery();
+                }
+                connection.Close();
             }
-            db.Close();
 
-            var numTokensQuery = $"SELECT COUNT(*) FROM Tokens WHERE UserID = {userId};";
-            db.ConnectionString = AccessHelper.GetDbConnectionString();
-            db.Open();
-            var cmd = new SqlCommand(numTokensQuery, db);
-            var numTokens = cmd.ExecuteScalar().ToString();
-            db.Close();
-            
-            if (Convert.ToInt32(numTokens) <= 1)
-                Assert.IsFalse(false);
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var numTokensQuery = $"SELECT COUNT(*) FROM Tokens WHERE UserID = {userId};";
 
+                var cmd = new SqlCommand(numTokensQuery, connection);
+                var numTokens = cmd.ExecuteScalar().ToString();
+
+                if (Convert.ToInt32(numTokens) <= 1)
+                    Assert.IsFalse(false);
+                connection.Close();
+            }
+        
             var currentToken = _db.LoginAndGetToken(email, password); // this should erase all tokens and create one new one.
 
             Assert.AreNotEqual(originalToken, currentToken);
@@ -278,19 +284,20 @@ namespace DbHelper.Test
 
             // to adequately test an expired token, we must connect to the database and manually set a token's expiration date
             // for this test, I have chosen to set TODAY as the expiration date.
-            var db = new SqlConnection(_connectionString); // manually connect to the test database
             var userId = _db.FindUser(email)?.Id; // find the test user's ID
-
             var today = DateTime.Today; // get today's date
-
             var query = $"UPDATE Tokens SET Expiry = '{today.ToString("G")}' WHERE UserID = {userId};"; // set the user's token's expiration date to today
 
-            // execute the sql query
-            var cmd = new SqlCommand(query, db);
-            db.Open();
-            cmd.ExecuteNonQuery();
-            db.Close();
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                
+                var cmd = new SqlCommand(query, connection);
+                cmd.ExecuteNonQuery();
 
+                connection.Close();
+            }
+            
             var currentToken = _db.LoginAndGetToken(email, password); // get the current (new) token
 
             Assert.AreNotEqual(originalToken, currentToken); // verify it is NEW and not the same as the original one
