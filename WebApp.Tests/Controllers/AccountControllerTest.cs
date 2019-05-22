@@ -281,14 +281,17 @@ namespace WebApp.Tests.Controllers
         }
 
         [TestMethod]
-        public void AccountController_ResetPasswordDeletesResetCode()
+        public void AccountController_ResetPasswordValidCodeReturnsView()
         {
             var code = "TestResetCode1234567890";
             _resetCodeDictionary.Add(_testUser.Id, code);
 
-            _accountController.ResetPassword(_testUser.Id, code);
-
-            Assert.IsFalse(_resetCodeDictionary.ContainsKey(_testUser.Id));
+            var result = _accountController.ResetPassword(_testUser.Id, code) as ViewResult;
+            var model = result?.Model as ResetPasswordViewModel;
+            
+            Assert.IsNotNull(result, "Did not return the ResetPassword view");
+            Assert.IsNotNull(model, "Did not return a ResetPasswordViewModel object");
+            Assert.AreEqual(_testUser.Email, model.Email);
         }
 
         [TestMethod]
