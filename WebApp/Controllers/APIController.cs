@@ -126,7 +126,7 @@ namespace WebApp.Controllers
                 return BadRequest("Could not find user " + model);
             }
 
-            var resetCode = Crypto.HashPassword(DateTime.Today.ToLongDateString());
+            var resetCode = Crypto.GeneratePin().ToString();
             //TODO: Store the reset code in the DB
             _db.SetResetCode(result.Id, resetCode);
 
@@ -146,8 +146,7 @@ namespace WebApp.Controllers
                 return BadRequest("Could not find user " + model);
             }
 
-            var resetCode = Crypto.HashPassword(DateTime.Today.ToLongDateString());
-            //TODO: Store the reset code in the DB
+            var resetCode = Crypto.GeneratePin().ToString();
             _db.SetResetCode(result.Id, resetCode);
 
             //TODO: modify SendPasswordResetEmail() method

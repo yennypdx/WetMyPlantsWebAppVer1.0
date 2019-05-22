@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using Models;
 
 namespace DbHelper
@@ -398,7 +399,7 @@ namespace DbHelper
                 list.Add(BuildSpeciesFromDataReader(reader));
             }
 
-            return list;
+            return list.OrderBy(s => s.LatinName).ToList();
         }
 
         public Species FindSpecies(string commonName = null, string latinName = null)
