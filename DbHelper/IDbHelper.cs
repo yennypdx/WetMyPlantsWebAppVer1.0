@@ -40,5 +40,11 @@ namespace DbHelper
         Plant FindPlant(string id);
         bool UpdatePlant(Plant update);
         bool DeletePlant(string id);
+        int CreateHub(Hub hub);
+        bool DeleteHub(int id);
+        List<Hub> GetHubList(int userId);
+        Hub GetHub(int id);
+
+        List<Hub> GetAllHubs();
     }
 }

@@ -45,6 +45,11 @@ namespace DbHelper
         SpeciesId
     }
 
+    public enum HubColumns
+    {
+        Id, Address, UserId, CurrentPower
+    }
+
     public class DbHelper : IDbHelper
     {
         private readonly string _connectionString;
@@ -638,6 +643,101 @@ namespace DbHelper
             var newHash = Crypto.HashPassword(newPassword);
             var query = $"UPDATE Users SET Hash = '{newHash}' WHERE UserID = {id};";
             return RunNonQuery(query);
+        }
+
+        public int CreateHub(Hub hub)
+        {
+            var query = $"INSERT INTO Hubs (HubAddress, UserId, CurrentPower)" +
+                $"VALUES ('{hub.Address}', {hub.UserId}, {hub.CurrentPower}) " +
+                $"SELECT SCOPE_IDENTITY();";
+
+            var id = RunScalar(query);
+
+            return id != null
+                ? Convert.ToInt32(id)
+                : -1;
+        }
+
+        public bool DeleteHub(int id)
+        {
+            var query = $"DELETE FROM Hubs WHERE HubId = {id};";
+
+            var result = RunNonQuery(query);
+            return result;
+        }
+
+        public Hub GetHub(int id)
+        {
+            var query = $"SELECT * FROM Hubs WHERE HubId = {id};";
+
+            var reader = RunReader(query);
+
+            if (reader != null)
+            {
+                reader.Read();
+                var hub = BuildHub(reader);
+                return hub;
+            }
+
+            return null;
+        }
+
+        public List<Hub> GetHubList(int userId)
+        {
+            var query = $"SELECT * FROM Hubs WHERE UserId = {userId};";
+
+            var reader = RunReader(query);
+
+            if (reader != null)
+            {
+                var hubList = new List<Hub>();
+                while (reader.Read())
+                {
+                    hubList.Add(BuildHub(reader));
+                }
+
+                return hubList;
+            }
+
+            return null;
+        }
+
+        public List<Hub> GetAllHubs()
+        {
+            var query = $"SELECT * FROM Hubs";
+
+            var reader = RunReader(query);
+
+            if(reader != null)
+            {
+                var hubList = new List<Hub>();
+                while(reader.Read())
+                {
+                    hubList.Add(BuildHub(reader));
+                }
+
+                return hubList;
+            }
+
+            return null;
+        }
+
+        private static Hub BuildHub(DataTableReader reader)
+        {
+            try
+            {
+                return new Hub
+                {
+                    Id = reader.GetInt32((int)HubColumns.Id),
+                    Address = reader.GetString((int)HubColumns.Address),
+                    UserId = reader.GetInt32((int)HubColumns.UserId),
+                    CurrentPower = reader.GetDouble((int)HubColumns.CurrentPower)
+                };
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         private string GetUserToken(int id)
