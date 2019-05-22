@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - WetMyPlants</title>
+    <link rel="icon" type="image/png" href="~/Content/wmp_icon_solid.png"/>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
@@ -12,6 +13,7 @@
 <body class="bg-light text-dark">
 
 <style>
+    /*
     .navbar {
         position: fixed;
         top: 0;
@@ -33,39 +35,44 @@
         left: 0;
         right: 0;
     }
+        */
+    .toggler-light.navbar-toggler {
+        border-color: rgb(255,255,255);
+    }
+    .toggler-light .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+    }
 </style>
 
 <nav class="navbar navbar-expand-md navbar-light bg-primary shadow border-dark border-bottom text-light">
     <a href="/home" class="navbar-brand text-light"><img src="../../Content/wmp_icon.png" class="d-inline-block align-top" height="30" width="30"> WetMyPlants</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-label="Toggle navigation">
+    <button class="navbar-toggler ml-auto toggler-light" type="button" data-toggle="collapse" data-target="#navigation" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navigation">
-        @if (Session["User"] != null)
-        {
-            <ul class="nav navbar-nav justify-content-end" id="nav-user-options">
-                <li>
-                    <a class="nav-item nav-link text-light" href="/home">Home</a>
+        <ul class="navbar-nav justify-content-end ml-auto">
+            @if (Session["User"] != null)
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="/home">Dashboard</a>
                 </li>
-                <li>
-                    <a class="nav-item nav-link text-light" href="/account/myaccount">My Account</a>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="/account/myaccount">My Account</a>
                 </li>
-                <li>
-                    <a class="nav-item nav-link text-light" href="/account/logout">Log Out</a>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="/account/logout">Logout</a>
                 </li>
-            </ul>
-        }
-        else
-        {
-            <ul class="nav navbar-nav justify-content-end" id="nav-user-options">
-                <li>
-                    <a class="nav-item nav-link text-light" href="/account/login">Login</a>
+            }
+            else
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="/account/login">Login</a>
                 </li>
-                <li>
-                    <a class="nav-item nav-link text-light" href="/account/register">Register</a>
-                </li>              
-            </ul>
-        }
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="/account/register">Register</a>
+                </li>
+            }
+        </ul>
     </div>
 </nav>
 

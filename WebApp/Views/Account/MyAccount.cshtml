@@ -2,7 +2,7 @@
 
 @{
     bool doNotNotify = false;
-    ViewBag.Title = "View";
+    ViewBag.Title = "My Account";
     if(Model.NotifyPhone == false && Model.NotifyEmail == false)
     {
         doNotNotify = true;
@@ -73,7 +73,7 @@
                 </div>
                 <div class="col-md-5">
                     <h5>Notification Settings:</h5>
-                    <div class="row flex-column">
+
                         <div class="form-group row">
                             <div class="col-2">
                                 <label for="notify-phone">Phone:</label>
@@ -102,7 +102,6 @@
                                 <input type="checkbox" name="" id="do-not-notify" checked="@doNotNotify" class="pointer ml-3" />
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
             <div class="form-group">
@@ -111,7 +110,7 @@
         </div>
 
     }
-    <a href="/Account/DeleteUser" class="text-danger position-relative" style="bottom: -100px;">Delete My Account</a>
+    <a href="/Account/DeleteUser" class="text-danger">Delete My Account</a>
 </div>
 
 
