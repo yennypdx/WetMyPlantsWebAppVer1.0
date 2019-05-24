@@ -255,7 +255,7 @@ namespace WebApp.Controllers
         }
 
 
-        [HttpPut, Route("plant/edit/{token}/")]
+        [HttpPatch, Route("plant/edit/{token}/")]
         public ActionResult EditPlant(string token, Plant updatedPlant)
         {
             // Check that user exists and plant exists for user?
@@ -278,7 +278,7 @@ namespace WebApp.Controllers
 
        
         [HttpDelete, Route("plant/del/{token}/")]
-        public ActionResult DeletePlant(string token, string plantId)
+        public ActionResult DeletePlant(String token, String plantId)
         {
             // Check that the user exists
             var user = _db.FindUser(token: token);
@@ -288,7 +288,5 @@ namespace WebApp.Controllers
             var result = _db.DeletePlant(plantId);
             return result ? Ok("Plant deleted") : BadRequest("Error deleting plant: " + plantId);
         }
-
-       
     }
 }
