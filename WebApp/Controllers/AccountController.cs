@@ -36,8 +36,6 @@ namespace WebApp.Controllers
 
             if (Db.ValidateResetCode((int)userId, code))
             {
-                Db.DeleteResetCode((int)userId);
-
                 var model = new ResetPasswordViewModel()
                 {
                     Email = (Db.FindUser((int)userId))?.Email
@@ -48,6 +46,7 @@ namespace WebApp.Controllers
 
             return RedirectToAction("Login");
         }
+
         [HttpPost]
         public ActionResult ForgotUserPassword(ForgotPasswordViewModel uModel)
         {
@@ -55,7 +54,7 @@ namespace WebApp.Controllers
 
             if (result == null) return Redirect("ForgotPassword");
 
-            var resetCode = Crypto.HashPassword(DateTime.Today.ToLongDateString());
+            var resetCode = Crypto.GeneratePin().ToString();
             // TODO: Store the reset code in the DB
             Db.SetResetCode(result.Id, resetCode);
 
@@ -73,7 +72,7 @@ namespace WebApp.Controllers
             {
                 From = new EmailAddress("resetpassword@wetmyplants.com", "WetMyPlants Team"),
                 Subject = "Reset Password",
-                PlainTextContent = "Please click on this link to reset your password: " + "http://wetmyplants.azurewebsites.net/Account/ResetPassword",
+                PlainTextContent = "Please click on this link to reset your password: " + urlString,
                 HtmlContent = "<strong>Please click on this link to reset your password: </strong><a href=\"" + urlString + "\" > wetmyplants.azurewebsites.net/Account/ResetPassword</a>"
             };
             msg.AddTo(new EmailAddress(email, "user"));
@@ -85,7 +84,12 @@ namespace WebApp.Controllers
         {
             if(uModel.Password == uModel.ConfirmPassword)
             {
+                var user = Db.FindUser(email: uModel.Email);
+                if(user == null)
+                    return RedirectToAction("Login");
+
                 Db.ResetPassword(uModel.Email, uModel.Password);
+                Db.DeleteResetCode(user.Id);
             }
             
             return RedirectToAction("Login");
@@ -236,6 +240,7 @@ namespace WebApp.Controllers
             };
             return View("ChangePassword", model);
         }
+
         [AuthorizeUser, HttpPost]
         public ActionResult ConfirmPasswordChange(ChangePasswordViewModel model)
         {

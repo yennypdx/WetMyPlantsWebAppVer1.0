@@ -34,13 +34,34 @@ namespace DbHelper
 
         public static string GenerateToken()
         {
-            // generate a date string with today's time and date
-            var dateString = DateTime.Today.ToLongDateString();
-            // hash the date string into a token
-            var token = HashPassword(dateString);
-            // strip out any back or forward slashes
-            var safeToken = token.Replace("\\", null).Replace("/", null);
-            return safeToken;
+            // allocate a new string
+            var str = string.Empty;
+            // create a new random number generator
+            var r = new Random(Convert.ToInt32(DateTime.Now.Millisecond));
+
+            // we will generate a string of 100 random alphabetic characters
+            for (var i = 0; i < 100; i++)
+            {
+                // each character has a 50% chance of being uppercase vs. lowercase
+                if (r.Next(1, 4) <= 2)
+                    // lowercase
+                    str += Convert.ToChar(r.Next(97, 122));
+                else
+                {
+                    // uppercase
+                    str += Convert.ToChar(r.Next(65, 90));
+                }
+            }
+
+            // return the character string
+            return str;
+        }
+
+        // GeneratePin returns a random 6 digit number to be used to reset password on Android
+        public static int GeneratePin()
+        {
+            Random rand = new Random(DateTime.Now.Millisecond);
+            return rand.Next(100000, 999999);
         }
     }
 }

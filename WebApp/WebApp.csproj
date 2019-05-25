@@ -204,6 +204,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\APIController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HubController.cs" />
     <Compile Include="Controllers\PiAPIController.cs" />
     <Compile Include="Controllers\PlantController.cs" />
     <Compile Include="Global.asax.cs">
@@ -217,6 +218,7 @@
     <Compile Include="Models\AccountViewModels\RegistrationViewModel.cs" />
     <Compile Include="Models\AccountViewModels\ResetPasswordViewModel.cs" />
     <Compile Include="Models\HomeViewModels\DashboardViewModel.cs" />
+    <Compile Include="Models\HubViewModels\HubViewModel.cs" />
     <Compile Include="Models\IAuthorize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -285,6 +287,8 @@
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Plant\Edit.cshtml" />
     <Content Include="Views\Plant\Add.cshtml" />
+    <Content Include="Views\Hub\Index.cshtml" />
+    <Content Include="Views\Hub\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

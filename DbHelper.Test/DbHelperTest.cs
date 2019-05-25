@@ -9,7 +9,7 @@
 using System;
 using System.Data.SqlClient;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using Models;
 
 namespace DbHelper.Test
 {
@@ -48,6 +48,9 @@ namespace DbHelper.Test
         private readonly double plantTwoCurrentWater = 8.00;
         private readonly string plantTwoId = "C4:C7:8D:6A:50:E5";
 
+        private readonly string hubAddress = "12:AB:34:CD";
+        private readonly double hubCurrentPower = 55.55;
+
         public DbHelperTest()
         {
             _db = GetDb();
@@ -75,6 +78,8 @@ namespace DbHelper.Test
 
             _db.RegisterPlantToUser(_db.FindPlant(plantOneId), _db.FindUser(email: email));
             _db.RegisterPlantToUser(_db.FindPlant(plantTwoId), _db.FindUser(email: email));
+
+            _db.CreateHub(new Hub { Address = hubAddress, UserId = _db.GetAllUsers()[0].Id, CurrentPower = hubCurrentPower });
         }
 
         [TestCleanup]
@@ -88,6 +93,9 @@ namespace DbHelper.Test
 
             var species = _db.GetAllSpecies();
             species?.ForEach(i => _db.DeleteSpecies(i.Id));
+
+            var hubs = _db.GetAllHubs();
+            hubs?.ForEach(i => _db.DeleteHub(i.Id));
         }
 
         [TestMethod]
@@ -242,30 +250,36 @@ namespace DbHelper.Test
         public void DbHelperRemoveErroneousTokensTest()
         {
             var originalToken = _db.LoginAndGetToken(email, password);
-
-            var db = new SqlConnection(_connectionString);
             var userId = _db.FindUser(email).Id;
-            db.Open();
-            for (var i = 0; i < 10; i++)
+
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                var testQuery = "INSERT INTO Tokens (UserID, Token, Expiry) " +
-                                $"VALUES ({userId}, '{new Random().Next(100000000, 999999999)}', 01012000);";
+                connection.Open();
+                for (var i = 0; i < 10; i++)
+                {
+                    var testQuery = "INSERT INTO Tokens (UserID, Token, Expiry) " +
+                                    $"VALUES ({userId}, '{new Random().Next(100000000, 999999999)}', 01012000);";
 
-                var testCommand = new SqlCommand(testQuery, db);
-                testCommand.ExecuteNonQuery();
+                    var testCommand = new SqlCommand(testQuery, connection);
+                    testCommand.ExecuteNonQuery();
+                }
+                connection.Close();
             }
-            db.Close();
 
-            var numTokensQuery = $"SELECT COUNT(*) FROM Tokens WHERE UserID = {userId};";
-            db.ConnectionString = AccessHelper.GetDbConnectionString();
-            db.Open();
-            var cmd = new SqlCommand(numTokensQuery, db);
-            var numTokens = cmd.ExecuteScalar().ToString();
-            db.Close();
-            
-            if (Convert.ToInt32(numTokens) <= 1)
-                Assert.IsFalse(false);
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var numTokensQuery = $"SELECT COUNT(*) FROM Tokens WHERE UserID = {userId};";
 
+                var cmd = new SqlCommand(numTokensQuery, connection);
+                var numTokens = cmd.ExecuteScalar().ToString();
+
+                if (Convert.ToInt32(numTokens) <= 1)
+                    Assert.IsFalse(false);
+                connection.Close();
+            }
+        
             var currentToken = _db.LoginAndGetToken(email, password); // this should erase all tokens and create one new one.
 
             Assert.AreNotEqual(originalToken, currentToken);
@@ -278,19 +292,20 @@ namespace DbHelper.Test
 
             // to adequately test an expired token, we must connect to the database and manually set a token's expiration date
             // for this test, I have chosen to set TODAY as the expiration date.
-            var db = new SqlConnection(_connectionString); // manually connect to the test database
             var userId = _db.FindUser(email)?.Id; // find the test user's ID
-
             var today = DateTime.Today; // get today's date
-
             var query = $"UPDATE Tokens SET Expiry = '{today.ToString("G")}' WHERE UserID = {userId};"; // set the user's token's expiration date to today
 
-            // execute the sql query
-            var cmd = new SqlCommand(query, db);
-            db.Open();
-            cmd.ExecuteNonQuery();
-            db.Close();
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                
+                var cmd = new SqlCommand(query, connection);
+                cmd.ExecuteNonQuery();
 
+                connection.Close();
+            }
+            
             var currentToken = _db.LoginAndGetToken(email, password); // get the current (new) token
 
             Assert.AreNotEqual(originalToken, currentToken); // verify it is NEW and not the same as the original one
@@ -599,6 +614,99 @@ namespace DbHelper.Test
             var isSet = _db.GetNotificationPreferences(user.Id)["Phone"];
 
             Assert.IsFalse(isSet, "Phone notification preference not set to false");
+        }
+
+        [TestMethod]
+        public void DbHelper_CreateHub_SuccessTest()
+        {
+            var newHub = new Hub
+            {
+                Address = hubAddress,
+                UserId = _db.GetAllUsers()[0].Id,
+                CurrentPower = 50
+            };
+
+            var result = _db.CreateHub(newHub);
+
+            Assert.AreNotEqual(-1, result);
+        }
+
+        [TestMethod]
+        public void DbHelper_DeleteHub_HubId()
+        {
+            var newHub = new Hub
+            {
+                Address = hubAddress,
+                UserId = _db.GetAllUsers()[0].Id,
+                CurrentPower = 50
+            };
+
+            var addResult = _db.CreateHub(newHub);
+
+            if (addResult != -1)
+            {
+                newHub.Id = addResult;
+
+                var deleteResult = _db.DeleteHub(id: newHub.Id);
+
+                Assert.IsTrue(deleteResult);
+            }
+        }
+
+        [TestMethod]
+        public void DbHelper_GetHub()
+        {
+            var newHub = new Hub
+            {
+                Address = hubAddress,
+                UserId = _db.GetAllUsers()[0].Id,
+                CurrentPower = 50
+            };
+
+            var addResult = _db.CreateHub(newHub);
+
+            if(addResult != -1)
+            {
+                newHub.Id = addResult;
+
+                var retrieved = _db.GetHub(newHub.Id);
+
+                Assert.IsNotNull(retrieved, "Unable to retrieve hub using HubId");
+                Assert.AreEqual(newHub.Address, retrieved.Address, "Addresses do not match");
+            }
+        }
+
+        [TestMethod]
+        public void DbHelper_GetHubList()
+        {
+            var newHub = new Hub
+            {
+                Address = hubAddress,
+                UserId = _db.GetAllUsers()[0].Id,
+                CurrentPower = 50
+            };
+
+            // there is already one hub in the db, add one more to make a list
+            var addResult = _db.CreateHub(newHub);
+
+            if(addResult != -1)
+            {
+                newHub.Id = addResult;
+
+                var retrieved = _db.GetHubList(newHub.UserId);
+
+                Assert.IsNotNull(retrieved, "Unable to retrieve hub using UserId");
+                Assert.AreEqual(2, retrieved.Count, "Did not retrieve the right number of Hubs");
+            }
+        }
+
+        [TestMethod]
+        public void DbHelper_GetAllHubs()
+        {
+            var hubList = _db.GetAllHubs();
+
+            Assert.IsNotNull(hubList, "Hub list was null");
+            Assert.AreEqual(1, hubList.Count, "Did not return the correct number of hubs");
         }
     }
 };
