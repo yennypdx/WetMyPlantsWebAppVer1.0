@@ -123,10 +123,10 @@ namespace WebApp.Controllers
             var result = _db.FindUser(email: model.Email);
             if (result == null)
             {
-                return BadRequest("Could not find user " + model);
+                return BadRequest("User not found");
             }
 
-            var resetCode = Crypto.HashPassword(DateTime.Today.ToLongDateString());
+            var resetCode = Crypto.GeneratePin().ToString();
             //TODO: Store the reset code in the DB
             _db.SetResetCode(result.Id, resetCode);
 
@@ -146,8 +146,7 @@ namespace WebApp.Controllers
                 return BadRequest("Could not find user " + model);
             }
 
-            var resetCode = Crypto.HashPassword(DateTime.Today.ToLongDateString());
-            //TODO: Store the reset code in the DB
+            var resetCode = Crypto.GeneratePin().ToString();
             _db.SetResetCode(result.Id, resetCode);
 
             //TODO: modify SendPasswordResetEmail() method
@@ -209,6 +208,7 @@ namespace WebApp.Controllers
             return Ok("Success");
         }
 
+        /* Getting a plant detail from DB >> Return PLANT */
         [HttpGet]
         [Route("plant/id/{id}/")]
         public JsonResult GetPlantDetail(String inId)
@@ -221,6 +221,7 @@ namespace WebApp.Controllers
             return Json(plant, JsonRequestBehavior.AllowGet);
         }
 
+        /* Adding a plant to DB >> Return OK */
         [HttpPost]
         [Route("plant/add/{token}/")]
         public ActionResult AddNewPlant(String token, Plant newPlant)
@@ -254,7 +255,6 @@ namespace WebApp.Controllers
             return Json(plants, JsonRequestBehavior.AllowGet);
         }
 
-
         [HttpPatch, Route("plant/edit/{token}/")]
         public ActionResult EditPlant(string token, Plant updatedPlant)
         {
@@ -275,7 +275,6 @@ namespace WebApp.Controllers
 
             return result ? Ok("Plant updated") : BadRequest("Error updating plant: " + updatedPlant.Id);
         }
-
        
         [HttpDelete, Route("plant/del/{token}/")]
         public ActionResult DeletePlant(String token, String plantId)

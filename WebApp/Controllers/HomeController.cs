@@ -23,15 +23,17 @@ namespace WebApp.Controllers
             if (!(Session["User"] is User user)) return RedirectToAction("Login", "Account");
 
             var plants = Db.GetPlantsForUser(user.Id);
+            var hubs = Db.GetHubList(user.Id);
 
             if (plants != null)
                 plants.ForEach(p => user.Plants.Add(p.Id));
-            else user.Plants = new List<string>();
+            //else user.Plants = new List<string>();
 
             var model = new DashboardViewModel
             {
                 User = user,
-                Plants = plants
+                Plants = plants,
+                Hubs = hubs ?? new List<Hub>()
             };
 
             return View(model);

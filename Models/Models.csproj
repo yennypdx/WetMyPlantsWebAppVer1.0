@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Hub.cs" />
     <Compile Include="Plant.cs" />
     <Compile Include="Species.cs" />
     <Compile Include="User.cs" />

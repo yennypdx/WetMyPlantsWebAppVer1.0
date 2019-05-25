@@ -1,0 +1,50 @@
+﻿@model WebApp.Models.HubViewModels.HubViewModel
+
+@{
+    ViewBag.Title = "My Hubs";
+    var numHubs = Model.Hubs.Count;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="/home">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">
+            My Hubs
+        </li>
+    </ol>
+</nav>
+
+<div class="container pt-5">
+    <h2>My Hubs</h2>
+
+    <p>
+        @Html.ActionLink("Register a New Hub", "Create")
+    </p>
+    <p>You currently have @numHubs registered hubs.</p>
+    <table class="table">
+        <tr>
+            <th>Serial No.</th>
+            <th>Battery Level</th>
+            <th></th>
+        </tr>
+
+        @foreach(var item in Model.Hubs)
+        {
+            <tr>
+                <td>
+                    @item.Address
+                </td>
+                <td>
+                    @item.CurrentPower%
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+
+    </table>
+
+</div>
