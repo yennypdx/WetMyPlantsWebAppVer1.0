@@ -59,7 +59,8 @@ namespace DbHelper.Test
 
         private DbHelper GetDb()
         {
-            return new DbHelper(_connectionString);
+             return new DbHelper(_connectionString);
+           
         }
 
         [TestInitialize]

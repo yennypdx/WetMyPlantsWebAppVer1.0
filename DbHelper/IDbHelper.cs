@@ -22,6 +22,7 @@ namespace DbHelper
         void SetEmailNotificationPreference(int userId, bool setting);
         void SetPhoneNotificationPreference(int userId, bool setting);
         Dictionary<string, bool> GetNotificationPreferences(int userId);
+        string GetNotificationResponseMessage(ResponseTypes type);
 
         int CreateNewSpecies(string commonName, string latinName, double waterMax, double waterMin, double lightMax,
             double lightMin);
@@ -32,12 +33,13 @@ namespace DbHelper
         bool UpdateSpecies(Species update);
         bool DeleteSpecies(int id);
 
-        bool CreateNewPlant(string plantId, int speciesId, string nickname, double currentWater, double currentLight);
+        bool CreateNewPlant(string plantId, int speciesId, string nickname, double currentWater, double currentLight, int lightTracker = 0, int updateTime= 0);
         bool RegisterPlantToUser(Plant plant, User user);
         List<Plant> GetAllPlants();
         List<Plant> GetPlantsForUser(int id);
         List<Plant> FindPlantsByNickname(string nickname);
         Plant FindPlant(string id);
+        User FindPlantUser(string id);
         bool UpdatePlant(Plant update);
         bool DeletePlant(string id);
         int CreateHub(Hub hub);
