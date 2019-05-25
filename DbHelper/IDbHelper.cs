@@ -33,7 +33,7 @@ namespace DbHelper
         bool UpdateSpecies(Species update);
         bool DeleteSpecies(int id);
 
-        bool CreateNewPlant(string plantId, int speciesId, string nickname, double currentWater, double currentLight);
+        bool CreateNewPlant(string plantId, int speciesId, string nickname, double currentWater, double currentLight, int lightTracker, int updateTime);
         bool RegisterPlantToUser(Plant plant, User user);
         List<Plant> GetAllPlants();
         List<Plant> GetPlantsForUser(int id);
