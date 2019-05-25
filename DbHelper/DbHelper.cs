@@ -38,10 +38,20 @@ namespace DbHelper
     public enum PlantColumns
     {
         Id,
-        Nickname,
+        Nickname,        
         CurrentWater,
         CurrentLight,
-        SpeciesId
+        SpeciesId,
+        LightTracker,
+        UpdateTime
+    }
+
+    public enum ResponseTypes
+    {
+        LowWater,
+        HighWater,
+        LowLight,
+        HighLight
     }
 
     public class DbHelper : IDbHelper
@@ -223,9 +233,11 @@ namespace DbHelper
                 {
                     Id = reader.GetString((int) PlantColumns.Id),
                     Nickname = reader.GetString((int) PlantColumns.Nickname),
-                    SpeciesId = reader.GetInt32((int) PlantColumns.SpeciesId),
                     CurrentLight = reader.GetDouble((int) PlantColumns.CurrentLight),
-                    CurrentWater = reader.GetDouble((int) PlantColumns.CurrentWater)
+                    CurrentWater = reader.GetDouble((int) PlantColumns.CurrentWater),
+                    SpeciesId = reader.GetInt32((int)PlantColumns.SpeciesId),
+                    LightTracker = reader.GetInt32((int) PlantColumns.LightTracker),
+                    UpdateTime = reader.GetInt32((int) PlantColumns.UpdateTime)
                 };
                 return plant;
             }
@@ -360,6 +372,74 @@ namespace DbHelper
         {
             var query = $"DELETE FROM Preferences WHERE UserID = {userId};";
             RunNonQuery(query);
+        }
+
+        public string GetNotificationResponseMessage(ResponseTypes type)
+        {
+            Random rnd = new Random();
+            int responeseId = rnd.Next(1, 5);
+            switch (type)
+            {
+                case ResponseTypes.HighLight:
+                    {
+                        var query = $"SELECT ResponseMsg FROM HighLightResponses WHERE ResponseID = {responeseId};";
+
+                        var reader = RunReader(query);
+
+                        if (!reader.HasRows) return null;
+
+                        reader.Read();
+
+                        string result = reader.GetString(0);
+
+                        return result;                      
+                    }
+                case ResponseTypes.LowLight:
+                    {
+                        var query = $"SELECT ResponseMsg FROM LowLightResponses WHERE ResponseID = {responeseId};";
+
+                        var reader = RunReader(query);
+
+                        if (!reader.HasRows) return null;
+
+                        reader.Read();
+
+                        string result = reader.GetString(0);
+
+                        return result;
+                    }
+                case ResponseTypes.HighWater:
+                    {
+                        var query = $"SELECT ResponseMsg FROM HighWaterResponses WHERE ResponseID = {responeseId};";
+
+                        var reader = RunReader(query);
+
+                        if (!reader.HasRows) return null;
+
+                        reader.Read();
+
+                        string result = reader.GetString(0);
+
+                        return result;
+                    }
+                case ResponseTypes.LowWater:
+                    {
+                        var query = $"SELECT ResponseMsg FROM LowWaterResponses WHERE ResponseID = {responeseId};";
+
+                        var reader = RunReader(query);
+
+                        if (!reader.HasRows) return null;
+
+                        reader.Read();
+
+                        string result = reader.GetString(0);
+
+                        return result;
+                    }
+                default: break;
+
+            }
+            throw new Exception("Error in GetNotificationResponce, DbHelper");
         }
 
         public int CreateNewSpecies(string commonName, string latinName, double waterMax = 0, double waterMin = 0, double lightMax = 0,
@@ -562,13 +642,30 @@ namespace DbHelper
             return plant;
         }
 
+        public User FindPlantUser(string id)
+        {
+            var userIdQuery = $"SELECT UserID FROM UserPlants WHERE PlantID = '{id}';";
+
+            var userId = RunReader(userIdQuery);
+
+            if (!userId.HasRows) return null;
+
+            userId.Read();
+
+            var user = FindUser(userId.GetInt32(0));
+            
+            return user;
+        }
+
         public bool UpdatePlant(Plant update)
         {
             var query = "UPDATE Plants SET " +
                         $"SpeciesID = {update.SpeciesId}, " +
                         $"Nickname = '{update.Nickname}', " +
                         $"CurrentWater = {update.CurrentWater}, " +
-                        $"CurrentLight = {update.CurrentLight} " +
+                        $"CurrentLight = {update.CurrentLight}, " +
+                        $"UpdateTime = {update.UpdateTime}, " +
+                        $"LightTracker = {update.LightTracker} " +
                         $"WHERE PlantID = '{update.Id}';";
 
             var result = RunNonQuery(query);

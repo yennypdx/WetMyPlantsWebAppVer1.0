@@ -153,7 +153,6 @@ namespace WebApp.Controllers
         {
             string token;
             User user;
-
             if ((token = Db.LoginAndGetToken(model.Email, model.Password)) != null
                 && (user = Db.FindUser(email: model.Email)) != null)
             {
@@ -161,6 +160,7 @@ namespace WebApp.Controllers
                 Session["User"] = user;
 
                 return RedirectToAction("Index", "Home");
+                
             }
 
             return View("Login");
@@ -254,6 +254,6 @@ namespace WebApp.Controllers
                 return RedirectToAction("ChangePassword", "Account", model.Email);
             }
         }
-     
+
     }
 }
