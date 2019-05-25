@@ -576,10 +576,10 @@ namespace DbHelper
             return result;
         }
 
-        public bool CreateNewPlant(string plantId, int speciesId, string nickname, double currentWater = 0, double currentLight = 0, int lightTraker = 0, int updateTime = 0)
+        public bool CreateNewPlant(string plantId, int speciesId, string nickname, double currentWater = 0, double currentLight = 0, int lightTracker = 0, int updateTime = 0)
         {
             var query = "INSERT INTO Plants (PlantId, SpeciesID, Nickname, CurrentWater, CurrentLight, LightTracker, UpdateTime)" +
-                        $"VALUES ('{plantId}', {speciesId}, '{nickname}', {currentWater}, {currentLight}, {lightTraker}, {updateTime}) " +
+                        $"VALUES ('{plantId}', {speciesId}, '{nickname}', {currentWater}, {currentLight}, {lightTracker}, {updateTime}) " +
                         "SELECT SCOPE_IDENTITY();";
 
             var result = RunNonQuery(query);
