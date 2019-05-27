@@ -210,6 +210,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ApiResponseService.cs" />
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Models\AccountViewModels\ChangePasswordViewModel.cs" />
     <Compile Include="Models\AccountViewModels\DeleteUserViewModel.cs" />
     <Compile Include="Models\AccountViewModels\ForgotPasswordViewModel.cs" />
