@@ -10,6 +10,7 @@ using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Net.Http;
 using System.Collections.Generic;
+using WebApp.Helpers;
 
 namespace WebApp.Controllers
 {
@@ -18,16 +19,16 @@ namespace WebApp.Controllers
     {
         private readonly IDbHelper _db;
 
-        private JsonResult Jsonify(string content) => Json($"{{ content: '{content}' }}");
+        //private JsonResult Jsonify(string content) => Json($"{{ content: '{content}' }}");
         // BadRequest takes a string or JSON object and returns it along with a 500 (BadRequest) status code
-        private ActionResult BadRequest(string content) => BadRequest(Jsonify(content));
-        private ActionResult BadRequest(JsonResult content) =>
-            new HttpStatusCodeResult(HttpStatusCode.BadRequest, content.Data.ToString());
+        //private ActionResult BadRequest(string content) => BadRequest(Jsonify(content));
+        //private ActionResult BadRequest(JsonResult content) =>
+          //  new HttpStatusCodeResult(HttpStatusCode.BadRequest, content.Data.ToString());
 
         // Ok takes a string or JSON object and returns it along with a 200 (OK) status code
-        private ActionResult Ok(string content) => Ok(Jsonify(content));
-        private ActionResult Ok(JsonResult content) =>
-              new HttpStatusCodeResult(HttpStatusCode.OK, content.Data.ToString());
+        //private ActionResult Ok(string content) => Ok(Jsonify(content));
+        //private ActionResult Ok(JsonResult content) =>
+          //    new HttpStatusCodeResult(HttpStatusCode.OK, content.Data.ToString());
 
         //external pi requirements include requests, os, apscheduler
         // CTOR receives the DbHelper through Dependency Injection
@@ -157,21 +158,25 @@ namespace WebApp.Controllers
 
         public void SendSMS(string userPhone, string msgbody)
         {
-            const string accountSid = "AC3dfa39c6c58dba42c4867c99fb626324";
-            const string authToken = "cab21f1579fd511e71c56bc45fcc2dbc";
+            //const string accountSid = "AC3dfa39c6c58dba42c4867c99fb626324";
+            var accountSid = Constants.TwilioAccountId;
+            var authToken = Constants.TwilioAuthenticationToken;
+            //const string authToken = "cab21f1579fd511e71c56bc45fcc2dbc";
             string completeNumber = "+1" + userPhone;
 
             TwilioClient.Init(accountSid, authToken);
 
             var message = MessageResource.Create(
             body: msgbody,
-            from: new Twilio.Types.PhoneNumber("+19713184244"),
+            //from: new Twilio.Types.PhoneNumber("+19713184244"),
+            from: new Twilio.Types.PhoneNumber(Constants.TwilioPhoneNumber),
             to: new Twilio.Types.PhoneNumber(completeNumber)
             );
         }
         static public async Task SendEmail(string email, string plantName, string msgSubject, string msgcontent)
         {
-            string apiKey = "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";//System.Environment.GetEnvironmentVariable("SENDGRID_APIKEY");
+            //string apiKey = "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";//System.Environment.GetEnvironmentVariable("SENDGRID_APIKEY");
+            var apiKey = Constants.SendGridApiKey;
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
