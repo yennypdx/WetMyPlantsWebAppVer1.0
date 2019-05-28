@@ -36,32 +36,56 @@ namespace WebApp.Controllers
         private ActionResult Ok(JsonResult content) =>
             new HttpStatusCodeResult(HttpStatusCode.OK, content.Data.ToString());
 
-        /* SendGrid >> helper method Android style */
-        static public async Task SendPasswordResetEmail(string email)
-        {
-            /* System.Environment.GetEnvironmentVariable("SENDGRID_APIKEY"); */
-            string apiKey = "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";
-            var client = new SendGridClient(apiKey);
-            var msg = new SendGridMessage()
-            {
-                /*
-                 * TODO:
-                 * 1. Create a helper method that will generate random six digits as temp key
-                 * 2. Pair that six digits with the email and push to db
-                 * 3. Send out the six digit via sendGrid
-                 */
-            };
-
-            msg.AddTo(new EmailAddress(email, "user"));
-            var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
-        }
-
         /* GET: api/ */
         /* Test function that returns "hello world!" when you navigate to the /api URI */
         public string Index()
         {
             return "hello world!";
         }
+
+        /* SendGrid >> helper method Android style */
+        [HttpPost]
+        [Route("forgotpass/sg")]
+        public ActionResult PinRequestViaEmail(string userEmail)
+        {
+            var result = _db.FindUser(email: userEmail);
+            if (result == null)
+                return BadRequest("User not found");
+
+            var resetPin = Crypto.GeneratePin().ToString();
+            _db.SetResetCode(result.Id, resetPin);
+
+            PasswordResetByEmail(userEmail).Wait();
+
+            return Ok("Success");
+        }
+
+        static public async Task PasswordResetByEmail(string email)
+        {
+            string apiKey = "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";
+            var client = new SendGridClient(apiKey);
+            var msg = new SendGridMessage()
+            {
+                From = new EmailAddress("resetpassword@wetmyplants.com", "WetMyPlants Team"),
+                Subject = "Reset Password",
+            };
+            msg.AddTo(new EmailAddress(email, "user"));
+            var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
+        }
+
+        /* Create new user in db >> return a TOKEN */
+        [HttpPost]
+        [Route("pin/confirm")]
+        public ActionResult ValidateUserPin(int receivedPin, String receivedEmail)
+        {
+            if (!_db.ValidateResetCode(receivedPin, receivedEmail))
+            {
+                return BadRequest("PIN has no match");
+            }
+
+            return Ok("Success");
+        }
+
 
         /* Create new user in db >> return a TOKEN */
         [HttpPost]
