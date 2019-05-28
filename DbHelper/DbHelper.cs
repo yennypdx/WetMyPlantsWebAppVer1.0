@@ -60,11 +60,6 @@ namespace DbHelper
         Id, Address, UserId, CurrentPower
     }
 
-    public enum HubColumns
-    {
-        Id, Address, UserId, CurrentPower
-    }
-
     public class DbHelper : IDbHelper
     {
         private readonly string _connectionString;

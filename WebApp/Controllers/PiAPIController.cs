@@ -158,12 +158,15 @@ namespace WebApp.Controllers
 
         public void SendSMS(string userPhone, string msgbody)
         {
+            /*
             //const string accountSid = "AC3dfa39c6c58dba42c4867c99fb626324";
             var accountSid = Constants.TwilioAccountId;
             var authToken = Constants.TwilioAuthenticationToken;
             //const string authToken = "cab21f1579fd511e71c56bc45fcc2dbc";
+            */
             string completeNumber = "+1" + userPhone;
 
+            /*
             TwilioClient.Init(accountSid, authToken);
 
             var message = MessageResource.Create(
@@ -172,6 +175,9 @@ namespace WebApp.Controllers
             from: new Twilio.Types.PhoneNumber(Constants.TwilioPhoneNumber),
             to: new Twilio.Types.PhoneNumber(completeNumber)
             );
+            */
+
+            SmsService.SendSms($"+1{userPhone}", msgbody);
         }
         static public async Task SendEmail(string email, string plantName, string msgSubject, string msgcontent)
         {
