@@ -164,7 +164,7 @@ namespace WebApp.Controllers
             var authToken = Constants.TwilioAuthenticationToken;
             //const string authToken = "cab21f1579fd511e71c56bc45fcc2dbc";
             */
-            string completeNumber = "+1" + userPhone;
+            //string completeNumber = "+1" + userPhone;
 
             /*
             TwilioClient.Init(accountSid, authToken);
@@ -181,6 +181,7 @@ namespace WebApp.Controllers
         }
         static public async Task SendEmail(string email, string plantName, string msgSubject, string msgcontent)
         {
+            /*
             //string apiKey = "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";//System.Environment.GetEnvironmentVariable("SENDGRID_APIKEY");
             var apiKey = Constants.SendGridApiKey;
             var client = new SendGridClient(apiKey);
@@ -193,6 +194,19 @@ namespace WebApp.Controllers
             };
             msg.AddTo(new EmailAddress(email, "user"));
             var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
+            */
+
+            var emailMessage = new EmailService
+            {
+                Destination = email,
+                Subject = msgSubject,
+                PlainTextContent = msgcontent,
+                HtmlContent = $"<strong>{msgcontent}</strong>"
+            };
+
+            emailMessage.OverrideFrom($"{plantName}@wetmyplants.com", plantName);
+
+            emailMessage.Send();
         }
     }
 }
