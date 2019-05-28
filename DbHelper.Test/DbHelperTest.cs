@@ -59,7 +59,8 @@ namespace DbHelper.Test
 
         private DbHelper GetDb()
         {
-            return new DbHelper(_connectionString);
+             return new DbHelper(_connectionString);
+           
         }
 
         [TestInitialize]
@@ -506,7 +507,7 @@ namespace DbHelper.Test
             Assert.AreEqual(id, result.Id); // ensure they are the same plant based on the id
         }
 
-      /*  [TestMethod]
+        [TestMethod]
         public void DbHelperUpdatePlantSpeciesTest()
         {
             var plants = _db.GetAllPlants();
@@ -556,7 +557,7 @@ namespace DbHelper.Test
 
             Assert.AreEqual(-1.00, result);
         }
-        */
+        
         [TestMethod]
         public void DbHelperDeletePlantTest()
         {
