@@ -86,7 +86,6 @@ namespace WebApp.Controllers
             return Ok("Success");
         }
 
-
         /* Create new user in db >> return a TOKEN */
         [HttpPost]
         [Route("user/register")]
@@ -243,6 +242,43 @@ namespace WebApp.Controllers
                 BadRequest("Input is null");
             }
                 
+            return Ok("Success");
+        }
+
+        /* Set user notification preference >>return OK */
+        [HttpPost]
+        [Route("notif/{token}/")]
+        public ActionResult SettingNotificationPreference(String token, int status)
+        {
+            var emailStatus = true;
+            var textStatus = true;
+            switch (status)
+            {
+                case 0:
+                    textStatus = true;
+                    emailStatus = false;
+                    break;
+                case 1:
+                    emailStatus = true;
+                    textStatus = false;
+                    break;
+                case 2:
+                    textStatus = true;
+                    emailStatus = true;
+                    break;
+                case 3:
+                    textStatus = false;
+                    emailStatus = false;
+                    break;
+            }
+
+            var user = _db.FindUser(token: token);
+            if (user != null)
+            {
+                _db.SetEmailNotificationPreference(user.Id, emailStatus);
+                _db.SetPhoneNotificationPreference(user.Id, textStatus);
+            }
+
             return Ok("Success");
         }
 
