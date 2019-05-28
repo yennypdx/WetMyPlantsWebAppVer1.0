@@ -12,8 +12,10 @@ namespace WebApp.Helpers
         //public static JsonResult Jsonify(string content) => Controller.Json($"{{ content: '{content}' }}");
         public static JsonResult Jsonify(string content)
         {
-            var data = new Dictionary<string, string>();
-            data.Add("content", content);
+            var data = new Dictionary<string, string>
+            {
+                { "content", content }
+            };
 
             var json = Json.Encode(data);
 

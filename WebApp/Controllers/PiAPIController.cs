@@ -156,7 +156,7 @@ namespace WebApp.Controllers
             }
         }
 
-        public void SendSMS(string userPhone, string msgbody)
+        private void SendSMS(string userPhone, string msgbody)
         {
             /*
             //const string accountSid = "AC3dfa39c6c58dba42c4867c99fb626324";
@@ -179,7 +179,7 @@ namespace WebApp.Controllers
 
             SmsService.SendSms($"+1{userPhone}", msgbody);
         }
-        static public async Task SendEmail(string email, string plantName, string msgSubject, string msgcontent)
+        private async Task SendEmail(string email, string plantName, string msgSubject, string msgcontent)
         {
             /*
             //string apiKey = "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";//System.Environment.GetEnvironmentVariable("SENDGRID_APIKEY");

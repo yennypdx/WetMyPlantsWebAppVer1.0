@@ -73,10 +73,10 @@ namespace WebApp.Controllers
                 HtmlContent = $"<strong>Please follow <a href={url}>this link</a> to reset your password"
             };
 
-            emailMessage.Send();
+            await emailMessage.Send();
         }
 
-        private async Task SendPasswordResetSms(string phone, string pin)
+        private void SendPasswordResetSms(string phone, string pin)
         {
             SmsService.SendSms(phone, $"Here is your password reset code: {pin}");
         }
@@ -172,7 +172,7 @@ namespace WebApp.Controllers
 
             //TODO: modify SendPasswordResetEmail() method
             //SendPasswordResetText()
-            SendPasswordResetSms(result.Phone, resetCode).Wait();
+            SendPasswordResetSms(result.Phone, resetCode);
             return ApiResponseService.Ok("Success");
         }
 
