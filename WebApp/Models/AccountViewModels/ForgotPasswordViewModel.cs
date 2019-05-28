@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.Models.AccountViewModels
 {
@@ -11,5 +7,6 @@ namespace WebApp.Models.AccountViewModels
         [Required]
         [EmailAddress]
         public string Email { get; set; }
+        public bool Sms { get; set; }
     }
 }

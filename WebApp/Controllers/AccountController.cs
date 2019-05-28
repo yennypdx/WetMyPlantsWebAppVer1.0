@@ -58,10 +58,25 @@ namespace WebApp.Controllers
             var resetCode = Crypto.GeneratePin().ToString();
             Db.SetResetCode(result.Id, resetCode);
 
-            var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = result.Id, code = resetCode }, protocol: Request?.Url?.Scheme);
+            if (uModel.Sms)
+            {
+                SmsService.SendSms(result.Phone, $"Here is your password reset PIN: {resetCode}");
+                var userId = Db.FindUser(email: result.Email)?.Id;
 
-            SendPasswordResetEmail(uModel.Email, callbackUrl);
-            return View("Login");
+                var model = new PinViewModel
+                {
+                    UserId = (int)userId
+                };
+
+                return View("Pin", model);
+            }
+            else
+            {
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = result.Id, code = resetCode }, protocol: Request?.Url?.Scheme);
+
+                SendPasswordResetEmail(uModel.Email, callbackUrl);
+                return View("Login");
+            }
         }
 
         private async Task SendPasswordResetEmail(string email, string urlString)

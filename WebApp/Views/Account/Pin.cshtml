@@ -1,0 +1,22 @@
+﻿@model WebApp.Models.AccountViewModels.PinViewModel
+
+@{
+    ViewBag.Title = "Enter your PIN";
+}
+
+<div class="container pt-5">
+    <h2 class="text-center">PIN Verification</h2>
+    <hr/>
+    <form method="get" action="/account/resetpassword" class="form">
+        @Html.ValidationSummary()
+        <input type="hidden" name="userId" value="@Model.UserId" />
+
+        <div class="form-group">
+            <label>Enter your six-digit PIN <input type="text" name="code" /></label>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" class="btn btn-success" value="Submit"/>
+        </div>
+    </form>
+</div>
