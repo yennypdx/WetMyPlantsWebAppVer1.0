@@ -36,32 +36,56 @@ namespace WebApp.Controllers
         private ActionResult Ok(JsonResult content) =>
             new HttpStatusCodeResult(HttpStatusCode.OK, content.Data.ToString());
 
-        /* SendGrid >> helper method Android style */
-        static public async Task SendPasswordResetEmail(string email)
-        {
-            /* System.Environment.GetEnvironmentVariable("SENDGRID_APIKEY"); */
-            string apiKey = "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";
-            var client = new SendGridClient(apiKey);
-            var msg = new SendGridMessage()
-            {
-                /*
-                 * TODO:
-                 * 1. Create a helper method that will generate random six digits as temp key
-                 * 2. Pair that six digits with the email and push to db
-                 * 3. Send out the six digit via sendGrid
-                 */
-            };
-
-            msg.AddTo(new EmailAddress(email, "user"));
-            var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
-        }
-
         /* GET: api/ */
         /* Test function that returns "hello world!" when you navigate to the /api URI */
         public string Index()
         {
             return "hello world!";
         }
+
+        /* SendGrid >> helper method Android style */
+        [HttpPost]
+        [Route("forgotpass/sg")]
+        public ActionResult PinRequestViaEmail(string userEmail)
+        {
+            var result = _db.FindUser(email: userEmail);
+            if (result == null)
+                return BadRequest("User not found");
+
+            var resetPin = Crypto.GeneratePin().ToString();
+            _db.SetResetCode(result.Id, resetPin);
+
+            PasswordResetByEmail(userEmail).Wait();
+
+            return Ok("Success");
+        }
+
+        static public async Task PasswordResetByEmail(string email)
+        {
+            string apiKey = "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";
+            var client = new SendGridClient(apiKey);
+            var msg = new SendGridMessage()
+            {
+                From = new EmailAddress("resetpassword@wetmyplants.com", "WetMyPlants Team"),
+                Subject = "Reset Password",
+            };
+            msg.AddTo(new EmailAddress(email, "user"));
+            var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
+        }
+
+        /* Validating PIN >> return OK */
+        [HttpPost]
+        [Route("pin/confirm")]
+        public ActionResult ValidateUserPin(int receivedPin, String receivedEmail)
+        {
+            if (!_db.ValidateResetCode(receivedPin, receivedEmail))
+            {
+                return BadRequest("PIN has no match");
+            }
+
+            return Ok("Success");
+        }
+
 
         /* Create new user in db >> return a TOKEN */
         [HttpPost]
@@ -113,26 +137,6 @@ namespace WebApp.Controllers
         public JsonResult GetAllUsers()
         {
             return Json(_db.GetAllUsers(), JsonRequestBehavior.AllowGet);
-        }
-
-        /* User update their password >> Return OK */
-        [HttpPost]
-        [Route("forgotpass/sg/{token}/")]
-        public ActionResult ForgotUserPasswordViaEmail(ForgotPasswordViewModel model)
-        {
-            var result = _db.FindUser(email: model.Email);
-            if (result == null)
-            {
-                return BadRequest("Could not find user " + model);
-            }
-
-            var resetCode = Crypto.GeneratePin().ToString();
-            //TODO: Store the reset code in the DB
-            _db.SetResetCode(result.Id, resetCode);
-
-            //TODO: modify SendPasswordResetEmail() method
-            SendPasswordResetEmail(model.Email).Wait();
-            return Ok("Success");
         }
 
         /* User update their password >> Return OK */
@@ -208,6 +212,7 @@ namespace WebApp.Controllers
             return Ok("Success");
         }
 
+        /* Getting a plant detail from DB >> Return PLANT */
         [HttpGet]
         [Route("plant/id/{id}/")]
         public JsonResult GetPlantDetail(String inId)
@@ -220,6 +225,7 @@ namespace WebApp.Controllers
             return Json(plant, JsonRequestBehavior.AllowGet);
         }
 
+        /* Adding a plant to DB >> Return OK */
         [HttpPost]
         [Route("plant/add/{token}/")]
         public ActionResult AddNewPlant(String token, Plant newPlant)
@@ -253,8 +259,7 @@ namespace WebApp.Controllers
             return Json(plants, JsonRequestBehavior.AllowGet);
         }
 
-
-        [HttpPut, Route("plant/edit/{token}/")]
+        [HttpPatch, Route("plant/edit/{token}/")]
         public ActionResult EditPlant(string token, Plant updatedPlant)
         {
             // Check that user exists and plant exists for user?
@@ -274,10 +279,9 @@ namespace WebApp.Controllers
 
             return result ? Ok("Plant updated") : BadRequest("Error updating plant: " + updatedPlant.Id);
         }
-
        
         [HttpDelete, Route("plant/del/{token}/")]
-        public ActionResult DeletePlant(string token, string plantId)
+        public ActionResult DeletePlant(String token, String plantId)
         {
             // Check that the user exists
             var user = _db.FindUser(token: token);
@@ -287,7 +291,5 @@ namespace WebApp.Controllers
             var result = _db.DeletePlant(plantId);
             return result ? Ok("Plant deleted") : BadRequest("Error deleting plant: " + plantId);
         }
-
-       
     }
 }
