@@ -73,7 +73,7 @@ namespace WebApp.Controllers
             var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
         }
 
-        /* Create new user in db >> return a TOKEN */
+        /* Validating PIN >> return OK */
         [HttpPost]
         [Route("pin/confirm")]
         public ActionResult ValidateUserPin(int receivedPin, String receivedEmail)
@@ -137,26 +137,6 @@ namespace WebApp.Controllers
         public JsonResult GetAllUsers()
         {
             return Json(_db.GetAllUsers(), JsonRequestBehavior.AllowGet);
-        }
-
-        /* User update their password >> Return OK */
-        [HttpPost]
-        [Route("forgotpass/sg/{token}/")]
-        public ActionResult ForgotUserPasswordViaEmail(ForgotPasswordViewModel model)
-        {
-            var result = _db.FindUser(email: model.Email);
-            if (result == null)
-            {
-                return BadRequest("User not found");
-            }
-
-            var resetCode = Crypto.GeneratePin().ToString();
-            //TODO: Store the reset code in the DB
-            _db.SetResetCode(result.Id, resetCode);
-
-            //TODO: modify SendPasswordResetEmail() method
-            SendPasswordResetEmail(model.Email).Wait();
-            return Ok("Success");
         }
 
         /* User update their password >> Return OK */
