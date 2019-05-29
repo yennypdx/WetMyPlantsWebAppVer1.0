@@ -394,7 +394,8 @@ namespace WebApp.Tests.Controllers
                 Email = _testUser.Email
             };
 
-            var result = _api.ForgotUserPasswordViaEmail(model) as HttpStatusCodeResult;
+            var email = model.Email;
+            var result = _api.PinRequestViaEmail(email) as HttpStatusCodeResult;
             if (result == null) Assert.Fail("Result was null");
 
             Assert.AreEqual(Convert.ToInt32(HttpStatusCode.OK), result.StatusCode, "Result was not 200 OK");
@@ -408,7 +409,8 @@ namespace WebApp.Tests.Controllers
                 Email = "invalid@email.domain"
             };
 
-            var result = _api.ForgotUserPasswordViaEmail(model) as HttpStatusCodeResult;
+            var email = model.Email;
+            var result = _api.PinRequestViaEmail(email) as HttpStatusCodeResult;
             if (result == null) Assert.Fail("Result was null");
 
             Assert.AreEqual(Convert.ToInt32(HttpStatusCode.BadRequest), result.StatusCode, "Status was not 400 BAD REQUEST");
