@@ -9,7 +9,6 @@ using WebApp.Models.AccountViewModels;
 using Models;
 using System.Linq;
 using System.Data.SqlClient;
-using WebApp.Helpers;
 
 namespace WebApp.Controllers
 {
@@ -23,63 +22,19 @@ namespace WebApp.Controllers
 
         /* HELPER FUNCTIONS */
         /* Jsonify takes a string and packages it as a JSON object under the "content" key */
-        //private JsonResult Jsonify(string content) => Json($"{{ content: '{content}' }}");
+        private JsonResult Jsonify(string content) => Json($"{{ content: '{content}' }}");
 
         /* BadRequest takes a string or JSON object and returns it along with a 500 (BadRequest) status code */
-        //private ActionResult BadRequest(string content) => BadRequest(Jsonify(content));
+        private ActionResult BadRequest(string content) => BadRequest(Jsonify(content));
 
-        //private ActionResult BadRequest(JsonResult content) =>
-        //  new HttpStatusCodeResult(HttpStatusCode.BadRequest, content.Data.ToString());
+        private ActionResult BadRequest(JsonResult content) =>
+            new HttpStatusCodeResult(HttpStatusCode.BadRequest, content.Data.ToString());
 
         /* Ok takes a string or JSON object and returns it along with a 200 (OK) status code */
-        //private ActionResult Ok(string content) => Ok(Jsonify(content));
+        private ActionResult Ok(string content) => Ok(Jsonify(content));
 
-        //private ActionResult Ok(JsonResult content) =>
-        //  new HttpStatusCodeResult(HttpStatusCode.OK, content.Data.ToString());
-
-        /* SendGrid >> helper method Android style */
-        private async Task SendPasswordResetEmail(string email, string pin)
-        {
-            /* System.Environment.GetEnvironmentVariable("SENDGRID_APIKEY"); */
-            /*
-            //string apiKey = "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";
-            var apiKey = Constants.SendGridApiKey;
-            var client = new SendGridClient(apiKey);
-            var msg = new SendGridMessage()
-            {
-                /*
-                 * TODO:
-                 * 1. Create a helper method that will generate random six digits as temp key
-                 * 2. Pair that six digits with the email and push to db
-                 * 3. Send out the six digit via sendGrid
-                 */
-            //};
-
-            //msg.AddTo(new EmailAddress(email, "user"));
-            //var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
-
-            var id = _db.FindUser(email: email)?.Id;
-
-            if(id == null)
-                return;
-
-            var url = Url.Action("ResetPassword", "Account", new { userId = id, code = pin }, protocol: Request?.Url?.Scheme);
-
-            var emailMessage = new EmailService
-            {
-                Destination = email,
-                Subject = "Reset Password",
-                PlainTextContent = $"Please follow this link to reset your password: {url}",
-                HtmlContent = $"<strong>Please follow <a href={url}>this link</a> to reset your password"
-            };
-
-            await emailMessage.Send();
-        }
-
-        private void SendPasswordResetSms(string phone, string pin)
-        {
-            SmsService.SendSms(phone, $"Here is your password reset code: {pin}");
-        }
+        private ActionResult Ok(JsonResult content) =>
+            new HttpStatusCodeResult(HttpStatusCode.OK, content.Data.ToString());
 
         /* GET: api/ */
         /* Test function that returns "hello world!" when you navigate to the /api URI */
@@ -88,21 +43,65 @@ namespace WebApp.Controllers
             return "hello world!";
         }
 
+        /* SendGrid >> helper method Android style */
+        [HttpPost]
+        [Route("forgotpass/sg")]
+        public ActionResult PinRequestViaEmail(string userEmail)
+        {
+            var result = _db.FindUser(email: userEmail);
+            if (result == null)
+                return BadRequest("User not found");
+
+            var resetPin = Crypto.GeneratePin().ToString();
+            _db.SetResetCode(result.Id, resetPin);
+
+            PasswordResetByEmail(userEmail).Wait();
+
+            return Ok("Success");
+        }
+
+        static public async Task PasswordResetByEmail(string email)
+        {
+            string apiKey = "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";
+            var client = new SendGridClient(apiKey);
+            var msg = new SendGridMessage()
+            {
+                From = new EmailAddress("resetpassword@wetmyplants.com", "WetMyPlants Team"),
+                Subject = "Reset Password",
+            };
+            msg.AddTo(new EmailAddress(email, "user"));
+            var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
+        }
+
+        /* Validating PIN >> return OK */
+        [HttpPost]
+        [Route("pin/confirm")]
+        public ActionResult ValidateUserPin(int receivedPin, String receivedEmail)
+        {
+            if (!_db.ValidateResetCode(receivedPin, receivedEmail))
+            {
+                return BadRequest("PIN has no match");
+            }
+
+            return Ok("Success");
+        }
+
+
         /* Create new user in db >> return a TOKEN */
         [HttpPost]
         [Route("user/register")]
         public ActionResult RegisterUser(RegistrationViewModel model)
         {
             var token = string.Empty;
-            if (!ModelState.IsValid) return ApiResponseService.BadRequest("Invalid registration model");
+            if (!ModelState.IsValid) return BadRequest("Invalid registration model");
 
             if (_db.CreateNewUser(model.FirstName, model.LastName, model.Phone, model.Email, model.Password)){
                 token = _db.LoginAndGetToken(model.Email, model.Password);
             } else {
-                return ApiResponseService.BadRequest("User already exists");
+                return BadRequest("User already exists");
             }
 
-            return token != null ? ApiResponseService.Jsonify(token) : ApiResponseService.BadRequest("Registration failed");
+            return token != null ? Jsonify(token) : BadRequest("Registration failed");
         }
 
         /* Authenticate user >> return a TOKEN */
@@ -110,11 +109,11 @@ namespace WebApp.Controllers
         [Route("login")]
         public ActionResult Login(LoginViewModel model)
         {
-            if (!ModelState.IsValid) return ApiResponseService.BadRequest("Invalid login model");
+            if (!ModelState.IsValid) return BadRequest("Invalid login model");
 
             var token = _db.LoginAndGetToken(model.Email, model.Password);
 
-            return token != null ? ApiResponseService.Jsonify(token) : ApiResponseService.BadRequest("Invalid login");
+            return token != null ? Jsonify(token) : BadRequest("Invalid login");
         }
 
         /* Delete a user from db with ID >> Return OK (currently not implemented) */
@@ -122,12 +121,14 @@ namespace WebApp.Controllers
         [Route("user/delete/{token}/")]
         public ActionResult DeleteUser(string token)
         {
+            //var users = _db.GetAllUsers();
+            //var user = users?.FirstOrDefault(u => u.Id.Equals(id));
             var user = _db.FindUser(null, token);
-            if (user == null) return ApiResponseService.BadRequest("Could not find user");
+            if (user == null) return BadRequest("Could not find user");
 
             var result = _db.DeleteUser(user.Email);
 
-            return result ? ApiResponseService.Ok("User deleted") : ApiResponseService.BadRequest("Error deleting user");
+            return result ? Ok("User deleted") : BadRequest("Error deleting user");
         }
 
         /* INSECURE! >> return User list  (currently not implemented) */
@@ -140,31 +141,13 @@ namespace WebApp.Controllers
 
         /* User update their password >> Return OK */
         [HttpPost]
-        [Route("forgotpass/sg/{token}/")]
-        public ActionResult ForgotUserPasswordViaEmail(ForgotPasswordViewModel model)
-        {
-            var result = _db.FindUser(email: model.Email);
-            if (result == null)
-            {
-                return ApiResponseService.BadRequest("Could not find user " + model);
-            }
-
-            var resetCode = Crypto.GeneratePin().ToString();
-            _db.SetResetCode(result.Id, resetCode);
-
-            SendPasswordResetEmail(model.Email, resetCode).Wait();
-            return ApiResponseService.Ok("Success");
-        }
-
-        /* User update their password >> Return OK */
-        [HttpPost]
         [Route("forgotpass/rmq/{token}/")]
         public ActionResult ForgotUserPasswordViaText(ForgotPasswordViewModel model)
         {
             var result = _db.FindUser(email: model.Email);
             if (result == null)
             {
-                return ApiResponseService.BadRequest("Could not find user " + model);
+                return BadRequest("Could not find user " + model);
             }
 
             var resetCode = Crypto.GeneratePin().ToString();
@@ -172,8 +155,7 @@ namespace WebApp.Controllers
 
             //TODO: modify SendPasswordResetEmail() method
             //SendPasswordResetText()
-            SendPasswordResetSms(result.Phone, resetCode);
-            return ApiResponseService.Ok("Success");
+            return Ok("Success");
         }
 
         /* Sumbitting pin to get token and access to dashboard */
@@ -183,8 +165,8 @@ namespace WebApp.Controllers
         {
             var user = _db.FindUser(email: userEmail);
             return user != null && _db.ValidateResetCode(user.Id, userPin)
-                ? ApiResponseService.Ok("Success")
-                : ApiResponseService.BadRequest("Invalid PIN or email");
+                ? Ok("Success")
+                : BadRequest("Invalid PIN or email");
         }
 
         /* Getting single account data >> return single USER Object */
@@ -194,7 +176,7 @@ namespace WebApp.Controllers
         {
             var user = _db.FindUser(token: token);
             if (user == null){
-                ApiResponseService.BadRequest("User not found.");
+                BadRequest("User not found.");
             }
 
             return Json(user, JsonRequestBehavior.AllowGet);
@@ -208,10 +190,10 @@ namespace WebApp.Controllers
             if (_db.FindUser(model.Id) != null && _db.UpdateUser(model))
             {
                 Session["User"] = model;
-                return ApiResponseService.Ok("Success");
+                return Ok("Success");
 
             } else {
-                return ApiResponseService.BadRequest("Update failed");
+                return BadRequest("Update failed");
             }
         }
         
@@ -224,24 +206,26 @@ namespace WebApp.Controllers
                 _db.ResetPassword(model.Email, model.Password);
             }
             else{
-                return ApiResponseService.BadRequest("Update failed");
+                return BadRequest("Update failed");
             }
 
-            return ApiResponseService.Ok("Success");
+            return Ok("Success");
         }
 
+        /* Getting a plant detail from DB >> Return PLANT */
         [HttpGet]
         [Route("plant/id/{id}/")]
         public JsonResult GetPlantDetail(String inId)
         {
             var plant = _db.FindPlant(id: inId);
             if (plant == null){
-                ApiResponseService.BadRequest("Plant not found.");
+                BadRequest("Plant not found.");
             }
 
             return Json(plant, JsonRequestBehavior.AllowGet);
         }
 
+        /* Adding a plant to DB >> Return OK */
         [HttpPost]
         [Route("plant/add/{token}/")]
         public ActionResult AddNewPlant(String token, Plant newPlant)
@@ -256,10 +240,10 @@ namespace WebApp.Controllers
             }
             else
             {
-                ApiResponseService.BadRequest("Input is null");
+                BadRequest("Input is null");
             }
                 
-            return ApiResponseService.Ok("Success");
+            return Ok("Success");
         }
 
         [HttpGet, Route("plant/{token}/")]
@@ -275,41 +259,37 @@ namespace WebApp.Controllers
             return Json(plants, JsonRequestBehavior.AllowGet);
         }
 
-
-        [HttpPut, Route("plant/edit/{token}/")]
+        [HttpPatch, Route("plant/edit/{token}/")]
         public ActionResult EditPlant(string token, Plant updatedPlant)
         {
             // Check that user exists and plant exists for user?
             var user = _db.FindUser(token: token);
-            if (user == null) return ApiResponseService.BadRequest("Invalid token ");
+            if (user == null) return BadRequest("Invalid token ");
 
             // Get all the plants for the user where the Id matches updatedPlant ID
             var userPlantsWithSpecifiedId = _db.GetPlantsForUser(user.Id).Where(plant => plant.Id.Equals(updatedPlant.Id)).ToList();
 
             // Verify the plant exists for that user
-            if (userPlantsWithSpecifiedId.Count() <= 0) return ApiResponseService.BadRequest("Invalid token");
+            if (userPlantsWithSpecifiedId.Count() <= 0) return BadRequest("Invalid token");
 
             // If count is greather than one, there are multiple plants with the same Id -- this should not happen
-            if (userPlantsWithSpecifiedId.Count() > 1) return ApiResponseService.BadRequest("Invalid token");
+            if (userPlantsWithSpecifiedId.Count() > 1) return BadRequest("Invalid token");
 
             var result = _db.UpdatePlant(updatedPlant);
 
-            return result ? ApiResponseService.Ok("Plant updated") : ApiResponseService.BadRequest("Error updating plant: " + updatedPlant.Id);
+            return result ? Ok("Plant updated") : BadRequest("Error updating plant: " + updatedPlant.Id);
         }
-
        
         [HttpDelete, Route("plant/del/{token}/")]
-        public ActionResult DeletePlant(string token, string plantId)
+        public ActionResult DeletePlant(String token, String plantId)
         {
             // Check that the user exists
             var user = _db.FindUser(token: token);
-            if (user == null) return ApiResponseService.BadRequest("Invalid token");
+            if (user == null) return BadRequest("Invalid token");
 
             // Check that plant exists for that user
             var result = _db.DeletePlant(plantId);
-            return result ? ApiResponseService.Ok("Plant deleted") : ApiResponseService.BadRequest("Error deleting plant: " + plantId);
+            return result ? Ok("Plant deleted") : BadRequest("Error deleting plant: " + plantId);
         }
-
-       
     }
 }
