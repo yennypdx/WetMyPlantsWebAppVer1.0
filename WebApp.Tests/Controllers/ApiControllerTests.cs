@@ -67,7 +67,7 @@ namespace WebApp.Tests.Controllers
                 Email = "test@email.com",
                 Password = "password",
                 Hash = Crypto.HashPassword("password"),
-                Phone = "1234567890",
+                Phone = "5034380863",
                 Plants = new List<string>()
             };
             _testSpecies = new Species

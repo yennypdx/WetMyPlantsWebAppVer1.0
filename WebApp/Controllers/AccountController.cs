@@ -10,6 +10,7 @@ using System.Net.Http;
 using DbHelper;
 using WebApp.Auth;
 using WebApp.Models;
+using WebApp.Helpers;
 
 namespace WebApp.Controllers
 {
@@ -55,17 +56,32 @@ namespace WebApp.Controllers
             if (result == null) return Redirect("ForgotPassword");
 
             var resetCode = Crypto.GeneratePin().ToString();
-            // TODO: Store the reset code in the DB
             Db.SetResetCode(result.Id, resetCode);
 
-            var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = result.Id, code = resetCode }, protocol: Request?.Url?.Scheme);
+            if (uModel.Sms)
+            {
+                SmsService.SendSms(result.Phone, $"Here is your password reset PIN: {resetCode}");
+                var userId = Db.FindUser(email: result.Email)?.Id;
 
-            SendPasswordResetEmail(uModel.Email, callbackUrl).Wait();
-            return View("Login");
+                var model = new PinViewModel
+                {
+                    UserId = (int)userId
+                };
+
+                return View("Pin", model);
+            }
+            else
+            {
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = result.Id, code = resetCode }, protocol: Request?.Url?.Scheme);
+
+                SendPasswordResetEmail(uModel.Email, callbackUrl);
+                return View("Login");
+            }
         }
 
-        static public async Task SendPasswordResetEmail(string email, string urlString)
+        private async Task SendPasswordResetEmail(string email, string urlString)
         {
+            /*
             string apiKey = "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";//System.Environment.GetEnvironmentVariable("SENDGRID_APIKEY");
             var client = new SendGridClient(apiKey);            
             var msg = new SendGridMessage()
@@ -77,6 +93,16 @@ namespace WebApp.Controllers
             };
             msg.AddTo(new EmailAddress(email, "user"));
             var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
+            */
+            var emailMessage = new EmailService
+            {
+                Destination = email,
+                PlainTextContent = $"Please click on this link to reset your password: {urlString}",
+                HtmlContent = $"<strong>Please click <a href={urlString}>here</a> to reset your password.",
+                Subject = "Reset Password"
+            };
+
+            emailMessage.Send();
         }
 
         [HttpPost]
