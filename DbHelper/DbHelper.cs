@@ -52,7 +52,8 @@ namespace DbHelper
         LowWater,
         HighWater,
         LowLight,
-        HighLight
+        HighLight,
+        Okay
     }
 
     public enum HubColumns
@@ -452,6 +453,10 @@ namespace DbHelper
                         string result = reader.GetString(0);
 
                         return result;
+                    }
+                case ResponseTypes.Okay:
+                    {
+                        break;
                     }
                 default: break;
 

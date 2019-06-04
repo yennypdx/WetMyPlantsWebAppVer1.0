@@ -40,12 +40,39 @@ namespace WebApp.Controllers
             return "I'm feeling Plant-Tastic!";
         }
         
+        //GET: piapi/getuserplants >> Return list of plant ids
+        // userEmail
+        [HttpGet]
+        public JsonResult GetUserPlants(string email)
+        {
+            //verify and find user
+            var user = _db.FindUser(email: email);              
+            if (user == null)
+            {
+                BadRequest("User not found.");
+            }
+
+            //get user's plants
+            List<Plant> plants = _db.GetPlantsForUser(user.Id);
+
+            //construct list of just PlantId's
+            List<string> plantIds = new List<string>();
+            foreach (Plant p in plants)
+            {
+                plantIds.Add(p.Id);
+            }
+
+            return Json(plantIds, JsonRequestBehavior.AllowGet);
+        }
+
+
         //POST: piapi/updateplant
         //ID,Water,Light
         [HttpPost]
         public void updateplant(Plant plant)
         {
             Plant currentPlant = _db.FindPlant(plant.Id);
+            Species currentSpecies = _db.FindSpecies(currentPlant.SpeciesId);
             double previousLightVariable = plant.CurrentLight;
             currentPlant.CurrentLight = plant.CurrentLight;
             currentPlant.CurrentWater = plant.CurrentWater;
@@ -55,104 +82,162 @@ namespace WebApp.Controllers
             var result = _db.UpdatePlant(currentPlant);
                         
             if (result == true)
-                HandleData(currentPlant, previousLightVariable);
-           
+            {
+                HandleLightTracker(currentPlant, currentSpecies, previousLightVariable);
+                HandleData(currentPlant, currentSpecies);
+            }
+
         }
         
-        public void HandleData(Plant plant, double previousLightVariable)
+        public void HandleData(Plant plant, Species species)
         {
             User currentUser = _db.FindPlantUser(plant.Id);
-            Plant currentPlant = _db.FindPlant(plant.Id);
-            Species currentSpecies = _db.FindSpecies(plant.SpeciesId);            
+            Plant currentPlant = plant;
+            Species currentSpecies = species;          
             Dictionary<string, bool> userPreferences = _db.GetNotificationPreferences(currentUser.Id);
+
+            bool email = userPreferences["Email"];
+            bool sms = userPreferences["Phone"];
+            bool waterNotification = false;
+            bool lightNotification = false;
+            
+
+            if (email == true || sms == true)
+            {
+
+                string emailSubject = null;
+                string emailBody = null;
+                string smsBody = null;
+
+                ResponseTypes waterType = CheckWater(currentPlant.CurrentWater, currentSpecies.WaterMax, currentSpecies.WaterMin);
+                ResponseTypes lightType = CheckLight(currentPlant.CurrentLight, currentSpecies.WaterMax, currentSpecies.WaterMin, currentPlant.LightTracker);
+
+                switch (waterType)
+                {
+                    case ResponseTypes.HighWater:
+                        {
+                            emailSubject = "High Water";
+                            emailBody = ComposeEmailBody(currentUser.FirstName, waterType, currentPlant.Nickname);
+                            smsBody = ComposeSMSBody(waterType, currentPlant.Nickname);
+                            waterNotification = true;
+                            break;
+                        }
+                    case ResponseTypes.LowWater:
+                        {
+                            emailSubject = "Low Water";
+                            emailBody = ComposeEmailBody(currentUser.FirstName, waterType, currentPlant.Nickname);
+                            smsBody = ComposeSMSBody(waterType, currentPlant.Nickname);
+                            waterNotification = true;
+                            break;
+                        }
+                    default:
+                        break;
+
+                }
+                if(waterNotification == true && email == true)
+                {
+                    SendEmail(currentUser.Email, currentPlant.Nickname, emailSubject, emailBody).Wait();
+                }
+                if (waterNotification == true && sms == true)
+                {
+                    SendSMS(currentUser.Phone, smsBody);
+                }
+
+                switch (lightType)
+                {
+
+                    case ResponseTypes.HighLight:
+                        {
+                            emailSubject = "High Light";
+                            emailBody = ComposeEmailBody(currentUser.FirstName, lightType, currentPlant.Nickname);
+                            smsBody = ComposeSMSBody(lightType, currentPlant.Nickname);
+                            lightNotification = true;
+                            break;
+                        }
+                    case ResponseTypes.LowLight:
+                        {
+                            emailSubject = "Low Light";
+                            emailBody = ComposeEmailBody(currentUser.FirstName, lightType, currentPlant.Nickname);
+                            smsBody = ComposeSMSBody(lightType, currentPlant.Nickname);
+                            lightNotification = true;
+                            break;
+                        }
+                    default:
+                        break;
+                }
+
+                if (lightNotification == true && email == true)
+                {
+                    SendEmail(currentUser.Email, currentPlant.Nickname, emailSubject, emailBody).Wait();
+                }
+                if (lightNotification == true && sms == true)
+                {
+                    SendSMS(currentUser.Phone, smsBody);
+                }
+            }
+        }
+
+        public ResponseTypes CheckWater(double currentWater, double speciesMax, double speciesMin)
+        {
+            if (currentWater > speciesMax)
+            {
+                return ResponseTypes.HighWater;
+            }
+            
+            if (currentWater < speciesMin)
+            {
+                return ResponseTypes.LowWater;
+            }
+            return ResponseTypes.Okay;
+        }
+
+        public ResponseTypes CheckLight(double currentLight, double speciesMax, double speciesMin, int lightTracker)
+        {
+            if(lightTracker >= 3)
+            {
+                if (currentLight > speciesMax)
+                {
+                    return ResponseTypes.HighLight;
+                }
+                if (currentLight < speciesMin)
+                {
+                    return ResponseTypes.LowLight;
+                }
+            }
+            return ResponseTypes.Okay;
+        }
+                
+        public void HandleLightTracker(Plant plant, Species species, double previousLight)
+        {
+            Plant currentPlant = plant;
+            Species currentSpecies = species;
             int lightTrackerTemp = currentPlant.LightTracker;
 
-            if (currentPlant.CurrentLight > currentSpecies.LightMax || currentPlant.CurrentLight < currentSpecies.LightMax)
+            if (currentPlant.CurrentLight > currentSpecies.LightMax || currentPlant.CurrentLight < currentSpecies.LightMin)
             {
-                if (currentPlant.CurrentLight == previousLightVariable && currentPlant.UpdateTime > 7 && currentPlant.UpdateTime < 20)
+                if (currentPlant.CurrentLight == previousLight && currentPlant.UpdateTime > 7 && currentPlant.UpdateTime < 19)
                 {
                     currentPlant.LightTracker = lightTrackerTemp + 1;
                     var result = _db.UpdatePlant(currentPlant);
 
                     if (result != true)
                     {
-                        throw new Exception("Error in updating lightTracker, PiAPIController, Line 78");
+                        throw new Exception("Error in HandlelightTracker, PiAPIController");
                     }
                 }
             }
-                
-            if (currentPlant.CurrentWater > currentSpecies.WaterMax)
-            {
-                if (userPreferences["Email"].Equals(true))
-                {
-                    
-                    string subject = "High Water";
-                    string message = "Hello " + currentUser.FirstName + "! " + _db.GetNotificationResponseMessage(ResponseTypes.HighWater) + "\n ~" + currentPlant.Nickname;
-                    SendEmail(currentUser.Email, currentPlant.Nickname, subject, message).Wait();
-                }
-                if (userPreferences["Phone"].Equals(true))
-                {
-                   
-                    string message = _db.GetNotificationResponseMessage(ResponseTypes.HighWater) + " ~" + currentPlant.Nickname;
-                    SendSMS(currentUser.Phone, message);
-                }
-            }
-            if (currentPlant.CurrentWater < currentSpecies.WaterMin)
-            {
-                if (userPreferences["Email"].Equals(true))
-                {
-                    
-                    string subject = "Low Water";
-                    string message = "Hello " + currentUser.FirstName + "! " + _db.GetNotificationResponseMessage(ResponseTypes.LowWater) + "\n ~" + currentPlant.Nickname;
-                    SendEmail(currentUser.Email, currentPlant.Nickname, subject, message).Wait();
-                }
-                if (userPreferences["Phone"].Equals(true))
-                {
-                    
-                    string message = _db.GetNotificationResponseMessage(ResponseTypes.LowWater) + " ~" + currentPlant.Nickname;
-                    SendSMS(currentUser.Phone, message);
-                }
-            }
+        }
 
-            if (currentPlant.CurrentLight > currentSpecies.LightMax)
-            {
-                if (currentPlant.LightTracker >= 3)
-                {
-                    if (userPreferences["Email"].Equals(true))
-                    {
+        public string ComposeSMSBody(ResponseTypes response, string plantName)
+        {
+            string message = _db.GetNotificationResponseMessage(response) + " ~" + plantName;
+            return message;
+        }
 
-                        string subject = "High Light";
-                        string message = "Hello " + currentUser.FirstName + "! " + _db.GetNotificationResponseMessage(ResponseTypes.HighLight) + "\n ~" + currentPlant.Nickname;
-                        SendEmail(currentUser.Email, currentPlant.Nickname, subject, message).Wait();
-                    }
-                    if (userPreferences["Phone"].Equals(true))
-                    {
-
-                        string message = _db.GetNotificationResponseMessage(ResponseTypes.HighLight) + " ~" + currentPlant.Nickname;
-                        SendSMS(currentUser.Phone, message);
-                    }
-                }
-            }
-
-            if (currentPlant.CurrentLight < currentSpecies.LightMin)
-            {
-                if (currentPlant.LightTracker >= 3)
-                {
-                    if (userPreferences["Email"].Equals(true))
-                    {
-
-                        string subject = "Low Light";
-                        string message = "Hello " + currentUser.FirstName + "! " + _db.GetNotificationResponseMessage(ResponseTypes.LowLight) + "\n ~" + currentPlant.Nickname;
-                        SendEmail(currentUser.Email, currentPlant.Nickname, subject, message).Wait();
-                    }
-                    if (userPreferences["Phone"].Equals(true))
-                    {
-
-                        string message = _db.GetNotificationResponseMessage(ResponseTypes.LowLight) + " ~" + currentPlant.Nickname;
-                        SendSMS(currentUser.Phone, message);
-                    }
-                }
-            }
+        public string ComposeEmailBody(string userName, ResponseTypes response, string plantName)
+        {
+            string message = "Hello " + userName + "! " + _db.GetNotificationResponseMessage(response) + "\n ~" + plantName;
+            return message;
         }
 
         public void SendSMS(string userPhone, string msgbody)

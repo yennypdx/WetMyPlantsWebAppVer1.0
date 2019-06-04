@@ -227,7 +227,7 @@ namespace WebApp.Controllers
 
         /* Adding a plant to DB >> Return OK */
         [HttpPost]
-        [Route("plant/add/{token}/")]
+        [Route("plan't/add/{token}/")]
         public ActionResult AddNewPlant(String token, Plant newPlant)
         {
             var user = _db.FindUser(token: token);
