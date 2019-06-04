@@ -16,8 +16,8 @@ namespace WebApp
                 url: "",
                 defaults: new
                 {
-                    controller = "Account",
-                    action = "Login",
+                    controller = "Home",
+                    action = "Index",
                 }
             );
             routes.MapRoute(
