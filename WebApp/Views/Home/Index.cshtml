@@ -61,7 +61,7 @@
                                 <a href="/plant/edit?id=@p.Id">Edit</a>
                             </td>
                             <td>
-                                <a href="/plant/delete?id=@p.Id" class="text-danger delete-button">Delete</a>
+                                <a href="/plant/delete?id=@p.Id" class="text-danger plant-delete-button">Delete</a>
                             </td>
                         </tr>
                     }
@@ -94,7 +94,7 @@
                                 @hub.CurrentPower%
                             </td>
                             <td>
-                                <a href="/hub/delete?id=@hub.Id" class="text-danger delete-button">Delete</a>
+                                <a href="/hub/delete?id=@hub.Id" class="text-danger hub-delete-button">Delete</a>
                             </td>
                         </tr>
                     }
@@ -107,15 +107,24 @@
 @section scripts {
     <script>
         $(document).ready(() => {
-            const deleteButtons = $('a.delete-button');
+            const hubDeleteButtons = $('a.hub-delete-button');
+            const plantDeleteButtons = $('a.plant-delete-button');
 
-            deleteButtons.on('click',
+            hubDeleteButtons.on('click',
                 (e) => {
                     e.preventDefault();
                     if (confirm('Are you sure you want to delete this Hub?')) {
                         $(location).attr('href', e.target.href);
                     }
                 });
+
+            plantDeleteButtons.on('click',
+                (e) => {
+                    e.preventDefault();
+                    if (confirm('Are you sure you want to delete this plant?')) {
+                        $(location).attr('href', e.target.href);
+                    }
+                })
         })
     </script>
 }
