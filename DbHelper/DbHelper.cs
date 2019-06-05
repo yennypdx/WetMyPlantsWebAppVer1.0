@@ -784,6 +784,22 @@ namespace DbHelper
             return null;
         }
 
+        public Hub GetHub(string address)
+        {
+            var query = $"SELECT * FROM Hubs WHERE HubAddress = '{address}';";
+
+            var reader = RunReader(query);
+
+            if (reader != null)
+            {
+                reader.Read();
+                var hub = BuildHub(reader);
+                return hub;
+            }
+
+            return null;
+        }
+
         public List<Hub> GetHubList(int userId)
         {
             var query = $"SELECT * FROM Hubs WHERE UserId = {userId};";
