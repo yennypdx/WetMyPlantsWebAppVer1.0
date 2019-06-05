@@ -92,7 +92,7 @@ namespace WebApp.Controllers
             double previousLightVariable = plant.CurrentLight;
             currentPlant.CurrentLight = plant.CurrentLight;
             currentPlant.CurrentWater = plant.CurrentWater;
-            currentPlant.UpdateTime = (int)DateTime.Now.TimeOfDay.TotalHours;
+            currentPlant.UpdateTime = (int)DateTime.Now.TimeOfDay.TotalHours - 6;
 
 
             var result = _db.UpdatePlant(currentPlant);
