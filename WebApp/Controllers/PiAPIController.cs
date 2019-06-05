@@ -39,11 +39,30 @@ namespace WebApp.Controllers
         {
             return "I'm feeling Plant-Tastic!";
         }
-        
+
+        //POST: piapi/checkHubRegStatus
+        //email, id
+        [HttpPost]
+        public void checkHubRegStatus(string email, string address)
+        {
+            var user = _db.FindUser(email: email);
+            if (user == null)
+            {
+                BadRequest("User not found.");
+            }
+            //verify or register Hub
+            var hub = _db.GetHub(address);
+
+            if (hub == null)
+            {
+                var result = _db.CreateHub(new Hub { Address = address, UserId = user.Id, CurrentPower = 98 });
+            }
+
+        }
         //GET: piapi/getuserplants >> Return list of plant ids
-        // userEmail
+        // userEmail, piMAC Address
         [HttpGet]
-        public JsonResult GetUserPlants(string email)
+        public JsonResult GetUserPlants(string email, string hubAddress)
         {
             //verify and find user
             var user = _db.FindUser(email: email);              
@@ -51,7 +70,6 @@ namespace WebApp.Controllers
             {
                 BadRequest("User not found.");
             }
-
             //get user's plants
             List<Plant> plants = _db.GetPlantsForUser(user.Id);
 
@@ -152,6 +170,8 @@ namespace WebApp.Controllers
                             emailBody = ComposeEmailBody(currentUser.FirstName, lightType, currentPlant.Nickname);
                             smsBody = ComposeSMSBody(lightType, currentPlant.Nickname);
                             lightNotification = true;
+                            currentPlant.LightTracker = 0;
+                            _db.UpdatePlant(currentPlant);
                             break;
                         }
                     case ResponseTypes.LowLight:
@@ -160,6 +180,8 @@ namespace WebApp.Controllers
                             emailBody = ComposeEmailBody(currentUser.FirstName, lightType, currentPlant.Nickname);
                             smsBody = ComposeSMSBody(lightType, currentPlant.Nickname);
                             lightNotification = true;
+                            currentPlant.LightTracker = 0;
+                            _db.UpdatePlant(currentPlant);
                             break;
                         }
                     default:

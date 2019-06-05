@@ -46,7 +46,7 @@ namespace DbHelper
         bool DeleteHub(int id);
         List<Hub> GetHubList(int userId);
         Hub GetHub(int id);
-
+        Hub GetHub(string address);
         List<Hub> GetAllHubs();
     }
 }
