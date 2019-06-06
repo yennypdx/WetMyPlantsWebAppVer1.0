@@ -41,9 +41,16 @@
         <div class="form-group">
             <label for="species">Species</label>
             <select name="SpeciesId" id="species" class="form-control">
-                @foreach (var species in speciesList)
+                @foreach(var species in speciesList)
                 {
-                    <option value="@species.Id">@species.CommonName</option>
+                    if(species.Id == Model.SpeciesId)
+                    {
+                        <option value="@species.Id" selected>@species.CommonName</option>
+                    }
+                    else
+                    {
+                        <option value="@species.Id">@species.CommonName</option>
+                    }
                 }
             </select>
         </div>
